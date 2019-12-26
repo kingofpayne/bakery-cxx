@@ -1,0 +1,3 @@
+definition "int.def";
+
+value = 42;
