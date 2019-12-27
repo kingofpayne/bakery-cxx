@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012
+ * Copyright (C) 2012, 2013
  * Olivier Heriveaux.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -27,45 +27,40 @@ namespace grammar {
 
 
 /**
- * Initializes the definition_or_data rule.
+ * Initializes the recipe rule.
  *
  * @param rules Reference over the rules container.
  */
-template <typename I>
-	void generic_init_definition_or_data(rule_container<I> & rules)
+template <typename I> void generic_init_recipe(rule_container<I> & rules)
 {
 	namespace qi = boost::spirit::qi;
 	using qi::_val;
 	using qi::_1;
-
-	/* Node which returns either a data or a definition. */
-	rules.definition_or_data_ =
-		/* Start by testing data since all data files must start by the
-		 * 'definition' directive. */
-		rules.data
+		
+	rules.recipe_ =
+		*(
+			"include"
+			>>
+			rules.recipe_indication
+			[
+				bind(&def::recipe::add_include_file, _val, _1)
+			]
+			>>
+			';'
+		)
+		>>
+		rules.def_composite_content
 		[
-			boost::phoenix::bind(
-				&definition_or_data::set_data,
-				_val,
-				_1
-			)
-		]
-		|
-		rules.definition_
-		[
-			boost::phoenix::bind(
-				&definition_or_data::set_definition,
-				_val,
-				_1
-			)
+			boost::phoenix::bind(&def::node::set_kind, *_1,
+				def::node::kind::structure),
+			boost::phoenix::bind(&def::recipe::set_node, _val, _1)
 		];
 }
 
 
-template <>
-	void init_definition_or_data<iterator>(rule_container<iterator> & rules)
+template <> void init_recipe<iterator>(rule_container<iterator> & rules)
 {
-	generic_init_definition_or_data<iterator>(rules);
+	generic_init_recipe<iterator>(rules);
 }
 
 

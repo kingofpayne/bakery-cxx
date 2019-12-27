@@ -19,11 +19,11 @@
  */
 
 
-#ifndef _BAKERY_DEFINITION_OR_DATA_HPP_
-#define _BAKERY_DEFINITION_OR_DATA_HPP_
+#ifndef _BAKERY_RECIPE_OR_DATA_HPP_
+#define _BAKERY_RECIPE_OR_DATA_HPP_
 
 
-#include "def/definition.hpp"
+#include "def/recipe.hpp"
 #include "dat/data.hpp"
 
 
@@ -31,24 +31,24 @@ namespace bakery {
 
 
 /**
- * Class which holds either a definition or a data, or nothing.
+ * Class which holds either a recipe or a data, or nothing.
  */
-class definition_or_data
+class recipe_or_data
 {
 	public:
-		definition_or_data();
+		recipe_or_data();
 
-		void set_definition(const def::definition &);
+		void set_recipe(const def::recipe &);
 		void set_data(const dat::data &);
-		bool is_definition() const;
+		bool is_recipe() const;
 		bool is_data() const;
-		def::definition & get_definition();
+		def::recipe & get_recipe();
 		dat::data & get_data();
 		
 	private:
 		boost::variant<
 			int, /* int to hold nothing. */
-			def::definition,
+			def::recipe,
 			dat::data
 		> value;	
 };

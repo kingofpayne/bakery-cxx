@@ -24,7 +24,7 @@
 
 
 #include "node.hpp"
-#include "../definition_indication.hpp"
+#include "../recipe_indication.hpp"
 #include <string>
 
 
@@ -39,16 +39,16 @@ class data
 {
 	public:
 		const node::sptr & get_root_node() const;
-		const definition_indication_t & get_definition_indication() const;
+		const recipe_indication_t & get_recipe_indication() const;
 		std::string print() const;
 		void set_root_node(const node::sptr &);
-		void set_definition_indication(const definition_indication_t &);
+		void set_recipe_indication(const recipe_indication_t &);
 
 	private:
 		/** Root node. */
 		node::sptr root_node;
-		/** Structure indicating where is located the definition file. */
-		definition_indication_t definition_indication;
+		/** Structure indicating where is located the recipe file. */
+		recipe_indication_t recipe_indication;
 };
 
 

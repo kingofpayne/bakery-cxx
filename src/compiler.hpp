@@ -27,7 +27,7 @@
 #include <algorithm>
 #include <fstream>
 #include "dat/data.hpp"
-#include "def/definition.hpp"
+#include "def/recipe.hpp"
 #include "file_indication.hpp"
 #include "tti_stack.hpp"
 #include <gmpxx.h>
@@ -217,7 +217,7 @@ bool floating_to_mpf(mpf_class &, const dat::floating &, compilation_log_t &);
 bool check_template_parameter_count(const def::type_instanciation_t &,
 	compilation_log_t &);
 
-bool merge_included_definition_files(def::definition &, const std::string &,
+bool merge_included_recipe_files(def::recipe &, const std::string &,
     const std::list<std::string> &, std::list<std::string> &, compilation_log_t &);
 
 bool resolve_file_indication(const file_indication &, const std::string &,

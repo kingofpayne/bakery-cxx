@@ -46,7 +46,7 @@ class enum_value_data_t
 	private:
 		/** Flag indicating if a fixed value has been specified. */
 		bool fixed_value_flag;
-		/** The string value given in the definition file. During compilation,
+		/** The string value given in the recipe file. During compilation,
 		 * this is converted as an int (if fits) and stored in value. */
 		std::string value_str;
 };

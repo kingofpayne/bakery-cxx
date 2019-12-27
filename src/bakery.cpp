@@ -77,7 +77,7 @@ void bakery_t::include(const std::list<std::string> & dirs)
 
 
 /**
- * Includes a directory which may contain definition files.
+ * Includes a directory which may contain recipe files.
  *
  * @param dir The directory.
  */
@@ -88,7 +88,7 @@ void bakery_t::include(const std::string & dir)
 
 
 /**
- * @return List of directories which may contain definition files.
+ * @return List of directories which may contain recipe files.
  */
 const std::list<std::string> & bakery_t::get_include_directories() const
 {

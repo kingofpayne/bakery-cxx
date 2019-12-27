@@ -506,7 +506,7 @@ void node::merge(const sptr & b)
 
 /**
  * Moves the types and namespaces nodes of b to this. Member nodes are
- * discarded. This function is used when loading an included definition file.
+ * discarded. This function is used when loading an included recipe file.
  *
  * @param b Second node from which nodes are moved.
  */

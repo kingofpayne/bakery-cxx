@@ -28,7 +28,7 @@ namespace bakery {
 
 /**
  * Template Type Instanciation stack. This type is used for recording how
- * template types are associated to real types when parsing a definition.
+ * template types are associated to real types when parsing a recipe.
  */
 typedef std::list<std::pair<def::node::sptr, def::type_instanciation_t> >
 	tti_stack_t;

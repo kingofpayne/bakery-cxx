@@ -35,18 +35,18 @@ namespace qi = boost::spirit::qi;
 
 
 /**
- * Main grammar which parses a definition or data code.
+ * Main grammar which parses a recipe or data code.
  */
 template <typename I>
 	struct main:
 	qi::grammar<
 		I,
-		definition_or_data(),
+		recipe_or_data(),
 		skipper
 	>
 {
 	main():
-		main::base_type(rules.definition_or_data_)
+		main::base_type(rules.recipe_or_data_)
 	{
 		/* Quoted string symbols */
 		rules.quoted_string_symbols.add
@@ -55,14 +55,14 @@ template <typename I>
 			("\\n", '\n')
 			("\\t", '\t');
 		
-		init_definition_or_data(rules);
+		init_recipe_or_data(rules);
 		init_identifier(rules);
 		init_quoted_string(rules);
 		init_integer(rules);
 		init_unsigned_integer(rules);
 		init_floating_number(rules);
 		init_path(rules); 
-		init_definition(rules);
+		init_recipe(rules);
 		init_data(rules);
 		init_def_composite_content(rules);
 		init_def_namespace(rules);
@@ -76,8 +76,8 @@ template <typename I>
 		init_def_member(rules);	
 		init_def_type_instanciation(rules);
 		init_def_type_instanciation_no_array(rules);
-		init_definition_indication(rules);
-		init_definition_indication_new(rules);
+		init_recipe_indication(rules);
+		init_recipe_indication_new(rules);
 		init_dat_structure_content(rules);
 		init_dat_assignment(rules);
 		init_dat_value(rules);

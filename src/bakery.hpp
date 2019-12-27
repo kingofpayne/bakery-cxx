@@ -56,7 +56,7 @@ class bakery_t
         bool has_rebuilt() const;
 	
     private:
-        /** List of directories which may contain definition files. */	
+        /** List of directories which may contain recipe files. */	
 		std::list<std::string> include_directories;
         /** Switch to force recompilation. */
         bool force_rebuild;

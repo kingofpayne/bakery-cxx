@@ -19,7 +19,7 @@
  */
 
 
-#include "definition.hpp"
+#include "recipe.hpp"
 
 
 namespace bakery {
@@ -27,27 +27,27 @@ namespace def {
 
 
 /**
- * @return A string representing the content of the definition.
+ * @return A string representing the content of the recipe.
  */
-std::string definition::print() const
+std::string recipe::print() const
 {
-	return "definition " + the_node->print();
+	return "recipe " + the_node->print();
 }
 
 
 /**
  * Returns the root node.
  */
-node::sptr definition::get_node() const
+node::sptr recipe::get_node() const
 {
 	return the_node;
 }
 
 
 /**
- * @return Const reference to the list of included definition files.
+ * @return Const reference to the list of included recipe files.
  */
-const std::list<file_indication> & definition::get_included_files() const
+const std::list<file_indication> & recipe::get_included_files() const
 {
 	return included_files;
 }
@@ -58,20 +58,20 @@ const std::list<file_indication> & definition::get_included_files() const
  *
  * @param value Shared pointer to the node.
  */
-void definition::set_node(node::sptr value)
+void recipe::set_node(node::sptr value)
 {
 	the_node = value;
 }
 
 
 /**
- * Compiles the definition.
+ * Compiles the recipe.
  *
  * @param compil_status The object in which error messages will be pushed.
  *
  * @return False if an error occurs during compilation.
  */
-bool definition::compile(compilation_log_t & compil_status)
+bool recipe::compile(compilation_log_t & compil_status)
 {
 	/* Similar namespaces must be merge before compiling. */
 	the_node->merge_namespaces();
@@ -83,11 +83,11 @@ bool definition::compile(compilation_log_t & compil_status)
 
 
 /**
- * Declares a file to be included as definition during compilation.
+ * Declares a file to be included as recipe during compilation.
  *
  * @param file_indication Indicates the path of the file, and its relativity.
  */
-void definition::add_include_file(const file_indication & file_indication)
+void recipe::add_include_file(const file_indication & file_indication)
 {
 	included_files.push_back(file_indication);
 }

@@ -38,7 +38,7 @@ namespace bakery {
 class parser
 {
 	public:
-		static void load_from_file(const std::string &, definition_or_data &,
+		static void load_from_file(const std::string &, recipe_or_data &,
             compilation_log_t &);
 };
 

@@ -30,7 +30,7 @@ namespace bakery {
 
 
 /**
- * Represents the definition file specification in a data file.
+ * Represents the recipe file specification in a data file.
  */
 class file_indication
 {
@@ -42,7 +42,7 @@ class file_indication
 		void set_path(const std::string &);
 		void set_absolute(bool);
 	private:
-		/** path to the definition file. */
+		/** path to the recipe file. */
 		std::string path;
 
 		/** True is the path is absolute, false if the path is relative. */

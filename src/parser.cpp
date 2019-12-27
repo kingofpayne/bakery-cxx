@@ -28,19 +28,19 @@ namespace bakery {
 
 
 /**
- * Loads a definition or data from a file.
+ * Loads a recipe or data from a file.
  *
  * If this function fails to read the file, an error message is pushed in the
  * parse status.
  *
- * @param path path to the file containing the definition.
- * @param definition_or_data Reference to a definition_or_data object in which
+ * @param path path to the file containing the recipe.
+ * @param recipe_or_data Reference to a recipe_or_data object in which
  *        the result will be stored.
  * @param log Where the error messages will be stored.
  */
 void parser::load_from_file(
 	const std::string & path,
-	definition_or_data & definition_or_data,
+	recipe_or_data & recipe_or_data,
 	compilation_log_t & log)
 {
 	/* Load the file */
@@ -59,7 +59,7 @@ void parser::load_from_file(
 	grammar::main<std::string::const_iterator> grammar;
 
 	boost::spirit::qi::phrase_parse(it, it_end, grammar,
-		grammar::skipper(), definition_or_data);
+		grammar::skipper(), recipe_or_data);
 
 	/* Check parse result. */
 	if (it != it_end)

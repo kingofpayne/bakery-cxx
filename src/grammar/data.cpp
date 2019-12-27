@@ -38,10 +38,10 @@ template <typename I> void generic_init_data(rule_container<I> & rules)
 	using qi::_1;
 
 	rules.data =
-		"definition"
-		>> rules.definition_indication_new
+		"recipe"
+		>> rules.recipe_indication_new
 		[
-			bind(&dat::data::set_definition_indication, _val, _1)
+			bind(&dat::data::set_recipe_indication, _val, _1)
 		]
 		>> ';'
 		>> rules.dat_structure_content

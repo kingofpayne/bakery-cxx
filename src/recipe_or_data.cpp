@@ -19,7 +19,7 @@
  */
 
 
-#include "definition_or_data.hpp"
+#include "recipe_or_data.hpp"
 
 
 namespace bakery {
@@ -28,37 +28,37 @@ namespace bakery {
 /**
  * Default constructor.
  */
-definition_or_data::definition_or_data():
+recipe_or_data::recipe_or_data():
 	value(0)
 {}
 
 
 /**
- * Defines the definition_or_data as a Definition.
+ * Defines the recipe_or_data as a Definition.
  *
- * @param value The definition.
+ * @param value The recipe.
  */
-void definition_or_data::set_definition(const def::definition & value)
+void recipe_or_data::set_recipe(const def::recipe & value)
 {
 	this->value = value;
 }
 
 
 /**
- * Defines the definition_or_data as a Data.
+ * Defines the recipe_or_data as a Data.
  *
  * @param value The data.
  */
-void definition_or_data::set_data(const dat::data & value)
+void recipe_or_data::set_data(const dat::data & value)
 {
 	this->value = value;
 }
 
 
 /**
- * @return True if the instance holds a definition.
+ * @return True if the instance holds a recipe.
  */
-bool definition_or_data::is_definition() const
+bool recipe_or_data::is_recipe() const
 {
 	return value.which() == 1;
 }
@@ -67,21 +67,21 @@ bool definition_or_data::is_definition() const
 /**
  * @return True if the instance holds a data.
  */
-bool definition_or_data::is_data() const
+bool recipe_or_data::is_data() const
 {
 	return value.which() == 2;
 }
 
 
 /**
- * @return A reference to the definition.
+ * @return A reference to the recipe.
  *
- * This function must be called only if is_definition() == true.
+ * This function must be called only if is_recipe() == true.
  */
-def::definition & definition_or_data::get_definition()
+def::recipe & recipe_or_data::get_recipe()
 {
-	bakery_assert_debug(is_definition());
-	return boost::get<def::definition>(value);
+	bakery_assert_debug(is_recipe());
+	return boost::get<def::recipe>(value);
 }
 
 
@@ -90,7 +90,7 @@ def::definition & definition_or_data::get_definition()
  *
  * This function must be called only if is_data() == true.
  */
-dat::data & definition_or_data::get_data()
+dat::data & recipe_or_data::get_data()
 {
 	bakery_assert_debug(is_data());
 	return boost::get<dat::data>(value);

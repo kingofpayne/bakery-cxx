@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012
+ * Copyright (C) 2012-2019
  * Olivier Heriveaux.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -27,12 +27,12 @@ namespace grammar {
 
 
 /**
- * Initializes the definition_indication rule.
+ * Initializes the recipe_indication_new rule.
  *
  * @param rules Reference over the rules container.
  */
 template <typename I>
-	void generic_init_definition_indication(rule_container<I> & rules)
+	void generic_init_recipe_indication_new(rule_container<I> & rules)
 {
 	namespace qi = boost::spirit::qi;
 	using qi::_val;
@@ -40,53 +40,24 @@ template <typename I>
 	using qi::_a;
 	using qi::char_;
 
-	/* Relative path definition file:
-	 * definition "toto.def"
+	/* Relative path recipe file:
+	 * recipe "toto.def" some_type
 	 *
-	 * Absolute path definition file:
-	 * definition <toto.def> */
-	rules.definition_indication =
-		(
-			(
-				'"'
-				>>
-				(	
-					qi::eps[_a = std::string()]
-					>>
-					*((char_ - char_('"'))[ _a += _1 ])
-				)
-				[
-					bind(&file_indication::set_absolute, _val, false)
-				]
-				>>
-				'"'
-			)
-			|
-			(
-				'<'
-				>>
-				(	
-					qi::eps[_a = std::string()]
-					>>
-					*((char_ - char_('>'))[ _a += _1 ])
-				)
-				[
-					bind(&file_indication::set_absolute, _val, true)
-				]
-				>>
-				'>'
-			)
-		)
-		[
-			bind(&file_indication::set_path, _val, _a)
-		];
+	 * Absolute path recipe file:
+	 * recipe <toto.def> some_type */
+	rules.recipe_indication_new =
+        rules.recipe_indication
+            [ boost::phoenix::bind(&recipe_indication_t::fi, _val) = _1 ]
+        >>
+        -rules.def_type_instanciation
+            [ boost::phoenix::bind(&recipe_indication_t::ti, _val) = _1 ];
 }
 
 
 template <>
-	void init_definition_indication<iterator>(rule_container<iterator> & rules)
+	void init_recipe_indication_new<iterator>(rule_container<iterator> & rules)
 {
-	generic_init_definition_indication<iterator>(rules);
+	generic_init_recipe_indication_new<iterator>(rules);
 }
 
 

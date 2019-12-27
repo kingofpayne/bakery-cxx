@@ -27,8 +27,7 @@ namespace bakery {
 
 
 /**
- * @return the path to the definition file. This path may be absolute or
- *         relative.
+ * @return the path to the recipe file. This path may be absolute or relative.
  */
 const std::string & file_indication::get_path() const
 {

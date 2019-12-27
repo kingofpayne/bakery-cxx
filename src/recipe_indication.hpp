@@ -1,6 +1,6 @@
 /**
- * Copyright (C) 2010, 2011, 2012
- * Olivier Heriveaux.
+ * Copyright (C) 2019
+ * Olivier Heriveaux
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,44 +19,28 @@
  */
 
 
-#ifndef _BAKERY_DEF_DEFINITION_HPP_
-#define _BAKERY_DEF_DEFINITION_HPP_
+#ifndef _BAKERY_RECIPE_INDICATION_HPP_
+#define _BAKERY_RECIPE_INDICATION_HPP_
 
 
-#include "../compilation_log.hpp"
-#include "node.hpp"
-#include "../file_indication.hpp"
-#include <vector>
+#include "def/type_instanciation.hpp"
+#include "file_indication.hpp"
 
 
 namespace bakery {
-namespace def {
 
 
 /**
- * Class representing the definition defined in a def file.
+ * Stores recipe specification of a data file.
  */
-class definition
+struct recipe_indication_t
 {
-	public:
-		std::string print() const;
-		node::sptr get_node() const;
-		const std::list<file_indication> & get_included_files() const;
-		void set_node(node::sptr);
-		bool compile(compilation_log_t &);
-		void add_include_file(const file_indication &);
-
-	private:
-		/** Root node of the definition. */
-		node::sptr the_node;
-		/** Included files. */
-		std::list<file_indication> included_files;
+    file_indication fi;
+    std::optional<def::type_instanciation_t> ti;
 };
 
 
-} /* namespace def */
 } /* namespace bakery */
 
 
 #endif
-

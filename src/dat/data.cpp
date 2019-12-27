@@ -36,11 +36,11 @@ const node::sptr & data::get_root_node() const
 
 
 /**
- * @return A object indicating where the definition file is located.
+ * @return A object indicating where the recipe file is located.
  */
-const definition_indication_t & data::get_definition_indication() const
+const recipe_indication_t & data::get_recipe_indication() const
 {
-	return definition_indication;
+	return recipe_indication;
 }
 
 
@@ -51,7 +51,7 @@ std::string data::print() const
 {
 	std::string r;
 
-	r = "definition " + definition_indication.fi.print() + "\n";
+	r = "recipe " + recipe_indication.fi.print() + "\n";
 	r += root_node->print();
 
 	return r;
@@ -70,13 +70,13 @@ void data::set_root_node(const node::sptr & value)
 
 
 /**
- * Defines where the definition file is located.
+ * Defines where the recipe file is located.
  *
- * @param value The location of the definition file.
+ * @param value The location of the recipe file.
  */
-void data::set_definition_indication(const definition_indication_t & value)
+void data::set_recipe_indication(const recipe_indication_t & value)
 {
-	definition_indication = value;
+	recipe_indication = value;
 }
 
 

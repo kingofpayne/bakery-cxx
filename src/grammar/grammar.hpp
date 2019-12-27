@@ -28,11 +28,11 @@
 
 #include "../dat/data.hpp"
 #include "../dat/node.hpp"
-#include "../def/definition.hpp"
+#include "../def/recipe.hpp"
 #include "../def/node.hpp"
 #include "../def/type_instanciation.hpp"
-#include "../definition_indication.hpp"
-#include "../definition_or_data.hpp"
+#include "../recipe_indication.hpp"
+#include "../recipe_or_data.hpp"
 #include "../file_indication.hpp"
 #include "custom_skipper.hpp"
 #include <boost/spirit/include/qi.hpp>
@@ -77,13 +77,13 @@ template <typename I>
 
 	boost::spirit::qi::rule<I, def::path(), skipper> path;
 
-	/** definition or data. */
-	boost::spirit::qi::rule<I, definition_or_data(), skipper>
-		definition_or_data_;
+	/** recipe or data. */
+	boost::spirit::qi::rule<I, recipe_or_data(), skipper>
+		recipe_or_data_;
 
-	/** definition. */
-	boost::spirit::qi::rule<I, def::definition(), skipper>
-		definition_;
+	/** recipe. */
+	boost::spirit::qi::rule<I, def::recipe(), skipper>
+		recipe_;
 
 	/** Array type definition. */
 	boost::spirit::qi::rule<I, boost::spirit::qi::locals<def::array_data_t>,
@@ -101,9 +101,9 @@ template <typename I>
 		def::node::sptr(), skipper> def_member;
 
 	boost::spirit::qi::rule<I, def::type_instanciation_t(), skipper>
-		/* type instanciation for definitions. Includes array definition. */
+		/* type instanciation for recipes. Includes array definition. */
 		def_type_instanciation,
-		/** type instanciation for definitions. Does not include array
+		/** type instanciation for recipes. Does not include array
 		 * definitions. */
 		def_type_instanciation_no_array;
 
@@ -154,13 +154,13 @@ template <typename I>
 	boost::spirit::qi::rule<I, boost::spirit::qi::locals<enum_value_data_t>,
 		def::node::sptr(), skipper> def_enum_value;
 
-	/** definition indication. */
+	/** recipe indication. */
 	boost::spirit::qi::rule<I, boost::spirit::qi::locals<std::string>,
 		file_indication(), skipper>
-		definition_indication;
+		recipe_indication;
 
-    boost::spirit::qi::rule<I, definition_indication_t(), skipper>
-        definition_indication_new;
+    boost::spirit::qi::rule<I, recipe_indication_t(), skipper>
+        recipe_indication_new;
 };
 
 
@@ -181,10 +181,10 @@ template <typename I> void init_unsigned_integer(rule_container<I> &);
 template <typename I> void init_quoted_string(rule_container<I> &);
 template <typename I> void init_floating_number(rule_container<I> &);
 template <typename I> void init_identifier(rule_container<I> &);
-template <typename I> void init_definition_or_data(rule_container<I> &);
-template <typename I> void init_definition(rule_container<I> &);
-template <typename I> void init_definition_indication(rule_container<I> &);
-template <typename I> void init_definition_indication_new(rule_container<I> &);
+template <typename I> void init_recipe_or_data(rule_container<I> &);
+template <typename I> void init_recipe(rule_container<I> &);
+template <typename I> void init_recipe_indication(rule_container<I> &);
+template <typename I> void init_recipe_indication_new(rule_container<I> &);
 template <typename I> void init_def_type_instanciation(rule_container<I> &);
 template <typename I> void init_def_array(rule_container<I> &);
 template <typename I> void init_def_member(rule_container<I> &);

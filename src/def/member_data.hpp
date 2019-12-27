@@ -32,7 +32,7 @@ namespace def {
 
 
 /**
- * Data corresponding to a member in structure of a definition.
+ * Data corresponding to a member in structure of a recipe.
  */
 struct member_data_t
 {

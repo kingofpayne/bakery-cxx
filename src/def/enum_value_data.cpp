@@ -36,7 +36,7 @@ enum_value_data_t::enum_value_data_t():
 
 
 /**
- * @return The fixed value string found in the definition file.
+ * @return The fixed value string found in the recipe file.
  */
 const std::string & enum_value_data_t::get_value_str() const
 {

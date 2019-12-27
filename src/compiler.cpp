@@ -74,8 +74,8 @@ void compile(
 		return;
 	}
 
-	definition_or_data definition_or_data;
-	parser::load_from_file(abs_dat_path.string(), definition_or_data, log);
+	recipe_or_data recipe_or_data;
+	parser::load_from_file(abs_dat_path.string(), recipe_or_data, log);
 
 	if (log.get_error_count() != 0)
 	{
@@ -83,15 +83,15 @@ void compile(
 		return;
 	}
 
-	/* Check that the parser returned a data and not a definition. */
-	if (!definition_or_data.is_data())
+	/* Check that the parser returned a data and not a recipe. */
+	if (!recipe_or_data.is_data())
 	{
 		log.add_error("File '" + abs_dat_path.string()
 			+ "' could not be parsed as a data.");
 		return;
 	}
 
-	dat::data & data = definition_or_data.get_data();
+	dat::data & data = recipe_or_data.get_data();
 	compilation_state_t state = { output, tti_stack_t(), log };
 
 	write_data(state, data, abs_dat_path.parent_path().string() + "/",
@@ -100,11 +100,11 @@ void compile(
 
 
 /**
- * Decompiles a binary file to generate a data file, given a definition file.
+ * Decompiles a binary file to generate a data file, given a recipe file.
  * This is the inverse operation of the compilation.
  *
  * @param bin_path Destination binary file path.
- * @param def_path Definition file path. The definition file cannot be guessed
+ * @param def_path Definition file path. The recipe file cannot be guessed
  *        from the binary file. This may be an absolute path or a relative path.
  *        If this path starts with '<' and ends with '>' the include directories
  *        of the context are scanned to find the file.
@@ -175,7 +175,7 @@ void decompile(
  * @param data The data to write. This is issued from the data parser.
  * @param current_directory The base directory to use for all relative path
  *        calculations - should be the directory of the compiled data file.
- * @param include_directories Directories in which the definition files may be
+ * @param include_directories Directories in which the recipe files may be
  *        searched.
  */
 bool write_data(
@@ -184,102 +184,102 @@ bool write_data(
 	const std::string & current_directory,
 	const std::list<std::string> & include_directories)
 {
-	/* Firstly, get the definition file path. */
+	/* Firstly, get the recipe file path. */
 	std::string def_path;
 
 	if ( !resolve_file_indication (
-		data.get_definition_indication().fi,
+		data.get_recipe_indication().fi,
 		current_directory,
 		include_directories,
 		def_path,
 		state.log) )
 	{
-		state.log.add_error("definition file not found.");
+		state.log.add_error("recipe file not found.");
 		return false;
 	}
 
-	/* Loads the definition */
-	definition_or_data definition_or_data;
-	parser::load_from_file(def_path, definition_or_data, state.log);
+	/* Loads the recipe */
+	recipe_or_data recipe_or_data;
+	parser::load_from_file(def_path, recipe_or_data, state.log);
 
 	if (state.log.get_error_count() != 0)
 	{
-		state.log.add_error("Failed to parse main definition file '"
+		state.log.add_error("Failed to parse main recipe file '"
 			+ def_path + "'.");
 
 		return false;
 	}
 
-	/* Check the grammar returned a definition. */
-	if (!definition_or_data.is_definition())
+	/* Check the grammar returned a recipe. */
+	if (!recipe_or_data.is_recipe())
 	{
 		state.log.add_error("File '" + def_path
-			+ "' could not be parsed as a definition.");
+			+ "' could not be parsed as a recipe.");
 
 		return false;
 	}
 
-	def::definition & definition = definition_or_data.get_definition();
+	def::recipe & recipe = recipe_or_data.get_recipe();
 
-	/* Handle included definition files. */
-	std::list<std::string> loaded_definition_files;
+	/* Handle included recipe files. */
+	std::list<std::string> loaded_recipe_files;
 
-	if (!merge_included_definition_files(
-		definition,
+	if (!merge_included_recipe_files(
+		recipe,
 		boost::filesystem::path(def_path).parent_path().string() + "/",
 		include_directories,
-		loaded_definition_files,
+		loaded_recipe_files,
 		state.log ) )
 	{
 		state.log.add_error(
-			"Failed to include some files into main definition.");
+			"Failed to include some files into main recipe.");
 		return false;
 	}
 
 	if (state.log.get_error_count() != 0)
 	{
 		state.log.add_error(
-			"Error occured while parsing included definition files.");
+			"Error occured while parsing included recipe files.");
 		return false;
 	}
 
-	/* Populate the definition. */
-	populate_node(definition.get_node());
+	/* Populate the recipe. */
+	populate_node(recipe.get_node());
 
-	/* Compile the definition. */
-	if (!definition.compile(state.log))
+	/* Compile the recipe. */
+	if (!recipe.compile(state.log))
 		return false;
 
-	/* If errors are encounterred during the definition file parsing, it is not
+	/* If errors are encounterred during the recipe file parsing, it is not
 	 * necessary to continue... */
 	if (state.log.get_error_count() != 0)
 		return false;
 
 
-    /* The definition can be either the members defined at the root of the
-     * definition file, or a struct type declared or imported in the definition
+    /* The recipe can be either the members defined at the root of the
+     * recipe file, or a struct type declared or imported in the recipe
      * file itself.
-     * The first case corresponds to data files with definition defined like:
-     * definition "some_file.def";
+     * The first case corresponds to data files with recipe defined like:
+     * recipe "some_file.def";
      * And for the second case:
-     * definition "some_file.def" some_type; */
+     * recipe "some_file.def" some_type; */
 	tti_stack_t tti_stack;
-    if (data.get_definition_indication().ti.has_value())
+    if (data.get_recipe_indication().ti.has_value())
     {
-        /* The type is specified in the definition declaration (second case). */
-        def::type_instanciation_t ti = data.get_definition_indication().ti.value();
+        /* The type is specified in the recipe declaration (second case). */
+        def::type_instanciation_t ti = data.get_recipe_indication().ti.value();
         /* note: ti is a copy we can edit. */
-        def::node::sptr def_root_node = definition.get_node();
+        def::node::sptr def_root_node = recipe.get_node();
         def_root_node->compile_type_instanciation(ti, state.log, def_root_node.get());
     	write_structure(state, ti, *data.get_root_node());
     }
     else
     {
-        /* All the members at the root of the definition file should be written
+        /* All the members at the root of the recipe file should be written
          * in the binary file (first case).
 	     * Write the root structure node, which will write the whole content. */
     	def::type_instanciation_t root_structure_instanciation;
-    	root_structure_instanciation.set_type_node_ptr(definition.get_node().get());
+    	root_structure_instanciation.set_type_node_ptr(recipe.get_node().get());
     	write_structure(state, root_structure_instanciation, *data.get_root_node());
     }
     bakery_assert_debug(tti_stack.size() == 0); /* sanity check */
@@ -289,7 +289,7 @@ bool write_data(
 
 
 /**
- * Writes a data node, according to a definition node.
+ * Writes a data node, according to a recipe node.
  *
  * @param state Compilation state.
  * @param type_inst The type instanciation.
@@ -341,7 +341,7 @@ bool write_node(compilation_state_t & state,
 
 
 /**
- * Write a data node, according to a definition template type.
+ * Write a data node, according to a recipe template type.
  *
  * @param state Compilation state.
  * @param type_inst The type instanciation.
@@ -371,7 +371,7 @@ bool write_template_type(compilation_state_t & state,
 
 
 /**
- * Writes a data node, according to a definition structure.
+ * Writes a data node, according to a recipe structure.
  *
  * @param state Compilation state.
  * @param type_inst The type instanciation.
@@ -510,7 +510,7 @@ bool write_structure(compilation_state_t & state,
 
 
 /**
- * Writes a data node, according to a definition variant node.
+ * Writes a data node, according to a recipe variant node.
  *
  * @param state Compilation state.
  * @param type_inst The type instanciation.
@@ -637,7 +637,7 @@ bool write_variant(compilation_state_t & state,
 
 
 /**
- * Writes a data node, according to a definition array node.
+ * Writes a data node, according to a recipe array node.
  *
  * @param state Compilation state.
  * @param type_inst The type instanciation.
@@ -773,7 +773,7 @@ bool write_array_dim(
 
 
 /**
- * Writes a data node, according to a definition typedef node.
+ * Writes a data node, according to a recipe typedef node.
  *
  * @param state Compilation state.
  * @param type_inst The type instanciation.
@@ -822,7 +822,7 @@ bool write_typedef(compilation_state_t & state,
 bool write_enum(compilation_state_t & state,
 	const def::type_instanciation_t & type_inst, const dat::node & data_node)
 {
-	/* Get the enumeration definition node. */
+	/* Get the enumeration recipe node. */
 	const def::node* type_ptr = type_inst.get_type_ptr();
 
 	/* Check data node's type. */
@@ -867,7 +867,7 @@ bool write_enum(compilation_state_t & state,
 
 
 /**
- * Writes a data node, according to a definition native node.
+ * Writes a data node, according to a recipe native node.
  *
  * @param state Compilation state.
  * @param type_inst The type instanciation.
@@ -934,7 +934,7 @@ bool write_native(compilation_state_t & state,
 
 
 /**
- * Writes a data node, according to a definition pair node.
+ * Writes a data node, according to a recipe pair node.
  *
  * @param state Compilation state.
  * @param type_inst The type instanciation.
@@ -1013,7 +1013,7 @@ bool write_native_pair(compilation_state_t & state,
 
 
 /**
- * Writes a data node, according to a definition tuple node.
+ * Writes a data node, according to a recipe tuple node.
  *
  * @param state Compilation state.
  * @param type_inst The type instanciation.
@@ -1080,7 +1080,7 @@ bool write_native_tuple(compilation_state_t & state,
 
 
 /**
- * Writes a data node, according to a definition list node.
+ * Writes a data node, according to a recipe list node.
  *
  * @param state Compilation state.
  * @param type_inst The type instanciation.
@@ -1137,7 +1137,7 @@ bool write_native_list(compilation_state_t & state,
 
 
 /**
- * Writes a data node, according to a definition map node.
+ * Writes a data node, according to a recipe map node.
  *
  * @param state Compilation state.
  * @param type_inst The type instanciation.
@@ -1541,11 +1541,11 @@ bool write_native_string(compilation_state_t & state,
 
 
 /**
- * Decompiles a binary file, following a definition file.
+ * Decompiles a binary file, following a recipe file.
  *
  * @param state Decompilation state.
- * @param def_path Path to the definition file.
- * @param include_directories Directories in which the definition files may be
+ * @param def_path Path to the recipe file.
+ * @param include_directories Directories in which the recipe files may be
  *        searched.
  */
 bool read_data(decompilation_state_t & state,
@@ -1553,8 +1553,8 @@ bool read_data(decompilation_state_t & state,
     const std::string & current_directory,
 	const std::list<std::string> & include_directories)
 {
-	/* Open the definition file and parse it. */
-	definition_or_data definition_or_data;
+	/* Open the recipe file and parse it. */
+	recipe_or_data recipe_or_data;
     std::string def_path;
 
     if (!resolve_file_indication(def_fi, current_directory, include_directories,
@@ -1564,66 +1564,66 @@ bool read_data(decompilation_state_t & state,
         return false;
     }
 
-	parser::load_from_file(def_path, definition_or_data, state.log);
+	parser::load_from_file(def_path, recipe_or_data, state.log);
 
 	if (state.log.get_error_count())
 	{
-		state.log.add_error("Error in definition file '" + def_path + "'.");
+		state.log.add_error("Error in recipe file '" + def_path + "'.");
 		return false;
 	}
 
-	/* Verify that the definition file is really a definition file and not a
+	/* Verify that the recipe file is really a recipe file and not a
 	 * data file. */
-	if (definition_or_data.is_data())
+	if (recipe_or_data.is_data())
 	{
 		state.log.add_error("File '" + def_path
-            + "' is not a definition file.");
+            + "' is not a recipe file.");
 
 		return false;
 	}
 
-	def::definition & definition = definition_or_data.get_definition();
+	def::recipe & recipe = recipe_or_data.get_recipe();
 
-	/* Handle included definition files. */
-	std::list< std::string > loaded_definition_files;
+	/* Handle included recipe files. */
+	std::list< std::string > loaded_recipe_files;
 
-	if (!merge_included_definition_files(definition,
+	if (!merge_included_recipe_files(recipe,
         boost::filesystem::path(def_path).parent_path().string() + "/",
-        include_directories, loaded_definition_files, state.log))
+        include_directories, loaded_recipe_files, state.log))
 	{
 		state.log.add_error("Failed to include some files into main "
-			"definition.");
+			"recipe.");
 
 		return false;
 	}
 
 	if (state.log.get_error_count())
 	{
-		state.log.add_error("Error occured while parsing included definition "
+		state.log.add_error("Error occured while parsing included recipe "
 			"files.");
 
 		return false;
 	}
 
-	/* At this point, the complete definition has been parsed. */
+	/* At this point, the complete recipe has been parsed. */
 
-	/* Populate the definition and compile it. */
-	populate_node(definition.get_node());
+	/* Populate the recipe and compile it. */
+	populate_node(recipe.get_node());
 
-	if (!definition.compile(state.log))
+	if (!recipe.compile(state.log))
 		return false;
 
 	if (state.log.get_error_count() != 0)
 		return false;
 
-	/* Write in the output the link to the definition file. */
+	/* Write in the output the link to the recipe file. */
 	boost::filesystem::path rel_def_path = make_relative(
 		boost::filesystem::current_path(), def_path);
 
-	state.output << "definition " << def_fi.print() << ";" << std::endl
+	state.output << "recipe " << def_fi.print() << ";" << std::endl
         << std::endl;
 
-	/* Next process is similar to compilation. The definition will be travelled
+	/* Next process is similar to compilation. The recipe will be travelled
 	 * and for each data, the binary file will be read and the data (in text
 	 * format) will be generated in the output file.
 	 *
@@ -1631,7 +1631,7 @@ bool read_data(decompilation_state_t & state,
 	 * enough bytes remaining in the binary file. */
 
 	def::type_instanciation_t root_structure_instanciation;
-	root_structure_instanciation.set_type_node_ptr(definition.get_node().get());
+	root_structure_instanciation.set_type_node_ptr(recipe.get_node().get());
 	read_structure(state, root_structure_instanciation);
 
 	return true;
@@ -2630,27 +2630,27 @@ bool check_template_parameter_count(
 
 
 /**
- * Loads included definition files and merge their content. Since included files
+ * Loads included recipe files and merge their content. Since included files
  * may also include other files, this method is recursive.
  *
- * @param def Reference to the definition containing the included files.
- * @param current_directory Current directory of the definition, this path will
+ * @param def Reference to the recipe containing the included files.
+ * @param current_directory Current directory of the recipe, this path will
  *        be used to calculate the relative paths of included files.
  * @param include_directories Directories in which the files may be searched.
- * @param loaded_defs List of already loaded definition files. This is to avoid
+ * @param loaded_defs List of already loaded recipe files. This is to avoid
  *        loading multiple times the same files (which would cause compilation
  *        error due to symbol redefinition) and circular references. It also
  *        avoid to use some #idndef #define C-like triks.
  * @param log The object in which error messages will be pushed.
  */
-bool merge_included_definition_files(
-	def::definition & def,
+bool merge_included_recipe_files(
+	def::recipe & def,
 	const std::string & current_directory,
 	const std::list<std::string> & include_directories,
 	std::list<std::string> & loaded_defs,
 	compilation_log_t & log)
 {
-	/* Retrieve the liste of included files by definition. */
+	/* Retrieve the liste of included files by recipe. */
 	const std::list<file_indication> & included_defs = def.get_included_files();
 
 	/* For each included file. */
@@ -2666,7 +2666,7 @@ bool merge_included_definition_files(
 			return false;
 		}
 
-		/* Find if this definition file has already been loaded. */
+		/* Find if this recipe file has already been loaded. */
 		if (
 			std::find_if(
 				loaded_defs.begin(),
@@ -2682,42 +2682,42 @@ bool merge_included_definition_files(
 		else
 		{
 			/* File not yet loaded
-			 * Store the file path to avoid reloading the same definition file
+			 * Store the file path to avoid reloading the same recipe file
 			 * later. */
 			loaded_defs.push_back(p);
 
-			/* Loads the definition. */
-			definition_or_data definition_or_data;
-			parser::load_from_file(p, definition_or_data, log);
+			/* Loads the recipe. */
+			recipe_or_data recipe_or_data;
+			parser::load_from_file(p, recipe_or_data, log);
 
 			if (log.get_error_count() != 0)
 			{
-				log.add_error("Failed to parse included definition '" + p +
+				log.add_error("Failed to parse included recipe '" + p +
                     "'.");
 
 				return false;
 			}
 
-			/* Check that the parser produced a def::definition. */
-			if (!definition_or_data.is_definition())
+			/* Check that the parser produced a def::recipe. */
+			if (!recipe_or_data.is_recipe())
 			{
 				log.add_error("Included file '" + p
-                    + "' could not be parsed as a definition.");
+                    + "' could not be parsed as a recipe.");
 
 				return false;
 			}
 
-			def::definition & def_2 = definition_or_data.get_definition();
+			def::recipe & def_2 = recipe_or_data.get_recipe();
 
-			/* Included definition may also include definitions files. */
-			if (!merge_included_definition_files(def_2,
+			/* Included recipe may also include recipes files. */
+			if (!merge_included_recipe_files(def_2,
 				boost::filesystem::path(p).parent_path().string() + "/",
                 include_directories, loaded_defs, log))
 			{
 				return false;
 			}
 
-			/* Merge the definition content.
+			/* Merge the recipe content.
              * This takes all namespaces and types. Member nodes are
              * discarded. */
 			def.get_node()->merge_types(def_2.get_node());
