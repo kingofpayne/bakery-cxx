@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2010, 2011, 2012, 2013
+ * Copyright (C) 2010, 2011, 2012
  * Olivier Heriveaux.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,41 +19,67 @@
  */
 
 
-#ifndef _BAKERY_RECIPE_OR_DATA_HPP_
-#define _BAKERY_RECIPE_OR_DATA_HPP_
+#ifndef _BAKERY_DEF_NATIVE_DATA_HPP_
+#define _BAKERY_DEF_NATIVE_DATA_HPP_
 
 
-#include "rec/recipe.hpp"
-#include "dat/data.hpp"
+#include "../continuous_wrapper.hpp"
 
 
 namespace bakery {
+namespace rec {
 
 
 /**
- * Class which holds either a recipe or a data, or nothing.
+ * data for nodes representing a native type. 
  */
-class recipe_or_data
+class native_data_t
 {
 	public:
-		recipe_or_data();
+		/**
+		 * Enumerates the different native types.
+		 */
+		struct class_t
+		{
+			enum value
+			{
+				null,
+				bool_,
+				char_,
+				short_,
+				int_,
+				float_,
+				double_,
+				string,
+				pair,
+				tuple,
+				list,
+				map
+			};
 
-		void set_recipe(const rec::recipe &);
-		void set_data(const dat::data &);
-		bool is_recipe() const;
-		bool is_data() const;
-		rec::recipe & get_recipe();
-		dat::data & get_data();
+			static const std::string strings[];
+
+			typedef continuous_wrapper_t<
+					value,
+					strings,
+					null,
+					map
+				> Wrapper;
+		};
+		
+		native_data_t();
+		native_data_t(class_t::value);
+		std::string print() const;
+		class_t::value get_class() const;
+		void set_class(class_t::value);
 		
 	private:
-		boost::variant<
-			int, /* int to hold nothing. */
-			rec::recipe,
-			dat::data
-		> value;	
+		/** Class */
+		class_t::value class_;
 };
 
 
+} /* namespace rec */
 } /* namespace bakery */
 
 

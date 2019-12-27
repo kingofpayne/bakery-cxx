@@ -24,7 +24,7 @@
 
 
 #include <boost/shared_ptr.hpp>
-#include "../def/node.hpp"
+#include "../rec/node.hpp"
 #include "../dat/node.hpp"
 
 
@@ -34,22 +34,22 @@ namespace grammar {
 
 struct def_node_sptr_creator
 {
-	typedef boost::shared_ptr<def::node> result_type;
+	typedef boost::shared_ptr<rec::node> result_type;
 
-	boost::shared_ptr<def::node> operator()() const
+	boost::shared_ptr<rec::node> operator()() const
 	{
-		return boost::shared_ptr<def::node>(
-			new def::node(def::node::kind::none));
+		return boost::shared_ptr<rec::node>(
+			new rec::node(rec::node::kind::none));
 	}
 
-	boost::shared_ptr<def::node> operator()(def::node::kind::value kind) const
+	boost::shared_ptr<rec::node> operator()(rec::node::kind::value kind) const
 	{
-		return boost::shared_ptr<def::node>(new def::node(kind));
+		return boost::shared_ptr<rec::node>(new rec::node(kind));
 	}
 };
 
 
-/** Phoenix function to create easily initialized def::node::sptr. */
+/** Phoenix function to create easily initialized rec::node::sptr. */
 extern const boost::phoenix::function<def_node_sptr_creator>
 	create_def_node_sptr;
 

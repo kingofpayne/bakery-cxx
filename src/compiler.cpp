@@ -28,7 +28,7 @@
 #include <boost/lambda/lambda.hpp>
 #include "util.hpp"
 #include "str.hpp"
-#include "def/util.hpp"
+#include "rec/util.hpp"
 #include "parser.hpp"
 #include <limits>
 
@@ -219,7 +219,7 @@ bool write_data(
 		return false;
 	}
 
-	def::recipe & recipe = recipe_or_data.get_recipe();
+	rec::recipe & recipe = recipe_or_data.get_recipe();
 
 	/* Handle included recipe files. */
 	std::list<std::string> loaded_recipe_files;
@@ -267,9 +267,9 @@ bool write_data(
     if (data.get_recipe_indication().ti.has_value())
     {
         /* The type is specified in the recipe declaration (second case). */
-        def::type_instanciation_t ti = data.get_recipe_indication().ti.value();
+        rec::type_instanciation_t ti = data.get_recipe_indication().ti.value();
         /* note: ti is a copy we can edit. */
-        def::node::sptr def_root_node = recipe.get_node();
+        rec::node::sptr def_root_node = recipe.get_node();
         def_root_node->compile_type_instanciation(ti, state.log, def_root_node.get());
     	write_structure(state, ti, *data.get_root_node());
     }
@@ -278,7 +278,7 @@ bool write_data(
         /* All the members at the root of the recipe file should be written
          * in the binary file (first case).
 	     * Write the root structure node, which will write the whole content. */
-    	def::type_instanciation_t root_structure_instanciation;
+    	rec::type_instanciation_t root_structure_instanciation;
     	root_structure_instanciation.set_type_node_ptr(recipe.get_node().get());
     	write_structure(state, root_structure_instanciation, *data.get_root_node());
     }
@@ -298,12 +298,12 @@ bool write_data(
  * @return True if no error occurs.
  */
 bool write_node(compilation_state_t & state,
-	const def::type_instanciation_t & type_inst, const dat::node & data_node)
+	const rec::type_instanciation_t & type_inst, const dat::node & data_node)
 {
-    def::node::kind::value kind = type_inst.get_type_ptr()->get_kind();
+    rec::node::kind::value kind = type_inst.get_type_ptr()->get_kind();
 
     /* Verify that the type is declared as 'unsigned' only for native types. */
-    if (type_inst.is_unsigned() && (kind != def::node::kind::native))
+    if (type_inst.is_unsigned() && (kind != rec::node::kind::native))
     {
         state.log.add_error("Type '" + type_inst.print() + "' of node '"
             + data_node.print() + "' cannot be declared as unsigned.");
@@ -312,25 +312,25 @@ bool write_node(compilation_state_t & state,
 
     switch (kind)
 	{
-		case def::node::kind::structure:
+		case rec::node::kind::structure:
 			return write_structure(state, type_inst, data_node);
 
-		case def::node::kind::variant:
+		case rec::node::kind::variant:
 			return write_variant(state, type_inst, data_node);
 
-		case def::node::kind::array:
+		case rec::node::kind::array:
 			return write_array(state, type_inst, data_node);
 
-		case def::node::kind::typedef_:
+		case rec::node::kind::typedef_:
 			return write_typedef(state, type_inst, data_node);
 
-		case def::node::kind::enum_:
+		case rec::node::kind::enum_:
 			return write_enum(state, type_inst, data_node);
 
-		case def::node::kind::native:
+		case rec::node::kind::native:
 			return write_native(state, type_inst, data_node);
 
-		case def::node::kind::template_type:
+		case rec::node::kind::template_type:
 			return write_template_type(state, type_inst, data_node);
 
 		/* Other cases should not happen. */
@@ -350,7 +350,7 @@ bool write_node(compilation_state_t & state,
  * @return True if no error occurs.
  */
 bool write_template_type(compilation_state_t & state,
-	const def::type_instanciation_t & type_inst, const dat::node & data_node)
+	const rec::type_instanciation_t & type_inst, const dat::node & data_node)
 {
 	/* template type must be matched to a real type. For this, tti stack must be
 	 * explored to find the latest instanciation of the template. */
@@ -358,7 +358,7 @@ bool write_template_type(compilation_state_t & state,
 	(
 		state.tti_stack.rbegin(),
 		state.tti_stack.rend(),
-		[&](const std::pair<def::node::sptr, def::type_instanciation_t> & p)
+		[&](const std::pair<rec::node::sptr, rec::type_instanciation_t> & p)
 			-> bool
 		{
 			return p.first.get() == type_inst.get_type_ptr();
@@ -380,7 +380,7 @@ bool write_template_type(compilation_state_t & state,
  * @return True if no error occurs.
  */
 bool write_structure(compilation_state_t & state,
-	const def::type_instanciation_t & type_inst, const dat::node & data_node)
+	const rec::type_instanciation_t & type_inst, const dat::node & data_node)
 {
 	/* Check data node's type. */
 	if (data_node.get_kind() != dat::node::kind::group)
@@ -389,7 +389,7 @@ bool write_structure(compilation_state_t & state,
 		return false;
 	}
 
-	const def::node* type_ptr = type_inst.get_type_ptr();
+	const rec::node* type_ptr = type_inst.get_type_ptr();
 
 	/* Check template parameter count. */
 	if (!check_template_parameter_count(type_inst, state.log))
@@ -398,12 +398,12 @@ bool write_structure(compilation_state_t & state,
 	/* Push in the tty stack the instancied types for template types. As we use
 	 * a tti_stacker, we are sure the elements will be poped correctly when this
 	 * function returns. */
-	std::list<def::node::sptr> template_types = type_ptr->query_nodes<std::list>
-		(def::node::kind::template_type);
+	std::list<rec::node::sptr> template_types = type_ptr->query_nodes<std::list>
+		(rec::node::kind::template_type);
 
 	tti_stacker_t<
-		std::list<def::node::sptr>,
-		def::type_instanciation_t::parameter_list
+		std::list<rec::node::sptr>,
+		rec::type_instanciation_t::parameter_list
 	> stacker(
 		state.tti_stack,
 		template_types.begin(),
@@ -413,11 +413,11 @@ bool write_structure(compilation_state_t & state,
 	);
 
 	/* Get the data of the structure */
-	const def::structure_data_t & the_structure_data =
+	const rec::structure_data_t & the_structure_data =
 		type_ptr->get_structure_data();
 
 	/* Firstly, we must write the data of the herited types. */
-	for (const def::type_instanciation_t & herited_type_inst :
+	for (const rec::type_instanciation_t & herited_type_inst :
 		the_structure_data.heritance_list)
 	{
 		if (!write_node(state, herited_type_inst, data_node))
@@ -434,17 +434,17 @@ bool write_structure(compilation_state_t & state,
 		dat::node::kind::assignment);
 
 	/* For each member of the structure. */
-	for (const def::node::sptr & node :
-		type_ptr->query_nodes<std::list>(def::node::kind::member))
+	for (const rec::node::sptr & node :
+		type_ptr->query_nodes<std::list>(rec::node::kind::member))
 	{
 		const std::string & name = node->get_name();
 
 		/* Retrive the member data */
-		const def::member_data_t & member_data = node->get_member_data();
+		const rec::member_data_t & member_data = node->get_member_data();
 
 		/* Checks if the node is optional or not. */
 		bool node_is_optional =
-			node->has_qualifier(def::node::qualifier::optional);
+			node->has_qualifier(rec::node::qualifier::optional);
 
 		/* Does the node has a default value ? */
 		bool has_default_value = member_data.has_default_value();
@@ -519,7 +519,7 @@ bool write_structure(compilation_state_t & state,
  * @return True if no error occurs.
  */
 bool write_variant(compilation_state_t & state,
-	const def::type_instanciation_t & type_inst, const dat::node & data_node)
+	const rec::type_instanciation_t & type_inst, const dat::node & data_node)
 {
 	/* Check data node's type. */
 	if (data_node.get_kind() != dat::node::kind::variant)
@@ -531,14 +531,14 @@ bool write_variant(compilation_state_t & state,
 		return false;
 	}
 
-	const def::node* type_ptr = type_inst.get_type_ptr();
+	const rec::node* type_ptr = type_inst.get_type_ptr();
 
 	/* Template argument count must be equal to template types. */
-	const def::type_instanciation_t::parameter_list & template_parameters =
+	const rec::type_instanciation_t::parameter_list & template_parameters =
 		type_inst.get_parameters();
 
-	std::list<def::node::sptr> template_types = type_ptr->query_nodes<std::list>
-		(def::node::kind::template_type);
+	std::list<rec::node::sptr> template_types = type_ptr->query_nodes<std::list>
+		(rec::node::kind::template_type);
 
 	if (template_types.size() != template_parameters.size())
 	{
@@ -553,8 +553,8 @@ bool write_variant(compilation_state_t & state,
 	 * a tti_stacker, we are sure the elements will be poped correctly when this
 	 * function returns. */
 	tti_stacker_t<
-		std::list<def::node::sptr>,
-		def::type_instanciation_t::parameter_list
+		std::list<rec::node::sptr>,
+		rec::type_instanciation_t::parameter_list
 	> stacker(
 		state.tti_stack,
 		template_types.begin(),
@@ -567,14 +567,14 @@ bool write_variant(compilation_state_t & state,
 	const std::string & assigned_member_name = data_node.get_name();
 
 	/* Get the member list. */
-	std::list<def::node::sptr> members = type_ptr->query_nodes<std::list>(
-		def::node::kind::member);
+	std::list<rec::node::sptr> members = type_ptr->query_nodes<std::list>(
+		rec::node::kind::member);
 
 	/* Find the corresponding member. */
 	unsigned int member_index = 0;
-	std::list<def::node::sptr>::const_iterator it_member_node = members.begin();
+	std::list<rec::node::sptr>::const_iterator it_member_node = members.begin();
 
-	const std::list<def::node::sptr>::const_iterator end_it_member_node =
+	const std::list<rec::node::sptr>::const_iterator end_it_member_node =
 		members.end();
 
 	while (it_member_node != end_it_member_node)
@@ -596,10 +596,10 @@ bool write_variant(compilation_state_t & state,
 	}
 
 	/* Transform it_member_node into a node (for code clarity). */
-	def::node::sptr member_node = *it_member_node;
+	rec::node::sptr member_node = *it_member_node;
 
 	/* Verify that the member is not marked as optional */
-	if (member_node->has_qualifier(def::node::qualifier::optional))
+	if (member_node->has_qualifier(rec::node::qualifier::optional))
 	{
 		state.log.add_error("variant member '" + assigned_member_name
 			+ "' cannot be marked as optional since it belongs to a variant.");
@@ -646,10 +646,10 @@ bool write_variant(compilation_state_t & state,
  * @return True if no error occurs.
  */
 bool write_array(compilation_state_t & state,
-	const def::type_instanciation_t & type_inst, const dat::node & data_node)
+	const rec::type_instanciation_t & type_inst, const dat::node & data_node)
 {
 	/* Get array data */
-	const def::array_data_t & array_data =
+	const rec::array_data_t & array_data =
 		type_inst.get_type_ptr()->get_array_data();
 
 	/* This should not fail, it the grammar does its job correctly. */
@@ -693,7 +693,7 @@ bool write_array(compilation_state_t & state,
  */
 bool write_array_dim(
 	compilation_state_t & state,
-	const def::type_instanciation_t & type_inst,
+	const rec::type_instanciation_t & type_inst,
 	size_t dim,
 	const dat::node & data_node)
 {
@@ -707,7 +707,7 @@ bool write_array_dim(
 	const dat::node::node_sptr_list & children = data_node.get_children();
 
 	/* Get array data */
-	const def::array_data_t & array_data =
+	const rec::array_data_t & array_data =
 		type_inst.get_type_ptr()->get_array_data();
 
 	const size_t dim_size = array_data.dims[dim];
@@ -782,22 +782,22 @@ bool write_array_dim(
  * @return True if no error occurs.
  */
 bool write_typedef(compilation_state_t & state,
-	const def::type_instanciation_t & type_inst, const dat::node & data_node)
+	const rec::type_instanciation_t & type_inst, const dat::node & data_node)
 {
 	if (!check_template_parameter_count(type_inst, state.log))
 		return false;
 
-	const def::node* type_ptr = type_inst.get_type_ptr();
+	const rec::node* type_ptr = type_inst.get_type_ptr();
 
 	/* Push in the tty stack the instancied types for template types. As we use
 	 * a tti_stacker, we are sure the elements will be poped correctly when this
 	 * function returns. */
-	std::list<def::node::sptr> template_types =
-		type_ptr->query_nodes<std::list>(def::node::kind::template_type);
+	std::list<rec::node::sptr> template_types =
+		type_ptr->query_nodes<std::list>(rec::node::kind::template_type);
 
 	tti_stacker_t<
-		std::list<def::node::sptr>,
-		def::type_instanciation_t::parameter_list
+		std::list<rec::node::sptr>,
+		rec::type_instanciation_t::parameter_list
 	> stacker(
 		state.tti_stack,
 		template_types.begin(),
@@ -820,10 +820,10 @@ bool write_typedef(compilation_state_t & state,
  * @return True if no error occurs.
  */
 bool write_enum(compilation_state_t & state,
-	const def::type_instanciation_t & type_inst, const dat::node & data_node)
+	const rec::type_instanciation_t & type_inst, const dat::node & data_node)
 {
 	/* Get the enumeration recipe node. */
-	const def::node* type_ptr = type_inst.get_type_ptr();
+	const rec::node* type_ptr = type_inst.get_type_ptr();
 
 	/* Check data node's type. */
 	if (data_node.get_kind() != dat::node::kind::identifier)
@@ -845,7 +845,7 @@ bool write_enum(compilation_state_t & state,
 	const std::string & identifier = data_node.get_identifier();
 
 	/* Find the enumeration member. */
-	def::node::sptr enum_value_node = type_ptr->find_node(identifier);
+	rec::node::sptr enum_value_node = type_ptr->find_node(identifier);
 	if (enum_value_node.get() != 0)
 	{
 		/* Found. Write the value. */
@@ -876,9 +876,9 @@ bool write_enum(compilation_state_t & state,
  * @return True if no error occurs.
  */
 bool write_native(compilation_state_t & state,
-	const def::type_instanciation_t & type_inst, const dat::node & data_node)
+	const rec::type_instanciation_t & type_inst, const dat::node & data_node)
 {
-    def::native_data_t::class_t::value cls =
+    rec::native_data_t::class_t::value cls =
         type_inst.get_type_ptr()->get_native_data().get_class();
 
     /* Some types cannot be declared as unsigned. Check this. */
@@ -886,9 +886,9 @@ bool write_native(compilation_state_t & state,
     {
         switch (cls)
         {
-            case def::native_data_t::class_t::int_:
-            case def::native_data_t::class_t::char_:
-            case def::native_data_t::class_t::short_:
+            case rec::native_data_t::class_t::int_:
+            case rec::native_data_t::class_t::char_:
+            case rec::native_data_t::class_t::short_:
                 break;
             default:
                 state.log.add_error("Type '" + type_inst.print() +
@@ -900,31 +900,31 @@ bool write_native(compilation_state_t & state,
 
     switch (cls)
 	{
-		case def::native_data_t::class_t::bool_:
+		case rec::native_data_t::class_t::bool_:
 			return write_native_bool(state, type_inst, data_node);
 
-		case def::native_data_t::class_t::int_:
-		case def::native_data_t::class_t::char_:
-		case def::native_data_t::class_t::short_:
+		case rec::native_data_t::class_t::int_:
+		case rec::native_data_t::class_t::char_:
+		case rec::native_data_t::class_t::short_:
 			return write_native_integer(state, type_inst, data_node);
 
-		case def::native_data_t::class_t::string:
+		case rec::native_data_t::class_t::string:
 			return write_native_string(state, type_inst, data_node);
 
-		case def::native_data_t::class_t::float_:
-		case def::native_data_t::class_t::double_:
+		case rec::native_data_t::class_t::float_:
+		case rec::native_data_t::class_t::double_:
 			return write_native_floating(state, type_inst, data_node);
 
-		case def::native_data_t::class_t::pair:
+		case rec::native_data_t::class_t::pair:
 			return write_native_pair(state, type_inst, data_node);
 
-		case def::native_data_t::class_t::tuple:
+		case rec::native_data_t::class_t::tuple:
 			return write_native_tuple(state, type_inst, data_node);
 
-		case def::native_data_t::class_t::list:
+		case rec::native_data_t::class_t::list:
 			return write_native_list(state, type_inst, data_node);
 
-		case def::native_data_t::class_t::map:
+		case rec::native_data_t::class_t::map:
 			return write_native_map(state, type_inst, data_node);
 
 		default:
@@ -943,7 +943,7 @@ bool write_native(compilation_state_t & state,
  * @return True if no error occurs.
  */
 bool write_native_pair(compilation_state_t & state,
-	const def::type_instanciation_t & type_inst, const dat::node & data_node)
+	const rec::type_instanciation_t & type_inst, const dat::node & data_node)
 {
 	/* Check data node's type. */
 	if (data_node.get_kind() != dat::node::kind::group)
@@ -965,7 +965,7 @@ bool write_native_pair(compilation_state_t & state,
 
 	/* pair is a template parametized type. We need to retrieve the type of the
 	 * elements. */
-	const def::type_instanciation_t::parameter_list & template_parameters =
+	const rec::type_instanciation_t::parameter_list & template_parameters =
 		type_inst.get_parameters();
 
 	size_t size = template_parameters.size();
@@ -980,7 +980,7 @@ bool write_native_pair(compilation_state_t & state,
 	}
 
 	/* Get the type of the first element. */
-	const def::type_instanciation_t & type_of_a = template_parameters[0];
+	const rec::type_instanciation_t & type_of_a = template_parameters[0];
 
 	/* Get the type of the second element. If only one template parameter was
 	 * specified, then the type is the same as the first element. With this
@@ -988,7 +988,7 @@ bool write_native_pair(compilation_state_t & state,
 	 * pair<int, int>
 	 * just write:
 	 * pair<int> */
-	const def::type_instanciation_t & type_of_b = (size == 2)?
+	const rec::type_instanciation_t & type_of_b = (size == 2)?
 		template_parameters[1]:
 		type_of_a;
 
@@ -1022,7 +1022,7 @@ bool write_native_pair(compilation_state_t & state,
  * @return True if no error occurs.
  */
 bool write_native_tuple(compilation_state_t & state,
-	const def::type_instanciation_t & type_inst, const dat::node & data_node)
+	const rec::type_instanciation_t & type_inst, const dat::node & data_node)
 {
 	/* Check data node's type. */
 	if (data_node.get_kind() != dat::node::kind::group)
@@ -1035,7 +1035,7 @@ bool write_native_tuple(compilation_state_t & state,
 
 	/* tuple is a template parametized type. We need to retrieve the type of the
 	 * elements. */
-	const def::type_instanciation_t::parameter_list & template_parameters =
+	const rec::type_instanciation_t::parameter_list & template_parameters =
 		type_inst.get_parameters();
 
 	size_t size = template_parameters.size();
@@ -1089,7 +1089,7 @@ bool write_native_tuple(compilation_state_t & state,
  * @return True if no error occurs.
  */
 bool write_native_list(compilation_state_t & state,
-	const def::type_instanciation_t & type_inst, const dat::node & data_node)
+	const rec::type_instanciation_t & type_inst, const dat::node & data_node)
 {
 	/* Check data node's type. */
 	if (data_node.get_kind() != dat::node::kind::group)
@@ -1102,7 +1102,7 @@ bool write_native_list(compilation_state_t & state,
 
 	/* list is a template parametized type. We need to retrieve the type of the
 	 * elements. */
-	const def::type_instanciation_t::parameter_list & template_parameters =
+	const rec::type_instanciation_t::parameter_list & template_parameters =
 		type_inst.get_parameters();
 
 	if (template_parameters.size() != 1)
@@ -1146,7 +1146,7 @@ bool write_native_list(compilation_state_t & state,
  * @return True if no error occurs.
  */
 bool write_native_map(compilation_state_t & state,
-	const def::type_instanciation_t & type_inst, const dat::node & data_node)
+	const rec::type_instanciation_t & type_inst, const dat::node & data_node)
 {
 	/* Check data node's type. */
 	if (data_node.get_kind() != dat::node::kind::group)
@@ -1159,7 +1159,7 @@ bool write_native_map(compilation_state_t & state,
 
 	/* map is a template parametized type. We need to retrieve the type of the
 	 * key and the type of the elements. */
-	const def::type_instanciation_t::parameter_list & template_parameters =
+	const rec::type_instanciation_t::parameter_list & template_parameters =
 		type_inst.get_parameters();
 
 	if (template_parameters.size() != 2)
@@ -1225,7 +1225,7 @@ bool write_native_map(compilation_state_t & state,
  * @return True if no error occurs.
  */
 bool write_native_bool(compilation_state_t & state,
-	const def::type_instanciation_t & type_inst, const dat::node & data_node)
+	const rec::type_instanciation_t & type_inst, const dat::node & data_node)
 {
 	if (data_node.get_kind() != dat::node::kind::bool_)
 	{
@@ -1248,9 +1248,9 @@ bool write_native_bool(compilation_state_t & state,
  * @return True if no error occurs.
  */
 bool write_native_integer(compilation_state_t & state,
-	const def::type_instanciation_t & type_inst, const dat::node & data_node)
+	const rec::type_instanciation_t & type_inst, const dat::node & data_node)
 {
-	const def::native_data_t::class_t::value the_class =
+	const rec::native_data_t::class_t::value the_class =
 		type_inst.get_type_ptr()->get_native_data().get_class();
 
 	if (data_node.get_kind() != dat::node::kind::floating)
@@ -1305,7 +1305,7 @@ bool write_native_integer(compilation_state_t & state,
 
 	switch (the_class)
 	{
-		case def::native_data_t::class_t::int_:
+		case rec::native_data_t::class_t::int_:
         {
             if ( (!is_unsigned && !val.fits_sint_p())
                 || (is_unsigned && !val.fits_uint_p()) )
@@ -1318,7 +1318,7 @@ bool write_native_integer(compilation_state_t & state,
 			break;
 		}
 
-		case def::native_data_t::class_t::short_:
+		case rec::native_data_t::class_t::short_:
         {
             if ( (!is_unsigned && !val.fits_sshort_p()) ||
                 (is_unsigned && !val.fits_ushort_p()) )
@@ -1331,7 +1331,7 @@ bool write_native_integer(compilation_state_t & state,
 			break;
 		}
 
-		case def::native_data_t::class_t::char_:
+		case rec::native_data_t::class_t::char_:
 		{
 			bool fits = false;
 			if (val.fits_sint_p())
@@ -1367,13 +1367,13 @@ bool write_native_integer(compilation_state_t & state,
 
         switch (the_class)
         {
-            case def::native_data_t::class_t::int_:
+            case rec::native_data_t::class_t::int_:
                 stream_write_binary(state.output, x);
                 break;
-            case def::native_data_t::class_t::short_:
+            case rec::native_data_t::class_t::short_:
                 stream_write_binary(state.output, (short)x);
                 break;
-            case def::native_data_t::class_t::char_:
+            case rec::native_data_t::class_t::char_:
                 stream_write_binary(state.output, (char)x);
                 break;
             default:
@@ -1386,13 +1386,13 @@ bool write_native_integer(compilation_state_t & state,
 
         switch (the_class)
         {
-            case def::native_data_t::class_t::int_:
+            case rec::native_data_t::class_t::int_:
                 stream_write_binary(state.output, x);
                 break;
-            case def::native_data_t::class_t::short_:
+            case rec::native_data_t::class_t::short_:
                 stream_write_binary(state.output, (unsigned short)x);
                 break;
-            case def::native_data_t::class_t::char_:
+            case rec::native_data_t::class_t::char_:
                 stream_write_binary(state.output, (unsigned char)x);
                 break;
             default:
@@ -1414,9 +1414,9 @@ bool write_native_integer(compilation_state_t & state,
  * @return True if no error occurs.
  */
 bool write_native_floating(compilation_state_t & state,
-	const def::type_instanciation_t & type_inst, const dat::node & data_node)
+	const rec::type_instanciation_t & type_inst, const dat::node & data_node)
 {
-	const def::native_data_t::class_t::value the_class =
+	const rec::native_data_t::class_t::value the_class =
 		type_inst.get_type_ptr()->get_native_data().get_class();
 
 	if (data_node.get_kind() != dat::node::kind::floating)
@@ -1436,7 +1436,7 @@ bool write_native_floating(compilation_state_t & state,
 	/* Verify that the value is not bigger than the maximal possible value. */
 	switch(the_class)
 	{
-		case def::native_data_t::class_t::float_:
+		case rec::native_data_t::class_t::float_:
 		{
 			if (mpf > mpf_class(std::numeric_limits<float>::max()))
 			{
@@ -1448,7 +1448,7 @@ bool write_native_floating(compilation_state_t & state,
 			break;
 		}
 
-		case def::native_data_t::class_t::double_:
+		case rec::native_data_t::class_t::double_:
 		{
 			if (mpf > mpf_class(std::numeric_limits<double>::max()))
 			{
@@ -1467,7 +1467,7 @@ bool write_native_floating(compilation_state_t & state,
 	/* Verify that the value is not smaller than the minimal possible value. */
 	switch (the_class)
 	{
-		case def::native_data_t::class_t::float_:
+		case rec::native_data_t::class_t::float_:
 		{
 			if (mpf < mpf_class(-std::numeric_limits<float>::max()))
 			{
@@ -1479,7 +1479,7 @@ bool write_native_floating(compilation_state_t & state,
 			break;
 		}
 
-		case def::native_data_t::class_t::double_:
+		case rec::native_data_t::class_t::double_:
 		{
 			if (mpf < mpf_class(-std::numeric_limits<double>::max()))
 			{
@@ -1500,10 +1500,10 @@ bool write_native_floating(compilation_state_t & state,
 	/* Now output the value in the stream. */
 	switch (the_class)
 	{
-		case def::native_data_t::class_t::float_:
+		case rec::native_data_t::class_t::float_:
 			stream_write_binary(state.output, (float)dou);
 			break;
-		case def::native_data_t::class_t::double_:
+		case rec::native_data_t::class_t::double_:
 			stream_write_binary(state.output, dou);
 			break;
 		default:
@@ -1524,7 +1524,7 @@ bool write_native_floating(compilation_state_t & state,
  * @return True if no error occurs.
  */
 bool write_native_string(compilation_state_t & state,
-	const def::type_instanciation_t & type_inst, const dat::node & data_node)
+	const rec::type_instanciation_t & type_inst, const dat::node & data_node)
 {
 	if (data_node.get_kind() != dat::node::kind::string)
 	{
@@ -1582,7 +1582,7 @@ bool read_data(decompilation_state_t & state,
 		return false;
 	}
 
-	def::recipe & recipe = recipe_or_data.get_recipe();
+	rec::recipe & recipe = recipe_or_data.get_recipe();
 
 	/* Handle included recipe files. */
 	std::list< std::string > loaded_recipe_files;
@@ -1630,7 +1630,7 @@ bool read_data(decompilation_state_t & state,
 	 * Note: each time data must be decompiled, we must verify that there is
 	 * enough bytes remaining in the binary file. */
 
-	def::type_instanciation_t root_structure_instanciation;
+	rec::type_instanciation_t root_structure_instanciation;
 	root_structure_instanciation.set_type_node_ptr(recipe.get_node().get());
 	read_structure(state, root_structure_instanciation);
 
@@ -1647,19 +1647,19 @@ bool read_data(decompilation_state_t & state,
  * @return True if no error occurs.
  */
 bool read_structure(decompilation_state_t & state,
-	const def::type_instanciation_t & type_inst)
+	const rec::type_instanciation_t & type_inst)
 {
-	const def::node* type_ptr = type_inst.get_type_ptr();
+	const rec::node* type_ptr = type_inst.get_type_ptr();
 
 	/* Verify template argument count. */
 	if (!check_template_parameter_count(type_inst, state.log)) return false;
 
-	std::list<def::node::sptr> template_types = type_ptr->query_nodes<std::list>
-		(def::node::kind::template_type);
+	std::list<rec::node::sptr> template_types = type_ptr->query_nodes<std::list>
+		(rec::node::kind::template_type);
 
 	tti_stacker_t<
-		std::list<def::node::sptr>,
-		def::type_instanciation_t::parameter_list
+		std::list<rec::node::sptr>,
+		rec::type_instanciation_t::parameter_list
 	> stacker(
 		state.tti_stack,
 		template_types.begin(),
@@ -1669,7 +1669,7 @@ bool read_structure(decompilation_state_t & state,
 	);
 
 	/* Read the data of the inherited types first. */
-	for (const def::type_instanciation_t & inherited_type_inst :
+	for (const rec::type_instanciation_t & inherited_type_inst :
 		type_ptr->get_structure_data().heritance_list)
 	{
 		if (!read_type(state, inherited_type_inst))
@@ -1682,14 +1682,14 @@ bool read_structure(decompilation_state_t & state,
 	}
 
 	/* For each member of the structure */
-	for (def::node::sptr node :
-		type_ptr->query_nodes<std::list>(def::node::kind::member))
+	for (rec::node::sptr node :
+		type_ptr->query_nodes<std::list>(rec::node::kind::member))
 	{
-		const def::member_data_t & member_data = node->get_member_data();
+		const rec::member_data_t & member_data = node->get_member_data();
 		bool has_default_value = member_data.has_default_value();
 
 		bool node_is_optional =
-			node->has_qualifier(def::node::qualifier::optional);
+			node->has_qualifier(rec::node::qualifier::optional);
 
 		/* A node cannot be optional if it has a default value. */
 		if (has_default_value && node_is_optional)
@@ -1808,7 +1808,7 @@ bool read_structure(decompilation_state_t & state,
  * @return True if no error occurs.
  */
 bool read_variant(decompilation_state_t & state,
-	const def::type_instanciation_t & type_inst)
+	const rec::type_instanciation_t & type_inst)
 {
 	/* Get the variant type index. */
 	unsigned int member_index;
@@ -1816,20 +1816,20 @@ bool read_variant(decompilation_state_t & state,
 	if (!read_native_type(state, member_index))
 		return false;
 
-	std::vector<def::node::sptr> members = type_inst.get_type_ptr()
-		->query_nodes<std::vector>(def::node::kind::member);
+	std::vector<rec::node::sptr> members = type_inst.get_type_ptr()
+		->query_nodes<std::vector>(rec::node::kind::member);
 
 	/* Verify that the index has a correct value. */
 	if (member_index >= members.size())
 		return false;
 
 	/* Get the type which is set for the variant. */
-	def::node::sptr member = members[member_index];
+	rec::node::sptr member = members[member_index];
 	const std::string & member_name = member->get_name();
 
 	/* Member must not be marked as optional (this does not affect the
 	 * decompilation process, but it seems legit to show the error). */
-	if (member->has_qualifier(def::node::qualifier::optional))
+	if (member->has_qualifier(rec::node::qualifier::optional))
 	{
 		state.log.add_error("variant member '" + member_name
 			+ "' cannot be marked as optional since it belongs to a variant.");
@@ -1866,10 +1866,10 @@ bool read_variant(decompilation_state_t & state,
  * @return True if no error occurs.
  */
 bool read_array_dim(decompilation_state_t & state,
-	const def::type_instanciation_t & type_inst, size_t dim)
+	const rec::type_instanciation_t & type_inst, size_t dim)
 {
 	/* Get array data */
-	const def::array_data_t & array_data =
+	const rec::array_data_t & array_data =
 		type_inst.get_type_ptr()->get_array_data();
 
 	size_t dim_count = array_data.dims.size();
@@ -1928,22 +1928,22 @@ bool read_array_dim(decompilation_state_t & state,
  * @return True if no error occurs.
  */
 bool read_typedef(decompilation_state_t & state,
-	const def::type_instanciation_t & type_inst)
+	const rec::type_instanciation_t & type_inst)
 {
 	if (!check_template_parameter_count(type_inst, state.log))
 		return false;
 
-	const def::node* type_ptr = type_inst.get_type_ptr();
+	const rec::node* type_ptr = type_inst.get_type_ptr();
 
 	/* Push in the tty stack the instancied types for template types. As we use
 	 * a tti_stacker, we are sure the elements will be poped correctly when this
 	 * function returns. */
-	std::list<def::node::sptr> template_types = type_ptr->query_nodes<std::list>
-		(def::node::kind::template_type);
+	std::list<rec::node::sptr> template_types = type_ptr->query_nodes<std::list>
+		(rec::node::kind::template_type);
 
 	tti_stacker_t<
-		std::list<def::node::sptr>,
-		def::type_instanciation_t::parameter_list
+		std::list<rec::node::sptr>,
+		rec::type_instanciation_t::parameter_list
 	> stacker(
 		state.tti_stack,
 		template_types.begin(),
@@ -1965,7 +1965,7 @@ bool read_typedef(decompilation_state_t & state,
  * @return True if no error occurs.
  */
 bool read_enum(decompilation_state_t & state,
-	const def::type_instanciation_t & type_inst)
+	const rec::type_instanciation_t & type_inst)
 {
 	/* Template argument count must be equal to zero. */
 	if (type_inst.get_parameters().size() != 0)
@@ -1983,8 +1983,8 @@ bool read_enum(decompilation_state_t & state,
 	/* Try to match one of the enumeration members. */
 	bool matched = false;
 
-	for (def::node::sptr n : type_inst.get_type_ptr()->query_nodes<std::list>
-		(def::node::kind::enum_value))
+	for (rec::node::sptr n : type_inst.get_type_ptr()->query_nodes<std::list>
+		(rec::node::kind::enum_value))
 	{
 		const enum_value_data_t & evd = n->get_enum_value_data();
 
@@ -2012,11 +2012,11 @@ bool read_enum(decompilation_state_t & state,
  * @return True if the data could be decompiled, false otherwise.
  */
 bool read_type(decompilation_state_t & state,
-	const def::type_instanciation_t & type_inst)
+	const rec::type_instanciation_t & type_inst)
 {
 	switch (type_inst.get_type_ptr()->get_kind())
 	{
-		case def::node::kind::structure:
+		case rec::node::kind::structure:
 		{
 			state.output << std::endl;
             state.write_indent();
@@ -2032,22 +2032,22 @@ bool read_type(decompilation_state_t & state,
 			return true;
 		}
 
-		case def::node::kind::variant:
+		case rec::node::kind::variant:
 			return read_variant(state, type_inst);
 
-		case def::node::kind::array:
+		case rec::node::kind::array:
 			return read_array_dim(state, type_inst, 0);
 
-		case def::node::kind::typedef_:
+		case rec::node::kind::typedef_:
 			return read_typedef(state, type_inst);
 
-		case def::node::kind::enum_:
+		case rec::node::kind::enum_:
 			return read_enum(state, type_inst);
 
-		case def::node::kind::native:
+		case rec::node::kind::native:
 			return read_native(state, type_inst);
 
-		case def::node::kind::template_type:
+		case rec::node::kind::template_type:
 			return read_template_type(state, type_inst);
 
 		default: bakery_unexpected_case();
@@ -2064,7 +2064,7 @@ bool read_type(decompilation_state_t & state,
  * @return True if the data could be decompiled, false otherwise.
  */
 bool read_template_type(decompilation_state_t & state,
-	const def::type_instanciation_t & type_inst)
+	const rec::type_instanciation_t & type_inst)
 {
 	/* template type must be matched to a real type. We explore tti stack to
 	 * find the latest instanciation of the template. */
@@ -2072,7 +2072,7 @@ bool read_template_type(decompilation_state_t & state,
 	(
 		state.tti_stack.rbegin(),
 		state.tti_stack.rend(),
-		[&](const std::pair<def::node::sptr, def::type_instanciation_t> & p)
+		[&](const std::pair<rec::node::sptr, rec::type_instanciation_t> & p)
 			-> bool
 		{
 			return p.first.get() == type_inst.get_type_ptr();
@@ -2093,33 +2093,33 @@ bool read_template_type(decompilation_state_t & state,
  * @return True if the data could be decompiled, false otherwise.
  */
 bool read_native(decompilation_state_t & state,
-	const def::type_instanciation_t & type_inst)
+	const rec::type_instanciation_t & type_inst)
 {
 	switch (type_inst.get_type_ptr()->get_native_data().get_class())
 	{
-		case def::native_data_t::class_t::bool_:
+		case rec::native_data_t::class_t::bool_:
 			return read_native_bool(state, type_inst);
 
-		case def::native_data_t::class_t::int_:
-		case def::native_data_t::class_t::char_:
-		case def::native_data_t::class_t::short_:
+		case rec::native_data_t::class_t::int_:
+		case rec::native_data_t::class_t::char_:
+		case rec::native_data_t::class_t::short_:
 			return read_native_integer(state, type_inst);
 
-		case def::native_data_t::class_t::string:
+		case rec::native_data_t::class_t::string:
 			return read_native_string(state, type_inst);
 
-		case def::native_data_t::class_t::float_:
-		case def::native_data_t::class_t::double_:
+		case rec::native_data_t::class_t::float_:
+		case rec::native_data_t::class_t::double_:
 			return read_native_floating(state, type_inst);
 
-		case def::native_data_t::class_t::pair:
-		case def::native_data_t::class_t::tuple:
+		case rec::native_data_t::class_t::pair:
+		case rec::native_data_t::class_t::tuple:
 			return read_native_tuple(state, type_inst);
 
-		case def::native_data_t::class_t::list:
+		case rec::native_data_t::class_t::list:
 			return read_native_list(state, type_inst);
 
-		case def::native_data_t::class_t::map:
+		case rec::native_data_t::class_t::map:
 			return read_native_map(state, type_inst);
 
 		default: bakery_unexpected_case();
@@ -2136,7 +2136,7 @@ bool read_native(decompilation_state_t & state,
  * @return True if the data could be decompiled, false otherwise.
  */
 bool read_native_bool(decompilation_state_t & state,
-	const def::type_instanciation_t & type_inst)
+	const rec::type_instanciation_t & type_inst)
 {
 	bool dest;
 
@@ -2157,14 +2157,14 @@ bool read_native_bool(decompilation_state_t & state,
  * @return True if the data could be decompiled, false otherwise.
  */
 bool read_native_integer(decompilation_state_t & state,
-	const def::type_instanciation_t & type_inst)
+	const rec::type_instanciation_t & type_inst)
 {
-	const def::native_data_t::class_t::value the_class =
+	const rec::native_data_t::class_t::value the_class =
 		type_inst.get_type_ptr()->get_native_data().get_class();
 
 	switch (the_class)
 	{
-		case def::native_data_t::class_t::int_:
+		case rec::native_data_t::class_t::int_:
 		{
 			int dest;
 
@@ -2175,7 +2175,7 @@ bool read_native_integer(decompilation_state_t & state,
 			return true;
 		}
 
-		case def::native_data_t::class_t::char_:
+		case rec::native_data_t::class_t::char_:
 		{
 			char dest;
 
@@ -2186,7 +2186,7 @@ bool read_native_integer(decompilation_state_t & state,
 			return true;
 		}
 
-		case def::native_data_t::class_t::short_:
+		case rec::native_data_t::class_t::short_:
 		{
 			short dest;
 
@@ -2211,11 +2211,11 @@ bool read_native_integer(decompilation_state_t & state,
  * @return True if the data could be decompiled, false otherwise.
  */
 bool read_native_floating(decompilation_state_t & state,
-	const def::type_instanciation_t & type_inst)
+	const rec::type_instanciation_t & type_inst)
 {
 	switch (type_inst.get_type_ptr()->get_native_data().get_class())
 	{
-		case def::native_data_t::class_t::float_:
+		case rec::native_data_t::class_t::float_:
 		{
 			float dest;
 
@@ -2226,7 +2226,7 @@ bool read_native_floating(decompilation_state_t & state,
 			return true;
 		}
 
-		case def::native_data_t::class_t::double_:
+		case rec::native_data_t::class_t::double_:
 		{
 			double dest;
 
@@ -2251,7 +2251,7 @@ bool read_native_floating(decompilation_state_t & state,
  * @return True if the data could be decompiled, false otherwise.
  */
 bool read_native_string(decompilation_state_t & state,
-	const def::type_instanciation_t & type_inst)
+	const rec::type_instanciation_t & type_inst)
 {
 	/* Read the size of the string. */
 	size_t len;
@@ -2296,7 +2296,7 @@ bool read_native_string(decompilation_state_t & state,
  * @return True if the data could be decompiled, false otherwise.
  */
 bool read_native_tuple(decompilation_state_t & state,
-	const def::type_instanciation_t & type_inst)
+	const rec::type_instanciation_t & type_inst)
 {
 	state.output << std::endl;
 	state.write_indent();
@@ -2305,7 +2305,7 @@ bool read_native_tuple(decompilation_state_t & state,
 
 	bool first_element = true;
 
-	for (const def::type_instanciation_t & i: type_inst.get_parameters())
+	for (const rec::type_instanciation_t & i: type_inst.get_parameters())
 	{
 		if (first_element)
 			first_element = false;
@@ -2336,7 +2336,7 @@ bool read_native_tuple(decompilation_state_t & state,
  * @return True if the data could be decompiled, false otherwise.
  */
 bool read_native_list(decompilation_state_t & state,
-	const def::type_instanciation_t & type_inst)
+	const rec::type_instanciation_t & type_inst)
 {
 	/* Read the size of the list. */
 	size_t size;
@@ -2345,7 +2345,7 @@ bool read_native_list(decompilation_state_t & state,
 		return false;
 
 	/* Get the type of the list elements. */
-	const def::type_instanciation_t::parameter_list & template_parameters =
+	const rec::type_instanciation_t::parameter_list & template_parameters =
 		type_inst.get_parameters();
 
 	if (template_parameters.size() != 1)
@@ -2391,7 +2391,7 @@ bool read_native_list(decompilation_state_t & state,
  * @return True if the data could be decompiled, false otherwise.
  */
 bool read_native_map(decompilation_state_t & state,
-	const def::type_instanciation_t & type_inst)
+	const rec::type_instanciation_t & type_inst)
 {
 	/* Read the size of the map. */
 	size_t size;
@@ -2400,7 +2400,7 @@ bool read_native_map(decompilation_state_t & state,
 		return false;
 
 	/* Get the type of the map elements. */
-	const def::type_instanciation_t::parameter_list & template_parameters =
+	const rec::type_instanciation_t::parameter_list & template_parameters =
 		type_inst.get_parameters();
 
 	if (template_parameters.size() != 2)
@@ -2447,82 +2447,82 @@ bool read_native_map(decompilation_state_t & state,
  *
  * @param node The node to populate.
  */
-void populate_node(def::node::sptr node)
+void populate_node(rec::node::sptr node)
 {
 	node->add_child(
-		def::util::make_native_node(
+		rec::util::make_native_node(
 			"bool",
-			def::native_data_t::class_t::bool_
+			rec::native_data_t::class_t::bool_
 		)
 	);
 
 	node->add_child(
-		def::util::make_native_node(
+		rec::util::make_native_node(
 			"char",
-			def::native_data_t::class_t::char_
+			rec::native_data_t::class_t::char_
 		)
 	);
 
 	node->add_child(
-		def::util::make_native_node(
+		rec::util::make_native_node(
 			"short",
-			def::native_data_t::class_t::short_
+			rec::native_data_t::class_t::short_
 		)
 	);
 
 	node->add_child(
-		def::util::make_native_node(
+		rec::util::make_native_node(
 			"int",
-			def::native_data_t::class_t::int_
+			rec::native_data_t::class_t::int_
 		)
 	);
 
 	node->add_child(
-		def::util::make_native_node(
+		rec::util::make_native_node(
 			"float",
-			def::native_data_t::class_t::float_
+			rec::native_data_t::class_t::float_
 		)
 	);
 
 	node->add_child(
-		def::util::make_native_node(
+		rec::util::make_native_node(
 			"double",
-			def::native_data_t::class_t::double_
+			rec::native_data_t::class_t::double_
 		)
 	);
 
 	node->add_child(
-		def::util::make_native_node(
+		rec::util::make_native_node(
 			"string",
-			def::native_data_t::class_t::string
+			rec::native_data_t::class_t::string
 		)
 	);
 
 	node->add_child(
-		def::util::make_native_node(
+		rec::util::make_native_node(
 			"pair",
-			def::native_data_t::class_t::pair
+			rec::native_data_t::class_t::pair
 		)
 	);
 
 	node->add_child(
-		def::util::make_native_node(
+		rec::util::make_native_node(
 			"tuple",
-			def::native_data_t::class_t::tuple
+			rec::native_data_t::class_t::tuple
 		)
 	);
 
 	node->add_child(
-		def::util::make_native_node(
+		rec::util::make_native_node(
 			"list",
-			def::native_data_t::class_t::list
+			rec::native_data_t::class_t::list
 		)
 	);
 
 	node->add_child(
-		def::util::make_native_node(
+		rec::util::make_native_node(
 			"map",
-			def::native_data_t::class_t::map
+			rec::native_data_t::class_t::map
 		)
 	);
 
@@ -2607,10 +2607,10 @@ bool floating_to_mpf(
  * @return True if template argument count if right, false otherwise.
  */
 bool check_template_parameter_count(
-	const def::type_instanciation_t & type_inst, compilation_log_t & log)
+	const rec::type_instanciation_t & type_inst, compilation_log_t & log)
 {
-	std::list<def::node::sptr> template_types = type_inst.get_type_ptr()
-		->query_nodes<std::list>(def::node::kind::template_type);
+	std::list<rec::node::sptr> template_types = type_inst.get_type_ptr()
+		->query_nodes<std::list>(rec::node::kind::template_type);
 
 	size_t template_parameters_size = type_inst.get_parameters().size();
 
@@ -2644,7 +2644,7 @@ bool check_template_parameter_count(
  * @param log The object in which error messages will be pushed.
  */
 bool merge_included_recipe_files(
-	def::recipe & def,
+	rec::recipe & def,
 	const std::string & current_directory,
 	const std::list<std::string> & include_directories,
 	std::list<std::string> & loaded_defs,
@@ -2698,7 +2698,7 @@ bool merge_included_recipe_files(
 				return false;
 			}
 
-			/* Check that the parser produced a def::recipe. */
+			/* Check that the parser produced a rec::recipe. */
 			if (!recipe_or_data.is_recipe())
 			{
 				log.add_error("Included file '" + p
@@ -2707,7 +2707,7 @@ bool merge_included_recipe_files(
 				return false;
 			}
 
-			def::recipe & def_2 = recipe_or_data.get_recipe();
+			rec::recipe & def_2 = recipe_or_data.get_recipe();
 
 			/* Included recipe may also include recipes files. */
 			if (!merge_included_recipe_files(def_2,

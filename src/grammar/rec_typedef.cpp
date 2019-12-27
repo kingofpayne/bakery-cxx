@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012
+ * Copyright (C) 2012, 2013
  * Olivier Heriveaux.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,10 +19,12 @@
  */
 
 
+/* Must be included before spirit and phoenix. */
+#include "../enable_phoenix_v3.hpp"
+
 #include "grammar.hpp"
-#include <boost/spirit/include/phoenix_operator.hpp>
-//#include <boost/spirit/home/phoenix/bind/bind_member_function.hpp> //DEPRECATED
-#include <boost/phoenix/bind/bind_member_function.hpp>
+#include "util.hpp"
+#include <boost/spirit/include/phoenix.hpp>
 
 
 namespace bakery {
@@ -30,50 +32,53 @@ namespace grammar {
 
 
 /**
- * Initializes the path rule.
+ * Initializes the def_typedef rule.
  *
  * @param rules Reference over the rules container.
  */
-template <typename I> void generic_init_path(rule_container<I> & rules)
+template <typename I> void generic_init_def_typedef(rule_container<I> & rules)
 {
 	namespace qi = boost::spirit::qi;
 	using qi::_val;
 	using qi::_1;
+	using boost::phoenix::construct;
 
-	/* Examples:
-	 *
-	 * ::toto::tutu::Mytype
-	 * tadam::waou::x
-	 * toto */
-	rules.path =
-	(
-		-(
-			qi::string("::")
-			[
-				boost::phoenix::bind(&rec::path::set_absolute, _val, true)
-			]
-		)
+	rules.def_typedef =
+		qi::string("typedef")
+		>>
+		qi::eps
+		[
+			_val = create_def_node_sptr(rec::node::kind::typedef_)
+		]
+		>>
+		rules.def_type_instanciation
+		[
+			boost::phoenix::bind(
+				&rec::node::set_typedef_data,
+				*_val,
+				construct<rec::typedef_data_t>(_1)
+			)
+		]
 		>>
 		rules.identifier
 		[
-			boost::phoenix::bind(&rec::path::push_back, _val, _1)
+			boost::phoenix::bind(&rec::node::set_name, *_val, _1)
 		]
 		>>
-		*(
-			qi::string("::")
-			>>
-			rules.identifier
-			[
-				boost::phoenix::bind(&rec::path::push_back, _val, _1)
-			]
-		)
-	);	
+		-rules.def_template_argument_declaration
+		[
+			boost::phoenix::bind(
+				&rec::node::add_child_list<std::list<rec::node::sptr> >,
+				*_val,
+				_1
+			)
+		];
 }
 
 
-template <> void init_path<iterator>(rule_container<iterator> & rules) 
+template <> void init_def_typedef<iterator>(rule_container<iterator> & rules)
 {
-	generic_init_path<iterator>(rules);
+	generic_init_def_typedef<iterator>(rules);
 }
 
 

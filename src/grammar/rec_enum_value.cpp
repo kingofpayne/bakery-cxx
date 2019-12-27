@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012
+ * Copyright (C) 2012, 2013
  * Olivier Heriveaux.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,10 +19,12 @@
  */
 
 
+/* Must be included before spirit and phoenix. */
+#include "../enable_phoenix_v3.hpp"
+
 #include "grammar.hpp"
-#include <boost/spirit/include/phoenix_operator.hpp>
-//#include <boost/spirit/home/phoenix/bind/bind_member_function.hpp> //DEPRECATED
-#include <boost/phoenix/bind/bind_member_function.hpp>
+#include "util.hpp"
+#include <boost/spirit/include/phoenix.hpp>
 
 
 namespace bakery {
@@ -30,50 +32,55 @@ namespace grammar {
 
 
 /**
- * Initializes the path rule.
+ * Initializes the def_enum_value rule.
  *
  * @param rules Reference over the rules container.
  */
-template <typename I> void generic_init_path(rule_container<I> & rules)
+template <typename I> void
+	generic_init_def_enum_value(rule_container<I> & rules)
 {
 	namespace qi = boost::spirit::qi;
 	using qi::_val;
 	using qi::_1;
+	using qi::_a;
+	using boost::phoenix::construct;
 
 	/* Examples:
 	 *
-	 * ::toto::tutu::Mytype
-	 * tadam::waou::x
-	 * toto */
-	rules.path =
-	(
-		-(
-			qi::string("::")
-			[
-				boost::phoenix::bind(&rec::path::set_absolute, _val, true)
-			]
-		)
+	 * toto	
+	 * toto = 4 */
+	rules.def_enum_value =
+		/* Create the node. */
+		qi::eps
+		[
+			_val = create_def_node_sptr(rec::node::kind::enum_value)
+		]
 		>>
 		rules.identifier
 		[
-			boost::phoenix::bind(&rec::path::push_back, _val, _1)
+			boost::phoenix::bind(&rec::node::set_name, *_val, _1)
 		]
 		>>
-		*(
-			qi::string("::")
+		-(
+			qi::char_('=')
 			>>
-			rules.identifier
+			rules.integer
 			[
-				boost::phoenix::bind(&rec::path::push_back, _val, _1)
+				/* Initialize an enum value data. */
+				_a = construct<enum_value_data_t>(),
+				/* Sets the value. */
+				boost::phoenix::bind(&enum_value_data_t::set_fixed_value, _a,
+					_1),
+				/* Save the data in the node. */
+				boost::phoenix::bind(&rec::node::set_enum_value_data, *_val, _a)
 			]
-		)
-	);	
+		);
 }
 
 
-template <> void init_path<iterator>(rule_container<iterator> & rules) 
+template <> void init_def_enum_value<iterator>(rule_container<iterator> & rules)
 {
-	generic_init_path<iterator>(rules);
+	generic_init_def_enum_value<iterator>(rules);
 }
 
 

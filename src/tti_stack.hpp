@@ -30,7 +30,7 @@ namespace bakery {
  * Template Type Instanciation stack. This type is used for recording how
  * template types are associated to real types when parsing a recipe.
  */
-typedef std::list<std::pair<def::node::sptr, def::type_instanciation_t> >
+typedef std::list<std::pair<rec::node::sptr, rec::type_instanciation_t> >
 	tti_stack_t;
 
 
@@ -65,7 +65,7 @@ template <typename T, typename U> class tti_stacker_t
 			{
 				bakery_assert_debug(first_ti != last_ti);
 				tti.push_back(
-					std::pair<def::node::sptr, def::type_instanciation_t>(
+					std::pair<rec::node::sptr, rec::type_instanciation_t>(
 						*first_node,
 						*first_ti
 					)

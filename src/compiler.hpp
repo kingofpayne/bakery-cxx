@@ -27,7 +27,7 @@
 #include <algorithm>
 #include <fstream>
 #include "dat/data.hpp"
-#include "def/recipe.hpp"
+#include "rec/recipe.hpp"
 #include "file_indication.hpp"
 #include "tti_stack.hpp"
 #include <gmpxx.h>
@@ -83,74 +83,74 @@ void compile(const std::string &, const std::string &,
 void decompile(const std::string &, const std::string &, const std::string &,
 	const std::list<std::string> &, compilation_log_t &);
 
-void populate_node(def::node::sptr);
+void populate_node(rec::node::sptr);
 
 bool write_data(compilation_state_t &, const dat::data &, const std::string &,
 	const std::list<std::string> &);
 
-bool write_node(compilation_state_t &, const def::type_instanciation_t &,
+bool write_node(compilation_state_t &, const rec::type_instanciation_t &,
 	const dat::node &);
 
 bool write_template_type(compilation_state_t &,
-	const def::type_instanciation_t &, const dat::node &);
+	const rec::type_instanciation_t &, const dat::node &);
 
-bool write_structure(compilation_state_t &, const def::type_instanciation_t &,
+bool write_structure(compilation_state_t &, const rec::type_instanciation_t &,
 	const dat::node &);
 
-bool write_variant(compilation_state_t &, const def::type_instanciation_t &,
+bool write_variant(compilation_state_t &, const rec::type_instanciation_t &,
 	const dat::node &);
 
-bool write_array(compilation_state_t &, const def::type_instanciation_t &,
+bool write_array(compilation_state_t &, const rec::type_instanciation_t &,
 	const dat::node &);
 
-bool write_array_dim(compilation_state_t &, const def::type_instanciation_t &,
+bool write_array_dim(compilation_state_t &, const rec::type_instanciation_t &,
 	size_t, const dat::node &);
 
-bool write_typedef(compilation_state_t &, const def::type_instanciation_t &,
+bool write_typedef(compilation_state_t &, const rec::type_instanciation_t &,
 	const dat::node &);
 
-bool write_enum(compilation_state_t &, const def::type_instanciation_t &,
+bool write_enum(compilation_state_t &, const rec::type_instanciation_t &,
 	const dat::node &);
 
-bool write_native(compilation_state_t &, const def::type_instanciation_t &,
+bool write_native(compilation_state_t &, const rec::type_instanciation_t &,
 	const dat::node &);
 
-bool write_native_pair(compilation_state_t &, const def::type_instanciation_t &,
+bool write_native_pair(compilation_state_t &, const rec::type_instanciation_t &,
 	const dat::node &);
 
 bool write_native_tuple(compilation_state_t &,
-	const def::type_instanciation_t &, const dat::node &);
+	const rec::type_instanciation_t &, const dat::node &);
 
-bool write_native_list(compilation_state_t &, const def::type_instanciation_t &,
+bool write_native_list(compilation_state_t &, const rec::type_instanciation_t &,
 	const dat::node &);
 
-bool write_native_map(compilation_state_t &, const def::type_instanciation_t &,
+bool write_native_map(compilation_state_t &, const rec::type_instanciation_t &,
 	const dat::node &);
 
-bool write_native_bool(compilation_state_t &, const def::type_instanciation_t &,
+bool write_native_bool(compilation_state_t &, const rec::type_instanciation_t &,
 	const dat::node &);
 
 bool write_native_integer(compilation_state_t &,
-	const def::type_instanciation_t &, const dat::node &);
+	const rec::type_instanciation_t &, const dat::node &);
 
 bool write_native_string(compilation_state_t &,
-	const def::type_instanciation_t &, const dat::node &);
+	const rec::type_instanciation_t &, const dat::node &);
 
 bool write_native_floating(compilation_state_t &,
-	const def::type_instanciation_t &, const dat::node &);
+	const rec::type_instanciation_t &, const dat::node &);
 
 bool read_data(decompilation_state_t &, const file_indication &,
     const std::string &, const std::list<std::string> &);
 
-bool read_structure(decompilation_state_t &, const def::type_instanciation_t &);
-bool read_varian(decompilation_state_t &, const def::type_instanciation_t &);
+bool read_structure(decompilation_state_t &, const rec::type_instanciation_t &);
+bool read_varian(decompilation_state_t &, const rec::type_instanciation_t &);
 
-bool read_array_dim(decompilation_state_t &, const def::type_instanciation_t &,
+bool read_array_dim(decompilation_state_t &, const rec::type_instanciation_t &,
 	size_t);
 
-bool read_enum(decompilation_state_t &, const def::type_instanciation_t &);
-bool read_typedef(decompilation_state_t &, const def::type_instanciation_t &);
-bool read_type(decompilation_state_t &, const def::type_instanciation_t &);
+bool read_enum(decompilation_state_t &, const rec::type_instanciation_t &);
+bool read_typedef(decompilation_state_t &, const rec::type_instanciation_t &);
+bool read_type(decompilation_state_t &, const rec::type_instanciation_t &);
 
 
 /**
@@ -187,37 +187,37 @@ template <typename T> static bool read_native_type(
 
 
 bool read_template_type(decompilation_state_t &,
-	const def::type_instanciation_t &);
+	const rec::type_instanciation_t &);
 
-bool read_native(decompilation_state_t &, const def::type_instanciation_t &);
+bool read_native(decompilation_state_t &, const rec::type_instanciation_t &);
 
 bool read_native_bool(decompilation_state_t &,
-	const def::type_instanciation_t &);
+	const rec::type_instanciation_t &);
 
 bool read_native_integer(decompilation_state_t &,
-	const def::type_instanciation_t &);
+	const rec::type_instanciation_t &);
 
 bool read_native_floating(decompilation_state_t &,
-	const def::type_instanciation_t &);
+	const rec::type_instanciation_t &);
 
 bool read_native_string(decompilation_state_t &,
-	const def::type_instanciation_t &);
+	const rec::type_instanciation_t &);
 
 bool read_native_tuple(decompilation_state_t &,
-	const def::type_instanciation_t &);
+	const rec::type_instanciation_t &);
 
 bool read_native_list(decompilation_state_t &,
-	const def::type_instanciation_t &);
+	const rec::type_instanciation_t &);
 
 bool read_native_map(decompilation_state_t &,
-	const def::type_instanciation_t &);
+	const rec::type_instanciation_t &);
 
 bool floating_to_mpf(mpf_class &, const dat::floating &, compilation_log_t &);
 
-bool check_template_parameter_count(const def::type_instanciation_t &,
+bool check_template_parameter_count(const rec::type_instanciation_t &,
 	compilation_log_t &);
 
-bool merge_included_recipe_files(def::recipe &, const std::string &,
+bool merge_included_recipe_files(rec::recipe &, const std::string &,
     const std::list<std::string> &, std::list<std::string> &, compilation_log_t &);
 
 bool resolve_file_indication(const file_indication &, const std::string &,

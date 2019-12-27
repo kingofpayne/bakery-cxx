@@ -1,6 +1,6 @@
 /**
- * Copyright (C) 2019
- * Olivier Heriveaux
+ * Copyright (C) 2010, 2011, 2012
+ * Olivier Heriveaux.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,28 +19,27 @@
  */
 
 
-#ifndef _BAKERY_RECIPE_INDICATION_HPP_
-#define _BAKERY_RECIPE_INDICATION_HPP_
+#ifndef _BAKERY_DEF_UTIL_HPP_
+#define _BAKERY_DEF_UTIL_HPP_
 
 
-#include "rec/type_instanciation.hpp"
-#include "file_indication.hpp"
+#include "node.hpp"
+#include "native_data.hpp"
 
 
 namespace bakery {
+namespace rec {
+namespace util {
 
 
-/**
- * Stores recipe specification of a data file.
- */
-struct recipe_indication_t
-{
-    file_indication fi;
-    std::optional<rec::type_instanciation_t> ti;
-};
+node::sptr make_native_node(const std::string &, native_data_t::class_t::value);
+node::sptr make_namespace_node(const std::string &);
 
 
+} /* namespace util */
+} /* namespace rec */
 } /* namespace bakery */
 
 
 #endif
+

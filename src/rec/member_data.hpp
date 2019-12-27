@@ -1,6 +1,6 @@
 /**
- * Copyright (C) 2019
- * Olivier Heriveaux
+ * Copyright (C) 2010, 2011, 2012, 2013, 2014
+ * Olivier Heriveaux.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,28 +19,38 @@
  */
 
 
-#ifndef _BAKERY_RECIPE_INDICATION_HPP_
-#define _BAKERY_RECIPE_INDICATION_HPP_
+#ifndef _BAKERY_DEF_MEMBER_DATA_HPP_
+#define _BAKERY_DEF_MEMBER_DATA_HPP_
 
 
-#include "rec/type_instanciation.hpp"
-#include "file_indication.hpp"
+#include "type_instanciation.hpp"
+#include "../dat/node.hpp"
 
 
 namespace bakery {
+namespace rec {
 
 
 /**
- * Stores recipe specification of a data file.
+ * Data corresponding to a member in structure of a recipe.
  */
-struct recipe_indication_t
+struct member_data_t
 {
-    file_indication fi;
-    std::optional<rec::type_instanciation_t> ti;
+	member_data_t();
+	std::string print() const;
+	bool has_default_value() const;
+		
+	/** The type instanciation of the member. */
+	type_instanciation_t type_instanciation;
+	/** Shared pointer to a default value node. If this pointer is null, no
+	 * default value is specified. */
+	dat::node::sptr default_value_node;
 };
 
 
+} /* namespace rec */
 } /* namespace bakery */
 
 
 #endif
+

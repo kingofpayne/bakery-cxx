@@ -38,7 +38,7 @@ recipe_or_data::recipe_or_data():
  *
  * @param value The recipe.
  */
-void recipe_or_data::set_recipe(const def::recipe & value)
+void recipe_or_data::set_recipe(const rec::recipe & value)
 {
 	this->value = value;
 }
@@ -78,10 +78,10 @@ bool recipe_or_data::is_data() const
  *
  * This function must be called only if is_recipe() == true.
  */
-def::recipe & recipe_or_data::get_recipe()
+rec::recipe & recipe_or_data::get_recipe()
 {
 	bakery_assert_debug(is_recipe());
-	return boost::get<def::recipe>(value);
+	return boost::get<rec::recipe>(value);
 }
 
 

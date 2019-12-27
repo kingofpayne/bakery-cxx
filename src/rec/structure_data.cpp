@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012, 2013
+ * Copyright (C) 2011, 2012, 2013
  * Olivier Heriveaux.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,51 +19,31 @@
  */
 
 
-#include "grammar.hpp"
+#include "structure_data.hpp"
 
 
 namespace bakery {
-namespace grammar {
+namespace rec {
 
 
 /**
- * Initializes the recipe rule.
- *
- * @param rules Reference over the rules container.
+ * Constructor.
  */
-template <typename I> void generic_init_recipe(rule_container<I> & rules)
+structure_data_t::structure_data_t()
+{}
+
+
+/**
+ * Adds a type from which the structure heritates.
+ *
+ * @param type The type.
+ */
+void structure_data_t::add_heritance_type(const type_instanciation_t & type)
 {
-	namespace qi = boost::spirit::qi;
-	using qi::_val;
-	using qi::_1;
-		
-	rules.recipe_ =
-		*(
-			"include"
-			>>
-			rules.recipe_indication
-			[
-				bind(&rec::recipe::add_include_file, _val, _1)
-			]
-			>>
-			';'
-		)
-		>>
-		rules.def_composite_content
-		[
-			boost::phoenix::bind(&rec::node::set_kind, *_1,
-				rec::node::kind::structure),
-			boost::phoenix::bind(&rec::recipe::set_node, _val, _1)
-		];
+	heritance_list.push_back(type);
 }
 
 
-template <> void init_recipe<iterator>(rule_container<iterator> & rules)
-{
-	generic_init_recipe<iterator>(rules);
-}
-
-
-} /* namespace grammar */
+} /* namespace rec */
 } /* namespace bakery */
 

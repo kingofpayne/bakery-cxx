@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012
+ * Copyright (C) 2012, 2013
  * Olivier Heriveaux.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -20,9 +20,6 @@
 
 
 #include "grammar.hpp"
-#include <boost/spirit/include/phoenix_operator.hpp>
-//#include <boost/spirit/home/phoenix/bind/bind_member_function.hpp> //DEPRECATED
-#include <boost/phoenix/bind/bind_member_function.hpp>
 
 
 namespace bakery {
@@ -30,50 +27,51 @@ namespace grammar {
 
 
 /**
- * Initializes the path rule.
+ * Initializes the def_variant rule.
  *
  * @param rules Reference over the rules container.
  */
-template <typename I> void generic_init_path(rule_container<I> & rules)
+template <typename I> void generic_init_def_variant(rule_container<I> & rules)
 {
 	namespace qi = boost::spirit::qi;
 	using qi::_val;
 	using qi::_1;
+	using qi::_a;
+	using qi::_b;
 
-	/* Examples:
-	 *
-	 * ::toto::tutu::Mytype
-	 * tadam::waou::x
-	 * toto */
-	rules.path =
-	(
+	/* _a : name of the node
+	 *_b : list of template arguments */
+	rules.def_variant =
+		qi::string("variant")
+		>>
+		rules.identifier[_a = _1]
+		>>
+		-rules.def_template_argument_declaration[_b = _1]
+		>>
+		'{'
+		>>
 		-(
-			qi::string("::")
+			rules.def_composite_content
 			[
-				boost::phoenix::bind(&rec::path::set_absolute, _val, true)
+				_val = _1,
+				boost::phoenix::bind(&rec::node::set_name, *_val, _a),
+				boost::phoenix::bind(&rec::node::set_kind, *_val,
+					rec::node::kind::variant),
+				boost::phoenix::bind(
+					&rec::node::add_child_list<std::list<rec::node::sptr> >,
+					*_val,
+					_b
+				)
 			]
 		)
 		>>
-		rules.identifier
-		[
-			boost::phoenix::bind(&rec::path::push_back, _val, _1)
-		]
-		>>
-		*(
-			qi::string("::")
-			>>
-			rules.identifier
-			[
-				boost::phoenix::bind(&rec::path::push_back, _val, _1)
-			]
-		)
-	);	
+		'}';
 }
 
 
-template <> void init_path<iterator>(rule_container<iterator> & rules) 
+template <> void init_def_variant<iterator>(rule_container<iterator> & rules)
 {
-	generic_init_path<iterator>(rules);
+	generic_init_def_variant<iterator>(rules);
 }
 
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012, 2013
+ * Copyright (C) 2010, 2011, 2012, 2013, 2014
  * Olivier Heriveaux.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,51 +19,42 @@
  */
 
 
-#include "grammar.hpp"
+#include "typedef_data.hpp"
 
 
 namespace bakery {
-namespace grammar {
+namespace rec {
 
 
 /**
- * Initializes the recipe rule.
- *
- * @param rules Reference over the rules container.
+ * Default constructor.
  */
-template <typename I> void generic_init_recipe(rule_container<I> & rules)
+typedef_data_t::typedef_data_t():
+	type_instanciation()
+{}
+
+
+/**
+ * Constructor.
+ *
+ * @param type_instanciation_ The type instanciation.
+ */
+typedef_data_t::typedef_data_t
+	(const type_instanciation_t & type_instanciation_)
+:
+	type_instanciation(type_instanciation_)
+{}
+
+
+/**
+ * @return A string representing the data.
+ */
+std::string typedef_data_t::print() const
 {
-	namespace qi = boost::spirit::qi;
-	using qi::_val;
-	using qi::_1;
-		
-	rules.recipe_ =
-		*(
-			"include"
-			>>
-			rules.recipe_indication
-			[
-				bind(&rec::recipe::add_include_file, _val, _1)
-			]
-			>>
-			';'
-		)
-		>>
-		rules.def_composite_content
-		[
-			boost::phoenix::bind(&rec::node::set_kind, *_1,
-				rec::node::kind::structure),
-			boost::phoenix::bind(&rec::recipe::set_node, _val, _1)
-		];
+	return type_instanciation.print();
 }
 
 
-template <> void init_recipe<iterator>(rule_container<iterator> & rules)
-{
-	generic_init_recipe<iterator>(rules);
-}
-
-
-} /* namespace grammar */
+} /* namespace rec */
 } /* namespace bakery */
 

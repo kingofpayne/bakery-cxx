@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012, 2013
+ * Copyright (C) 2010, 2011, 2012, 2013
  * Olivier Heriveaux.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,51 +19,45 @@
  */
 
 
-#include "grammar.hpp"
+#include "util.hpp"
 
 
 namespace bakery {
-namespace grammar {
+namespace rec {
+namespace util {
 
 
 /**
- * Initializes the recipe rule.
+ * Creates a native node.
  *
- * @param rules Reference over the rules container.
+ * @param name Name of the node.
+ * @param class_ Class of the native type.
  */
-template <typename I> void generic_init_recipe(rule_container<I> & rules)
-{
-	namespace qi = boost::spirit::qi;
-	using qi::_val;
-	using qi::_1;
-		
-	rules.recipe_ =
-		*(
-			"include"
-			>>
-			rules.recipe_indication
-			[
-				bind(&rec::recipe::add_include_file, _val, _1)
-			]
-			>>
-			';'
-		)
-		>>
-		rules.def_composite_content
-		[
-			boost::phoenix::bind(&rec::node::set_kind, *_1,
-				rec::node::kind::structure),
-			boost::phoenix::bind(&rec::recipe::set_node, _val, _1)
-		];
+node::sptr make_native_node(
+	const std::string & name,
+	native_data_t::class_t::value class_
+){
+	node::sptr a_node(new node(node::kind::native));
+	a_node->set_name(name);
+	a_node->set_native_data(native_data_t(class_));
+	return a_node;
 }
 
 
-template <> void init_recipe<iterator>(rule_container<iterator> & rules)
+/**
+ * Creates a namespace node.
+ *
+ * @param name Name of the node.
+ */
+node::sptr make_namespace_node(const std::string & name)
 {
-	generic_init_recipe<iterator>(rules);
+	node::sptr a_node(new node(node::kind::namespace_));
+	a_node->set_name(name);
+	return a_node;
 }
 
 
-} /* namespace grammar */
+} /* namespace util */
+} /* namespace rec */
 } /* namespace bakery */
 

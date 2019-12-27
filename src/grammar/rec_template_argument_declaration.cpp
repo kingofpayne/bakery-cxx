@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012
+ * Copyright (C) 2012, 2013
  * Olivier Heriveaux.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -20,9 +20,7 @@
 
 
 #include "grammar.hpp"
-#include <boost/spirit/include/phoenix_operator.hpp>
-//#include <boost/spirit/home/phoenix/bind/bind_member_function.hpp> //DEPRECATED
-#include <boost/phoenix/bind/bind_member_function.hpp>
+#include "util.hpp"
 
 
 namespace bakery {
@@ -30,50 +28,45 @@ namespace grammar {
 
 
 /**
- * Initializes the path rule.
+ * Initializes the def_template_argument_declaration rule.
  *
  * @param rules Reference over the rules container.
  */
-template <typename I> void generic_init_path(rule_container<I> & rules)
+template <typename I>
+	void generic_init_def_template_argument_declaration
+	(rule_container<I> & rules)
 {
 	namespace qi = boost::spirit::qi;
 	using qi::_val;
 	using qi::_1;
+	using qi::_a;
 
-	/* Examples:
-	 *
-	 * ::toto::tutu::Mytype
-	 * tadam::waou::x
-	 * toto */
-	rules.path =
-	(
-		-(
-			qi::string("::")
-			[
-				boost::phoenix::bind(&rec::path::set_absolute, _val, true)
-			]
-		)
+	rules.def_template_argument_declaration =
+		qi::char_('<')[ _val ]
 		>>
-		rules.identifier
-		[
-			boost::phoenix::bind(&rec::path::push_back, _val, _1)
-		]
-		>>
-		*(
-			qi::string("::")
-			>>
+		(
 			rules.identifier
 			[
-				boost::phoenix::bind(&rec::path::push_back, _val, _1)
+				/* Create a node and store it into _a */
+				_a = create_def_node_sptr(rec::node::kind::template_type),
+				/* Set the name of the node to the identifier _1 */
+				boost::phoenix::bind(&rec::node::set_name, *_a, _1),
+				/* Push the node in the list */
+				boost::phoenix::push_back(_val, _a)	
 			]
+			%
+			','
 		)
-	);	
+		>>
+		'>';
 }
 
 
-template <> void init_path<iterator>(rule_container<iterator> & rules) 
+template <>
+	void init_def_template_argument_declaration<iterator>
+	(rule_container<iterator> & rules)
 {
-	generic_init_path<iterator>(rules);
+	generic_init_def_template_argument_declaration<iterator>(rules);
 }
 
 

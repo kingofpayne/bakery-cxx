@@ -20,9 +20,6 @@
 
 
 #include "grammar.hpp"
-#include <boost/spirit/include/phoenix_operator.hpp>
-//#include <boost/spirit/home/phoenix/bind/bind_member_function.hpp> //DEPRECATED
-#include <boost/phoenix/bind/bind_member_function.hpp>
 
 
 namespace bakery {
@@ -30,11 +27,12 @@ namespace grammar {
 
 
 /**
- * Initializes the path rule.
+ * Initializes the def_type_instanciation rule.
  *
  * @param rules Reference over the rules container.
  */
-template <typename I> void generic_init_path(rule_container<I> & rules)
+template <typename I>
+	void generic_init_def_type_instanciation(rule_container<I> & rules)
 {
 	namespace qi = boost::spirit::qi;
 	using qi::_val;
@@ -42,38 +40,25 @@ template <typename I> void generic_init_path(rule_container<I> & rules)
 
 	/* Examples:
 	 *
-	 * ::toto::tutu::Mytype
-	 * tadam::waou::x
-	 * toto */
-	rules.path =
-	(
-		-(
-			qi::string("::")
-			[
-				boost::phoenix::bind(&rec::path::set_absolute, _val, true)
-			]
-		)
-		>>
-		rules.identifier
+	 * int
+	 * point<int>
+	 * list<point<double>>
+	 */
+    rules.def_type_instanciation =
+		rules.def_array
 		[
-			boost::phoenix::bind(&rec::path::push_back, _val, _1)
+			boost::phoenix::bind(
+				&rec::type_instanciation_t::set_type_node_sptr, _val, _1)
 		]
-		>>
-		*(
-			qi::string("::")
-			>>
-			rules.identifier
-			[
-				boost::phoenix::bind(&rec::path::push_back, _val, _1)
-			]
-		)
-	);	
+		|
+		rules.def_type_instanciation_no_array[_val = _1];
 }
 
 
-template <> void init_path<iterator>(rule_container<iterator> & rules) 
+template <>
+	void init_def_type_instanciation<iterator>(rule_container<iterator> & rules)
 {
-	generic_init_path<iterator>(rules);
+	generic_init_def_type_instanciation<iterator>(rules);
 }
 
 

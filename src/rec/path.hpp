@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2010, 2011, 2012, 2013
+ * Copyright (C) 2010, 2011, 2012
  * Olivier Heriveaux.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,41 +19,49 @@
  */
 
 
-#ifndef _BAKERY_RECIPE_OR_DATA_HPP_
-#define _BAKERY_RECIPE_OR_DATA_HPP_
+#ifndef _BAKERY_DEF_PATH_HPP_
+#define _BAKERY_DEF_PATH_HPP_
 
 
-#include "rec/recipe.hpp"
-#include "dat/data.hpp"
+#include <string>
+#include <vector>
 
 
 namespace bakery {
+namespace rec {
 
 
 /**
- * Class which holds either a recipe or a data, or nothing.
+ * Represents a path identifing a type (or maybe something else).
+ *
+ * Example of paths:
+ *
+ * toto::tutu::my_type
+ * ::super::toc::type
+ *
+ * A path can be absolute or relative (paths starting with "::" are absolutes).
  */
-class recipe_or_data
+class path
 {
 	public:
-		recipe_or_data();
+		typedef std::vector<std::string> token_list;
 
-		void set_recipe(const rec::recipe &);
-		void set_data(const dat::data &);
-		bool is_recipe() const;
-		bool is_data() const;
-		rec::recipe & get_recipe();
-		dat::data & get_data();
-		
+		path();
+		bool get_absolute() const;
+		const token_list & get_tokens() const;
+		std::string print() const;
+		void push_back(const std::string &);
+		void pop_front();
+		void set_absolute(bool);
 	private:
-		boost::variant<
-			int, /* int to hold nothing. */
-			rec::recipe,
-			dat::data
-		> value;	
+		/** True if the path is absolute. False by default. */
+		bool absolute;
+		/** Elements composing the path. */
+		token_list tokens;
 };
 
 
+} /* namespace rec */
 } /* namespace bakery */
 
 
