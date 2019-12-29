@@ -10,6 +10,9 @@ Welcome to bakery's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   Getting started <getting_started.rst>
+   Types <types.rst>
+   Structures <structures.rst>
 
 
 Indices and tables
