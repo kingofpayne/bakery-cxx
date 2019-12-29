@@ -58,3 +58,6 @@ html_static_path = ['_static']
 html_logo = 'logo.png'
 
 html_css_files = ['custom_theme.css']
+
+# Added for readthedocs.org
+master_doc = 'index'
