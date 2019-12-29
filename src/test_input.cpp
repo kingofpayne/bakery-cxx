@@ -19,37 +19,31 @@
  */
 
 
-#include "io.hpp"
+#include <catch2/catch.hpp>
+#include "input.hpp"
+#include <fstream>
 
 
-namespace bakery {
-
-
-/**
- * Constructor.
- *
- * @param stream Stream used for deserialization. Ownership is taken.
- */
-input_t::input_t(std::istream* stream):
-    stream(stream)
-{}
-
-
-/**
- * Move constructor.
- *
- * @param Moved instance.
- */
-input_t::input_t(input_t && rhs): stream(rhs.stream) {}
-
-
-/**
- * Destructor. Closes the stream.
- */
-input_t::~input_t()
+TEST_CASE("input_t")
 {
-    delete stream;
+    SECTION("constructor a")
+    {
+        bakery::input_t x(0, false);
+        REQUIRE( (bool)x == false );
+        REQUIRE( x.has_rebuilt() == false );
+    }
+    
+    SECTION("constructor b")
+    {
+        bakery::input_t x(new std::ifstream("README.md"), false);
+        REQUIRE( (bool)x == true );
+        REQUIRE( x.has_rebuilt() == false );
+    }
+    
+    SECTION("constructor c")
+    {
+        bakery::input_t x(new std::ifstream("README.md"), true);
+        REQUIRE( (bool)x == true );
+        REQUIRE( x.has_rebuilt() == true );
+    }
 }
-
-
-} /* namespace bakery */

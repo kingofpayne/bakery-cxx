@@ -32,7 +32,6 @@ TEST_CASE("bakery_t")
         REQUIRE( bk.get_include_directories().size() == 0 );
         REQUIRE( bk.get_include_directories() == std::list<std::string>() );
         REQUIRE( bk.get_force_rebuild() == false );
-        REQUIRE( bk.has_rebuilt() == false );
     }
 
     /* Test include directory list management */
@@ -67,22 +66,51 @@ TEST_CASE("bakery_t")
         int a;
         bakery::bakery_t bk;
         bk.set_force_rebuild(true);
-        REQUIRE( bk.has_rebuilt() == false );
-        REQUIRE( bk.load("tests/int_42.dat", &a) == 0 );
-        REQUIRE( a == 42 );
-        REQUIRE( bk.has_rebuilt() == true );
+        {
+            bakery::input_t input = bk.load("tests/int_42.dat");
+            REQUIRE( (bool)input == true );
+            REQUIRE( input.good() == true );
+            REQUIRE( input.has_rebuilt() == true );
+            input >> a;
+            REQUIRE( a == 42 );
+        }
         /* Load again, verify that build occured again (force_rebuild flag is
          * set). */
-        a = 0;
-        REQUIRE( bk.load("tests/int_42.dat", &a) == 0 );
-        REQUIRE( a == 42 );
-        REQUIRE( bk.has_rebuilt() == true );
+        {
+            a = 0;
+            bakery::input_t input = bk.load("tests/int_42.dat");
+            REQUIRE( (bool)input == true );
+            REQUIRE( input.good() == true );
+            REQUIRE( input.has_rebuilt() == true );
+            input >> a;
+            REQUIRE( a == 42 );
+        }
         /* Disable force_rebuild switch, load again and verify it did not
          * rebuild this time. */
-        a = 0;
         bk.set_force_rebuild(false);
-        REQUIRE( bk.load("tests/int_42.dat", &a) == 0 );
-        REQUIRE( a == 42 );
-        REQUIRE( bk.has_rebuilt() == false );
+        {
+            a = 0;
+            bakery::input_t input = bk.load("tests/int_42.dat");
+            REQUIRE( (bool)input == true );
+            REQUIRE( input.good() == true );
+            REQUIRE( input.has_rebuilt() == false );
+            input >> a;
+            REQUIRE( a == 42 );
+        }
     }
+
+    /* Test all native types. */
+    SECTION("load native types")
+    {
+        int a;
+        short b;
+        char c;
+        float d;
+        double e;
+        std::string f;
+        std::pair<int, float> g;
+        std::tuple<int, float, std::string> h;
+        std::list<int> i;
+        std::map<std::string, float> j;
+    };
 }

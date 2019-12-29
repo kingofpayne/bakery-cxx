@@ -19,8 +19,8 @@
  */
 
 
-#ifndef _BAKERY_IO_HXX_
-#define _BAKERY_IO_HXX_
+#ifndef _BAKERY_INPUT_HXX_
+#define _BAKERY_INPUT_HXX_
 
 
 #include <istream>
@@ -37,11 +37,14 @@ namespace bakery {
 class input_t
 {
     public:
-        input_t(std::istream*);
+        input_t(std::istream*, bool);
         ~input_t();
         input_t(const input_t &) = delete;
         input_t & operator = (const input_t &) = delete;
         input_t(input_t &&);
+        operator bool() const;
+        bool good() const;
+        bool has_rebuilt() const;
 
         /**
          * Reads input into t using bakery deserialization.
@@ -94,6 +97,8 @@ class input_t
     private:
         /** Input stream for deserialization. Owned. */
         std::istream* stream;
+        /** When true, indicates the binary has been rebuilt. */
+        bool rebuilt_flag;
 };
 
 
