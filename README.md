@@ -1,3 +1,5 @@
+[![Documentation Status](https://readthedocs.org/projects/libbakery/badge/?version=latest)](https://libbakery.readthedocs.io/en/latest/?badge=latest)
+
 # Bakery
 
 Bakery is a C++ library for building and loading complex binary data files. It
