@@ -10,8 +10,11 @@ env.SharedLibrary('bakery', lib_source)
 
 env = Environment()
 env['CPPFLAGS'] = cpp_flags + ['-g']
-env['LIBS'] = libs
-run_tests = env.Program('run-tests', test_source + lib_source)
+env['LIBS'] = libs + ['bakery']
+env['LIBPATH'] = '.'
+run_tests = env.Program('run-tests', test_source)
 
-run_tests_cmd = Command('run_tests_cmd', 'run-tests', action='./run-tests')
+env = Environment()
+env['ENV']['LD_LIBRARY_PATH'] = '.'
+run_tests_cmd = env.Command('run_tests_cmd', 'run-tests', action='./run-tests')
 Depends(run_tests_cmd, run_tests)
