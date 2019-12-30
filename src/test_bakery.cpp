@@ -153,4 +153,17 @@ TEST_CASE("bakery_t")
         REQUIRE( j["a"] == 6 );
         REQUIRE( j["b"] == 7 );
     };
+
+    /* Test include directory effectiveness */
+    SECTION("include")
+    {
+        bakery::bakery_t bak;
+        bak.set_force_rebuild(true);
+        bak.include("./tests/dir");
+        bakery::input_t input = bak.load("tests/aaa.dat");
+        REQUIRE( input.good() );
+        std::string value;
+        input >> value;
+        REQUIRE( value == "aaa" );
+    }
 }
