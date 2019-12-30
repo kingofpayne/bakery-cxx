@@ -1,6 +1,6 @@
 /**
- * Copyright (C) 2010, 2011, 2012
- * Olivier Hériveaux.
+ * Copyright (C) 2019
+ * Olivier Hériveaux
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,39 +19,26 @@
  */
 
 
-#ifndef _BAKERY_FILE_INDICATION_HPP_
-#define _BAKERY_FILE_INDICATION_HPP_
+#include <catch2/catch.hpp>
+#include "file_indication.hpp"
 
 
-#include <string>
-
-
-namespace bakery {
-
-
-/**
- * Represents the recipe file specification in a data file.
- */
-class file_indication_t
+TEST_CASE("file_indication_t")
 {
-    public:
-        file_indication_t();
-        const std::string & get_path() const;
-        bool get_absolute() const;
-        std::string print() const;
-        void set_path(const std::string &);
-        void set_absolute(bool);
+    bakery::file_indication_t f;
+    REQUIRE( f.get_path() == "" );
+    REQUIRE( f.get_absolute() == false );
+    REQUIRE( f.print() == "\"\"" );
 
-    private:
-        /** path to the recipe file. */
-        std::string path;
-        /** True is the path is absolute, false if the path is relative. */
-        bool absolute;
-};
+    f.set_absolute(true);
+    REQUIRE( f.get_absolute() == true );
+    REQUIRE( f.print() == "<>" );
 
+    f.set_path("test/test");
+    REQUIRE( f.get_path() == "test/test" );
+    REQUIRE( f.print() == "<test/test>" );
 
-} /* namespace bakery */
-
-
-#endif
+    f.set_absolute( false);
+    REQUIRE( f.print() == "\"test/test\"" );
+}
 
