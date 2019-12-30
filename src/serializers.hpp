@@ -44,35 +44,6 @@ class input_t;
 class output_t;
 
 
-/**
- * serializer for all types that may be directly serialized by the core::streams
- * library.
- *
- * Template parameters:
- * - T: may be any primitive type which can be directly serialized by the
- *   core::streams library. Such types include int, float, double, std::string,
- *   unsigned int...
- */
-template <typename T> struct serializer
-{
-	/**
-	 * Serialization operator.
-	 *
-	 * @param u Object to be serialized.
-	 * @param io Reference to the end-point serializer.
-	 *
-	 * Template parameters:
-	 * - U: reference or const reference to T.
-	 * - IO: Input or Output.
-	 */
-	template <typename U, typename IO>
-		void operator()(U u, IO & io)
-	{
-		io.stream_serialize(u);
-	}
-};
-
-
 /** Sugar macro to define a serializer for a given type T. */
 #define BAKERY_BASIC_SERIALIZER_BEGIN(T) template <> struct serializer<T> { \
     template <typename X, typename IO> void operator()(X x, IO & io) {
@@ -84,6 +55,9 @@ template <typename T> struct serializer
 
 /** Internal class helping arithmetic types serialization. */
 template <typename T> struct arithmetic_wrapping_t {};
+
+
+template <typename T> struct serializer;
 
 
 /**
@@ -132,6 +106,46 @@ template <typename E> struct serializer< enum_wrapping_t<E> >
         io.stream_serialize(x);
         u = (E)x;
     }
+};
+
+
+/**
+ * Serializer for std::string.
+ */
+template <> struct serializer<std::string>
+{
+	/**
+	 * Serialization operator, for input.
+	 *
+	 * @param u Object to be serialized.
+	 * @param io Reference to the end-point serializer.
+     * @tparam U std::string &
+     * @tparam IO input_t
+	 */
+	template <typename U, typename IO> void operator()(std::string & u, IO & io)
+	{
+		size_t size = 0;
+		io(size);
+		u.resize(size);
+        for (size_t i = 0; i < size; ++i)
+            io(u[i]);
+	}
+
+	/**
+	 * Serialialization operator, for output.
+	 *
+	 * @param u Object to be serialized.
+     * @param io Reference to the end-point serializer.
+     * @tparam U const std::sttring<T> &
+     * @tparam IO output_t.
+	 */
+	template <typename U, typename IO>
+		void operator()(const std::string & u, IO & io)
+	{
+		io(u.size());
+        for (char c: u)
+            io(c);
+	}
 };
 
 
@@ -200,7 +214,8 @@ template <typename T>
 		io(size);
 		u.clear();
 		u.resize(size);
-		std::for_each(u.begin(), u.end(), io);
+        for (auto & item: u)
+            io(item);
 	}
 
 
@@ -243,6 +258,50 @@ template <typename A, typename B>
 		void operator()(U u, IO & io)
 	{
 		io(u.first)(u.second);
+	}
+};
+
+
+template <typename T, size_t Index> struct tuple_item_serializer_t
+{
+    void read_tuple(T & u, input_t & input)
+    {
+        tuple_item_serializer_t<T, Index - 1> x;
+        x.read_tuple(u, input);
+        input(std::get<Index>(u));
+    }
+};
+
+
+template <typename T> struct tuple_item_serializer_t<T, 0>
+{
+    void read_tuple(T & u, input_t & input)
+    {
+        input(std::get<0>(u));
+    }
+};
+
+
+/**
+ * Serializer for std::tuple<...>.
+ */
+template <typename ... T> struct serializer<std::tuple<T ...>>
+{
+	/**
+	 * Serialization operator, for input.
+	 *
+	 * @param u Object to be serialized.
+	 * @param io Reference to the end-point serializer.
+     * @tparam U std::tuple<T ...> &
+     * @tparam IO input_t
+	 */
+	template <typename U, typename IO>
+        void operator()(std::tuple<T ...> & u, IO & io)
+	{
+        tuple_item_serializer_t<
+            std::tuple<T ...>,
+            std::tuple_size<std::tuple<T ...>>::value - 1> x;
+        x.read_tuple(u, io);
 	}
 };
 

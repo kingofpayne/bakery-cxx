@@ -99,18 +99,58 @@ TEST_CASE("bakery_t")
         }
     }
 
+    /* Test loading without bakery_t instanciation */
+    SECTION("load direct")
+    {
+        bakery::input_t input = bakery::load("tests/int_42.dat");
+        REQUIRE( input.good() == true );
+        int a;
+        input >> a;
+        REQUIRE( a == 42 );
+    }
+
     /* Test all native types. */
     SECTION("load native types")
     {
+        bakery::bakery_t bak;
+        bak.set_force_rebuild(true);
+        bakery::input_t input = bak.load("tests/types.dat");
+        REQUIRE( input.good() == true );
+
         int a;
+        input >> a;
+        REQUIRE( a == -42 );
         short b;
+        input >> b;
+        REQUIRE( b == 101 );
         char c;
+        input >> c;
+        REQUIRE( c == 127 );
         float d;
+        input >> d;
+        REQUIRE( d == Approx(3.14159265f) );
         double e;
+        input >> e;
+        REQUIRE( e == Approx(-3.14159265) );
         std::string f;
+        input >> f;
+        REQUIRE( f == "Hello world!" );
         std::pair<int, float> g;
+        input >> g;
+        REQUIRE( g.first == 99 );
+        REQUIRE( g.second == 2.0 );
         std::tuple<int, float, std::string> h;
+        input >> h;
+        REQUIRE( std::get<0>(h) == 123456 );
+        REQUIRE( std::get<1>(h) == -8.88f );
+        REQUIRE( std::get<2>(h) == "tomato" );
         std::list<int> i;
+        input >> i;
+        REQUIRE( i == std::list<int>({5, 4, 3, 2, 1, 0}) );
         std::map<std::string, float> j;
+        input >> j;
+        REQUIRE( j.size() == 2 );
+        REQUIRE( j["a"] == 6 );
+        REQUIRE( j["b"] == 7 );
     };
 }

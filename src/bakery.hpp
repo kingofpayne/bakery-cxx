@@ -62,6 +62,9 @@ class bakery_t
 };
 
 
+input_t load(const std::string &);
+
+
 } /* namespace bakery */
 
 

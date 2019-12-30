@@ -1,0 +1,10 @@
+int a;
+short b;
+char c;
+float d;
+double e;
+string f;
+pair<int, float> g;
+tuple<int, float, string> h;
+list<int> i;
+map<string, float> j;

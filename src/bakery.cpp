@@ -164,4 +164,18 @@ input_t bakery_t::load(const std::string & path)
 }
 
 
+/**
+ * Load a bakery data file. Rebuilds the binary cache if necessary, or if the
+ * force_build option is enabled.
+ *
+ * @param path Path to the datafile.
+ * @return input_t for deserialization.
+ */
+input_t load(const std::string & path)
+{
+    bakery_t b;
+    return b.load(path);
+}
+
+
 } /* namespace bakery */
