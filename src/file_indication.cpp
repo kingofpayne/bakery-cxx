@@ -29,7 +29,7 @@ namespace bakery {
 /**
  * @return the path to the recipe file. This path may be absolute or relative.
  */
-const std::string & file_indication::get_path() const
+const std::string & file_indication_t::get_path() const
 {
 	return path;
 }
@@ -38,7 +38,7 @@ const std::string & file_indication::get_path() const
 /**
  * @return True if the path is absolute, false if relative.
  */
-bool file_indication::get_absolute() const
+bool file_indication_t::get_absolute() const
 {
 	return absolute;
 }
@@ -47,7 +47,7 @@ bool file_indication::get_absolute() const
 /**
  * @return A string representing the content of the object.
  */
-std::string file_indication::print() const
+std::string file_indication_t::print() const
 {
 	return
 		(absolute?"<":"\"")
@@ -61,7 +61,7 @@ std::string file_indication::print() const
  *
  * @param value path. May be relative or absolute.
  */
-void file_indication::set_path(const std::string & value)
+void file_indication_t::set_path(const std::string & value)
 {
 	path = value;
 }
@@ -72,7 +72,7 @@ void file_indication::set_path(const std::string & value)
  *
  * @param value True if the path is absolute, false otherwise.
  */
-void file_indication::set_absolute(bool value)
+void file_indication_t::set_absolute(bool value)
 {
 	absolute = value;
 }

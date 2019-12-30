@@ -139,7 +139,7 @@ bool write_native_string(compilation_state_t &,
 bool write_native_floating(compilation_state_t &,
 	const rec::type_instanciation_t &, const dat::node &);
 
-bool read_data(decompilation_state_t &, const file_indication &,
+bool read_data(decompilation_state_t &, const file_indication_t &,
     const std::string &, const std::list<std::string> &);
 
 bool read_structure(decompilation_state_t &, const rec::type_instanciation_t &);
@@ -220,7 +220,7 @@ bool check_template_parameter_count(const rec::type_instanciation_t &,
 bool merge_included_recipe_files(rec::recipe &, const std::string &,
     const std::list<std::string> &, std::list<std::string> &, compilation_log_t &);
 
-bool resolve_file_indication(const file_indication &, const std::string &,
+bool resolve_file_indication(const file_indication_t &, const std::string &,
     const std::list<std::string> &, std::string &, compilation_log_t &);
 
 mpz_class make_mpz_10_power(unsigned int power);

@@ -47,7 +47,7 @@ node::sptr recipe::get_node() const
 /**
  * @return Const reference to the list of included recipe files.
  */
-const std::list<file_indication> & recipe::get_included_files() const
+const std::list<file_indication_t> & recipe::get_included_files() const
 {
 	return included_files;
 }
@@ -87,7 +87,7 @@ bool recipe::compile(compilation_log_t & compil_status)
  *
  * @param file_indication Indicates the path of the file, and its relativity.
  */
-void recipe::add_include_file(const file_indication & file_indication)
+void recipe::add_include_file(const file_indication_t & file_indication)
 {
 	included_files.push_back(file_indication);
 }

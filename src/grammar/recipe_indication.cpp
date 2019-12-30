@@ -56,7 +56,7 @@ template <typename I>
 					*((char_ - char_('"'))[ _a += _1 ])
 				)
 				[
-					bind(&file_indication::set_absolute, _val, false)
+					bind(&file_indication_t::set_absolute, _val, false)
 				]
 				>>
 				'"'
@@ -71,14 +71,14 @@ template <typename I>
 					*((char_ - char_('>'))[ _a += _1 ])
 				)
 				[
-					bind(&file_indication::set_absolute, _val, true)
+					bind(&file_indication_t::set_absolute, _val, true)
 				]
 				>>
 				'>'
 			)
 		)
 		[
-			bind(&file_indication::set_path, _val, _a)
+			bind(&file_indication_t::set_path, _val, _a)
 		];
 }
 

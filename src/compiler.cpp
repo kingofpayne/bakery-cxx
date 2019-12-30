@@ -122,7 +122,7 @@ void decompile(
     bool scan_inc_dirs = (def_path.size() >= 2) && (def_path[0] == '<') &&
         (def_path[def_path.size()-1] == '>');
 
-    file_indication def_path_fi;
+    file_indication_t def_path_fi;
 
     def_path_fi.set_path(scan_inc_dirs ? def_path.substr(1, def_path.size()-2) :
         def_path);
@@ -1549,7 +1549,7 @@ bool write_native_string(compilation_state_t & state,
  *        searched.
  */
 bool read_data(decompilation_state_t & state,
-    const file_indication & def_fi,
+    const file_indication_t & def_fi,
     const std::string & current_directory,
 	const std::list<std::string> & include_directories)
 {
@@ -2651,10 +2651,10 @@ bool merge_included_recipe_files(
 	compilation_log_t & log)
 {
 	/* Retrieve the liste of included files by recipe. */
-	const std::list<file_indication> & included_defs = def.get_included_files();
+	const std::list<file_indication_t> & included_defs = def.get_included_files();
 
 	/* For each included file. */
-	for (const file_indication & included_def : included_defs)
+	for (const file_indication_t & included_def : included_defs)
 	{
 		/* Solve path. */
 		std::string p;
@@ -2740,7 +2740,7 @@ bool merge_included_recipe_files(
  * @param log The object in which error messages will be pushed.
  */
 bool resolve_file_indication(
-	const file_indication & fi,
+	const file_indication_t & fi,
 	const std::string & current_directory,
 	const std::list<std::string> & include_directories,
 	std::string & dest,

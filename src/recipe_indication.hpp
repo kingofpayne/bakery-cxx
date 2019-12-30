@@ -35,7 +35,7 @@ namespace bakery {
  */
 struct recipe_indication_t
 {
-    file_indication fi;
+    file_indication_t fi;
     std::optional<rec::type_instanciation_t> ti;
 };
 

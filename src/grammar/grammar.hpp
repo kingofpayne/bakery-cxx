@@ -156,7 +156,7 @@ template <typename I>
 
 	/** recipe indication. */
 	boost::spirit::qi::rule<I, boost::spirit::qi::locals<std::string>,
-		file_indication(), skipper>
+		file_indication_t(), skipper>
 		recipe_indication;
 
     boost::spirit::qi::rule<I, recipe_indication_t(), skipper>

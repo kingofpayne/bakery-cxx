@@ -32,7 +32,7 @@ namespace bakery {
 /**
  * Represents the recipe file specification in a data file.
  */
-class file_indication
+class file_indication_t
 {
 	public:
 		const std::string & get_path() const;
