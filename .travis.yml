@@ -1,8 +1,12 @@
 language: cpp
 script: scons
+dist: bionic
 addons:
   apt:
     packages:
       - scons
       - libboost-dev
+      - libboost-filesystem-dev
+      - libboost-regex-dev
+      - libboost-system-dev
       - libgmp-dev
