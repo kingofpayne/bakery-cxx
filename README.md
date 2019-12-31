@@ -1,4 +1,5 @@
 [![Documentation Status](https://readthedocs.org/projects/libbakery/badge/?version=latest)](https://libbakery.readthedocs.io/en/latest/?badge=latest)
+[![Build Status](https://travis-ci.com/kingofpayne/bakery.svg?branch=master)](https://travis-ci.com/kingofpayne/bakery)
 
 # Bakery
 
