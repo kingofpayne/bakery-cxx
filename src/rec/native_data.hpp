@@ -31,7 +31,7 @@ namespace rec {
 
 
 /**
- * data for nodes representing a native type. 
+ * data for nodes representing a native type.
  */
 class native_data_t
 {
@@ -66,13 +66,13 @@ class native_data_t
                     map
                 > Wrapper;
         };
-        
+
         native_data_t();
         native_data_t(class_t::value);
         std::string print() const;
         class_t::value get_class() const;
         void set_class(class_t::value);
-        
+
     private:
         /** Class */
         class_t::value class_;

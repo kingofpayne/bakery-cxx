@@ -38,7 +38,7 @@ template <typename I> void generic_init_dat_map(rule_container<I> & rules)
     using qi::_val;
     using qi::_1;
     using qi::char_;
-        
+
     rules.dat_map =
         qi::eps
         [

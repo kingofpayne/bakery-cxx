@@ -45,7 +45,7 @@ template <typename I> void generic_init_dat_value(rule_container<I> & rules)
          rules.dat_variant_value[_val = _1]
         | rules.dat_bool_value[_val = _1]
         | rules.dat_string_value[_val = _1]
-        | rules.dat_floating_value[_val = _1]        
+        | rules.dat_floating_value[_val = _1]
         | rules.dat_identifier_value[_val = _1]
         | rules.dat_structure[_val = _1]
         | rules.dat_list[_val = _1]

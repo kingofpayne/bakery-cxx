@@ -41,7 +41,7 @@ const std::string node::kind::strings[] =
     "none",
     "assignment",
     "string",
-    "floating", 
+    "floating",
     "identifier",
     "bool_",
     "group",
@@ -286,7 +286,7 @@ void node::set_string(const std::string & value)
  *
  * @throw core::exceptions::unexpected_call if node's kind is not kind::floating.
  */
-void node::set_floating(const floating & value) 
+void node::set_floating(const floating & value)
 {
     bakery_assert(kind == kind::floating);
     data = value;

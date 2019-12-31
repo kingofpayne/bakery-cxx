@@ -83,7 +83,7 @@ error_code_t & error_code_t::operator = (const error_code_t & source)
 
 /**
  * @return true if there is an error.
- * 
+ *
  * Calling this function marks the error code as checked.
  */
 bool error_code_t::fail() const
@@ -91,7 +91,7 @@ bool error_code_t::fail() const
     make_checked();
     return value != 0;
 }
-        
+
 
 /**
  * @return true if there is no error.

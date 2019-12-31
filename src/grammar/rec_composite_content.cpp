@@ -38,13 +38,13 @@ template <typename I>
     namespace qi = boost::spirit::qi;
     using qi::_val;
     using qi::_1;
-        
+
     /* A composite is a list of member and type nodes. */
     rules.def_composite_content =
         qi::eps[ _val = create_def_node_sptr() ]
         >>
         -(
-            (    
+            (
                  rules.def_namespace
                 [
                     boost::phoenix::bind(&rec::node::add_child, *_val, _1)

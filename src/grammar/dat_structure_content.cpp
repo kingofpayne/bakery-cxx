@@ -56,7 +56,7 @@ template <typename I>
             )
             >>
             -qi::char_(';')
-        );        
+        );
 }
 
 

@@ -104,7 +104,7 @@ input_t bakery_t::load(const std::string & path)
 
     boost::filesystem::path bin_path(path);
     bin_path.replace_extension(".bin");
-    
+
     /* Will get all compilation errors */
     compilation_log_t log;
 
@@ -134,7 +134,7 @@ input_t bakery_t::load(const std::string & path)
             std::cout << " failed." << std::endl;
 
             std::cerr << "An error occured during compilation of ressource "
-                << path 
+                << path
                 << ", below are listed the error messages reported during "
                 << "compilation."
                 << std::endl

@@ -47,7 +47,7 @@ template <typename I> void
 
     /* Examples:
      *
-     * toto    
+     * toto
      * toto = 4 */
     rules.def_enum_value =
         /* Create the node. */

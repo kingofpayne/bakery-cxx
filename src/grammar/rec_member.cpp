@@ -44,7 +44,7 @@ template <typename I> void generic_init_def_member(rule_container<I> & rules)
     using qi::_a;
     using boost::phoenix::construct;
 
-    /* A member is a type_instanciation followed by a name.        
+    /* A member is a type_instanciation followed by a name.
      * It may have qualifiers, such as "optional".
      * It may have a default value (for example: "int x = 4"). */
     rules.def_member =
@@ -58,7 +58,7 @@ template <typename I> void generic_init_def_member(rule_container<I> & rules)
             qi::string("optional")
             [
                 boost::phoenix::bind(
-                    &rec::node::add_qualifier, 
+                    &rec::node::add_qualifier,
                     *_val,
                     rec::node::qualifier::optional
                 )

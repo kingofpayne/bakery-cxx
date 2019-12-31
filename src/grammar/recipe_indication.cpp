@@ -50,7 +50,7 @@ template <typename I>
             (
                 '"'
                 >>
-                (    
+                (
                     qi::eps[_a = std::string()]
                     >>
                     *((char_ - char_('"'))[ _a += _1 ])
@@ -65,7 +65,7 @@ template <typename I>
             (
                 '<'
                 >>
-                (    
+                (
                     qi::eps[_a = std::string()]
                     >>
                     *((char_ - char_('>'))[ _a += _1 ])

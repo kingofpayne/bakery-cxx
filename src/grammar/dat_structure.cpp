@@ -35,7 +35,7 @@ template <typename I> void generic_init_dat_structure(rule_container<I> & rules)
 {
     namespace qi = boost::spirit::qi;
 
-    rules.dat_structure = 
+    rules.dat_structure =
         qi::char_('{')
         >>
         rules.dat_structure_content[ qi::_val = qi::_1 ]

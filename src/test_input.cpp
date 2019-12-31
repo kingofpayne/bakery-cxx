@@ -32,14 +32,14 @@ TEST_CASE("input_t")
         REQUIRE( (bool)x == false );
         REQUIRE( x.has_rebuilt() == false );
     }
-    
+
     SECTION("constructor b")
     {
         bakery::input_t x(new std::ifstream("README.md"), false);
         REQUIRE( (bool)x == true );
         REQUIRE( x.has_rebuilt() == false );
     }
-    
+
     SECTION("constructor c")
     {
         bakery::input_t x(new std::ifstream("README.md"), true);

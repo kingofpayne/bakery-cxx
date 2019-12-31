@@ -45,7 +45,7 @@ template <typename I> void generic_init_data(rule_container<I> & rules)
         ]
         >> ';'
         >> rules.dat_structure_content
-        [    
+        [
             boost::phoenix::bind(&dat::data::set_root_node, _val, _1)
         ];
 }

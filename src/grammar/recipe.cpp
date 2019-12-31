@@ -36,7 +36,7 @@ template <typename I> void generic_init_recipe(rule_container<I> & rules)
     namespace qi = boost::spirit::qi;
     using qi::_val;
     using qi::_1;
-        
+
     rules.recipe_ =
         *(
             "include"

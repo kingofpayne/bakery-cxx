@@ -38,7 +38,7 @@ template <typename I>
     namespace qi = boost::spirit::qi;
     using qi::_val;
     using qi::_1;
-        
+
     rules.dat_assignment =
         qi::eps
         [

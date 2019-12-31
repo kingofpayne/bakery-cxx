@@ -47,7 +47,7 @@ class floating
 {
     public:
         floating();
-        
+
         bool get_negative() const;
         const std::string & get_integer_string() const;
         const std::string & get_decimal_string() const;

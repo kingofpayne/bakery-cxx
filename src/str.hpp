@@ -29,7 +29,7 @@
 #include "error_code.hpp"
 #include <limits>
 #include <list>
-#include <sstream> 
+#include <sstream>
 #include <string>
 
 
@@ -112,7 +112,7 @@ template <typename T> std::string from(const T& x)
 
 
 /**
- * Get the size of a data of type T into text. This function uses stl 
+ * Get the size of a data of type T into text. This function uses stl
  * streams for conversion.
  *
  * @param <T> Type of the data to be converted to a string.
@@ -128,7 +128,7 @@ template <typename T> int size(const T& x)
 
 
 /**
- * Converts a list of datas of type T into text. This function uses stl 
+ * Converts a list of datas of type T into text. This function uses stl
  * streams for conversion.
  *
  * Example:

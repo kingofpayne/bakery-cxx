@@ -475,9 +475,9 @@ struct serializer< boost::variant<T ...> >{
 
     typedef typename boost::variant<T ...> VariantType;
 
-    template <typename U, typename IO> 
+    template <typename U, typename IO>
     void operator()(
-        VariantType & u, 
+        VariantType & u,
         IO & io
     ){
         unsigned int which;

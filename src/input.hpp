@@ -56,7 +56,7 @@ class input_t
         {
             return (*this)(t);
         }
-        
+
         /**
          * Reads input into t using bakery deserialization.
          *

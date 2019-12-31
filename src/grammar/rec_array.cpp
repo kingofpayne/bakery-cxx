@@ -44,7 +44,7 @@ template <typename I> void generic_init_def_array(rule_container<I> & rules)
     using qi::_a;
     using boost::phoenix::construct;
 
-        
+
     rules.def_array =
         qi::eps
         [

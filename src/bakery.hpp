@@ -53,9 +53,9 @@ class bakery_t
         void set_force_rebuild(bool);
         bool get_force_rebuild() const;
         input_t load(const std::string &);
-    
+
     private:
-        /** List of directories which may contain recipe files. */    
+        /** List of directories which may contain recipe files. */
         std::list<std::string> include_directories;
         /** Switch to force recompilation. */
         bool force_rebuild;

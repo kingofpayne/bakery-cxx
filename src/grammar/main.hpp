@@ -54,14 +54,14 @@ template <typename I>
             ("\\\\", '\\')
             ("\\n", '\n')
             ("\\t", '\t');
-        
+
         init_recipe_or_data(rules);
         init_identifier(rules);
         init_quoted_string(rules);
         init_integer(rules);
         init_unsigned_integer(rules);
         init_floating_number(rules);
-        init_path(rules); 
+        init_path(rules);
         init_recipe(rules);
         init_data(rules);
         init_def_composite_content(rules);
@@ -70,10 +70,10 @@ template <typename I>
         init_def_structure(rules);
         init_def_array(rules);
         init_def_variant(rules);
-        init_def_typedef(rules);    
+        init_def_typedef(rules);
         init_def_enum(rules);
-        init_def_enum_value(rules);    
-        init_def_member(rules);    
+        init_def_enum_value(rules);
+        init_def_member(rules);
         init_def_type_instanciation(rules);
         init_def_type_instanciation_no_array(rules);
         init_recipe_indication(rules);
@@ -90,7 +90,7 @@ template <typename I>
         init_dat_list(rules);
         init_dat_map(rules);
         init_dat_map_assignment(rules);
-        
+
         /*boost::spirit::qi::on_error<boost::spirit::qi::fail>
         (
                global
@@ -99,7 +99,7 @@ template <typename I>
                 << _4
                 << val(" here: \"")
                 << construct<std::string>(_3, _2)
-                << val("\"")    
+                << val("\"")
                 << std::endl
         );*/
     }

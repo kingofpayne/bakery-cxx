@@ -44,13 +44,13 @@ class recipe_or_data
         bool is_data() const;
         rec::recipe & get_recipe();
         dat::data & get_data();
-        
+
     private:
         boost::variant<
             int, /* int to hold nothing. */
             rec::recipe,
             dat::data
-        > value;    
+        > value;
 };
 
 

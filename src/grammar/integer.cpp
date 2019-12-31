@@ -49,7 +49,7 @@ template <typename I> void generic_init_integer(rule_container<I> & rules)
         +(
             qi::digit[_val += _1]
         )
-    ];        
+    ];
 }
 
 

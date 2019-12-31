@@ -42,7 +42,7 @@ class enum_value_data_t
 
         /** Value of the enumeration member. */
         int value;
-                
+
     private:
         /** Flag indicating if a fixed value has been specified. */
         bool fixed_value_flag;

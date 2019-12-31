@@ -47,7 +47,7 @@ const recipe_indication_t & data::get_recipe_indication() const
 /**
  * @return A string representing the data.
  */
-std::string data::print() const 
+std::string data::print() const
 {
     std::string r;
 

@@ -71,7 +71,7 @@ template <typename I>
      * expression:
      *
      * ( Z || (.N) ) || (e Z) */
-    rules.floating_number = 
+    rules.floating_number =
         -(
             qi::char_('-')
             [

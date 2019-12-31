@@ -65,7 +65,7 @@ std::string compilation_log_t::print() const
                 var(r) += "\n",
                 var(add_nl) = true
             ),
-            var(r) 
+            var(r)
                 += boost::lambda::bind(
                     &compilation_message_t::to_string,
                     boost::lambda::_1

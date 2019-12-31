@@ -39,7 +39,7 @@ struct member_data_t
     member_data_t();
     std::string print() const;
     bool has_default_value() const;
-        
+
     /** The type instanciation of the member. */
     type_instanciation_t type_instanciation;
     /** Shared pointer to a default value node. If this pointer is null, no

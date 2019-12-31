@@ -52,7 +52,7 @@ template <typename I>
                 /* Set the name of the node to the identifier _1 */
                 boost::phoenix::bind(&rec::node::set_name, *_a, _1),
                 /* Push the node in the list */
-                boost::phoenix::push_back(_val, _a)    
+                boost::phoenix::push_back(_val, _a)
             ]
             %
             ','

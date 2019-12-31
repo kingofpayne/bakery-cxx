@@ -37,7 +37,7 @@ struct array_data_t
 {
     array_data_t();
     void add_dim(size_t);
-        
+
     /** The type of the array. */
     type_instanciation_t type_instanciation;
     /** Size of each dimension of the array. The size of this list is the

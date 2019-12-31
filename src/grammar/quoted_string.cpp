@@ -38,7 +38,7 @@ template <typename I> void generic_init_quoted_string(rule_container<I> & rules)
     using qi::_val;
     using qi::_1;
     using qi::char_;
-        
+
     rules.quoted_string = qi::lexeme
     [
         char_('"')
