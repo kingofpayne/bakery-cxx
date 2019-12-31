@@ -40,9 +40,9 @@ array_data_t::array_data_t()
  */
 void array_data_t::add_dim(size_t dim)
 {
-	/* Note: this function is not usefull since the dims member is public.
-	 * However, it is convenient for the grammar parser. */
-	dims.push_back(dim);
+    /* Note: this function is not usefull since the dims member is public.
+     * However, it is convenient for the grammar parser. */
+    dims.push_back(dim);
 }
 
 

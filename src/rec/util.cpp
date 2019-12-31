@@ -34,13 +34,13 @@ namespace util {
  * @param class_ Class of the native type.
  */
 node::sptr make_native_node(
-	const std::string & name,
-	native_data_t::class_t::value class_
+    const std::string & name,
+    native_data_t::class_t::value class_
 ){
-	node::sptr a_node(new node(node::kind::native));
-	a_node->set_name(name);
-	a_node->set_native_data(native_data_t(class_));
-	return a_node;
+    node::sptr a_node(new node(node::kind::native));
+    a_node->set_name(name);
+    a_node->set_native_data(native_data_t(class_));
+    return a_node;
 }
 
 
@@ -51,9 +51,9 @@ node::sptr make_native_node(
  */
 node::sptr make_namespace_node(const std::string & name)
 {
-	node::sptr a_node(new node(node::kind::namespace_));
-	a_node->set_name(name);
-	return a_node;
+    node::sptr a_node(new node(node::kind::namespace_));
+    a_node->set_name(name);
+    return a_node;
 }
 
 

@@ -36,24 +36,24 @@ namespace rec {
 
 const std::string node::kind::strings[] =
 {
-	"none",
-	"namespace",
-	"structure",
-	"variant",
-	"array",
-	"typedef",
-	"enum",
-	"enum_value",
-	"member",
-	"native",
-	"template_type"
+    "none",
+    "namespace",
+    "structure",
+    "variant",
+    "array",
+    "typedef",
+    "enum",
+    "enum_value",
+    "member",
+    "native",
+    "template_type"
 };
 
 
 const std::string node::qualifier::strings[] =
 {
-	"unsigned",
-	"optional"
+    "unsigned",
+    "optional"
 };
 
 
@@ -61,14 +61,14 @@ const std::string node::qualifier::strings[] =
  * Constructor.
  */
 node::node():
-	kind(kind::none),
-	children(),
-	parent(0),
-	scope_node(0),
-	name(),
-	qualifiers()
+    kind(kind::none),
+    children(),
+    parent(0),
+    scope_node(0),
+    name(),
+    qualifiers()
 {
-	init_data();
+    init_data();
 }
 
 
@@ -78,15 +78,15 @@ node::node():
  * @param _kind kind of node.
  */
 node::node(kind::value _kind):
-	kind(_kind),
-	children(),
-	parent(0),
-	scope_node(0),
-	name(),
-	qualifiers()
+    kind(_kind),
+    children(),
+    parent(0),
+    scope_node(0),
+    name(),
+    qualifiers()
 {
-	bakery_assert_message(kind::Wrapper::has(_kind), "Invalid enumeration value.");
-	init_data();
+    bakery_assert_message(kind::Wrapper::has(_kind), "Invalid enumeration value.");
+    init_data();
 }
 
 
@@ -95,7 +95,7 @@ node::node(kind::value _kind):
  */
 node::kind::value node::get_kind() const
 {
-	return kind;
+    return kind;
 }
 
 
@@ -104,7 +104,7 @@ node::kind::value node::get_kind() const
  */
 const std::string & node::get_name() const
 {
-	return name;
+    return name;
 }
 
 
@@ -113,50 +113,50 @@ const std::string & node::get_name() const
  */
 std::string node::print() const
 {
-	std::string r;
+    std::string r;
 
-	if(name.empty())
-		r = "anonymous";
-	else
-		r = name;
+    if(name.empty())
+        r = "anonymous";
+    else
+        r = name;
 
-	r += " is " + kind::Wrapper::to_string(kind);
+    r += " is " + kind::Wrapper::to_string(kind);
 
-	if(!children.empty())
-	{
-		r += " {\n";
-		std::string r2;
-		bool first = true;
-		std::for_each(
-			children.begin(),
-			children.end(),
-			[&](const sptr & x)
-			{
-				if (first)
-					first = false;
-				else
-					r2 += "\n";
+    if(!children.empty())
+    {
+        r += " {\n";
+        std::string r2;
+        bool first = true;
+        std::for_each(
+            children.begin(),
+            children.end(),
+            [&](const sptr & x)
+            {
+                if (first)
+                    first = false;
+                else
+                    r2 += "\n";
 
-				r2 += x->print();
-			}
-		);
+                r2 += x->print();
+            }
+        );
 
-		r += indent(r2);
-		r += "\n}";
-	}
+        r += indent(r2);
+        r += "\n}";
+    }
 
-	switch(kind)
-	{
-		case kind::native:
-			r += " (" + get_native_data().print() + ")";
-			break;
-		case kind::member:
-			r += " (" + get_member_data().print() += ")";
-			break;
-		default:;
-	}
+    switch(kind)
+    {
+        case kind::native:
+            r += " (" + get_native_data().print() + ")";
+            break;
+        case kind::member:
+            r += " (" + get_member_data().print() += ")";
+            break;
+        default:;
+    }
 
-	return r;
+    return r;
 }
 
 
@@ -167,8 +167,8 @@ std::string node::print() const
  */
 const typedef_data_t & node::get_typedef_data() const
 {
-	bakery_assert(kind == kind::typedef_);
-	return boost::get<typedef_data_t>(data);
+    bakery_assert(kind == kind::typedef_);
+    return boost::get<typedef_data_t>(data);
 }
 
 
@@ -179,8 +179,8 @@ const typedef_data_t & node::get_typedef_data() const
  */
 const member_data_t & node::get_member_data() const
 {
-	bakery_assert(kind == kind::member);
-	return boost::get<member_data_t>(data);
+    bakery_assert(kind == kind::member);
+    return boost::get<member_data_t>(data);
 }
 
 
@@ -191,8 +191,8 @@ const member_data_t & node::get_member_data() const
  */
 const native_data_t & node::get_native_data() const
 {
-	bakery_assert(kind == kind::native);
-	return boost::get<native_data_t>(data);
+    bakery_assert(kind == kind::native);
+    return boost::get<native_data_t>(data);
 }
 
 
@@ -204,8 +204,8 @@ const native_data_t & node::get_native_data() const
  */
 const enum_value_data_t & node::get_enum_value_data() const
 {
-	bakery_assert(kind == kind::enum_value);
-	return boost::get<enum_value_data_t>(data);
+    bakery_assert(kind == kind::enum_value);
+    return boost::get<enum_value_data_t>(data);
 }
 
 
@@ -217,8 +217,8 @@ const enum_value_data_t & node::get_enum_value_data() const
  */
 enum_value_data_t & node::get_enum_value_data()
 {
-	bakery_assert(kind == kind::enum_value);
-	return boost::get<enum_value_data_t>(data);
+    bakery_assert(kind == kind::enum_value);
+    return boost::get<enum_value_data_t>(data);
 }
 
 
@@ -230,8 +230,8 @@ enum_value_data_t & node::get_enum_value_data()
  */
 const structure_data_t & node::get_structure_data() const
 {
-	bakery_assert(kind == kind::structure);
-	return boost::get<structure_data_t>(data);
+    bakery_assert(kind == kind::structure);
+    return boost::get<structure_data_t>(data);
 }
 
 
@@ -243,8 +243,8 @@ const structure_data_t & node::get_structure_data() const
  */
 structure_data_t & node::get_structure_data()
 {
-	bakery_assert(kind == kind::structure);
-	return boost::get<structure_data_t>(data);
+    bakery_assert(kind == kind::structure);
+    return boost::get<structure_data_t>(data);
 }
 
 
@@ -255,8 +255,8 @@ structure_data_t & node::get_structure_data()
  */
 const array_data_t & node::get_array_data() const
 {
-	bakery_assert(kind == kind::array);
-	return boost::get<array_data_t>(data);
+    bakery_assert(kind == kind::array);
+    return boost::get<array_data_t>(data);
 }
 
 
@@ -267,8 +267,8 @@ const array_data_t & node::get_array_data() const
  */
 array_data_t & node::get_array_data()
 {
-	bakery_assert(kind == kind::array);
-	return boost::get<array_data_t>(data);
+    bakery_assert(kind == kind::array);
+    return boost::get<array_data_t>(data);
 }
 
 
@@ -279,8 +279,8 @@ array_data_t & node::get_array_data()
  */
 bool node::has_qualifier(qualifier::value q) const
 {
-	return std::find(qualifiers.begin(), qualifiers.end(), q)
-		!= qualifiers.end();
+    return std::find(qualifiers.begin(), qualifiers.end(), q)
+        != qualifiers.end();
 }
 
 
@@ -289,20 +289,20 @@ bool node::has_qualifier(qualifier::value q) const
  */
 bool node::is_type() const
 {
-	switch(kind)
-	{
-		case kind::structure:
-		case kind::variant:
-		case kind::array:
-		case kind::typedef_:
-		case kind::enum_:
-		case kind::native:
-		case kind::template_type:
-			return true;
+    switch(kind)
+    {
+        case kind::structure:
+        case kind::variant:
+        case kind::array:
+        case kind::typedef_:
+        case kind::enum_:
+        case kind::native:
+        case kind::template_type:
+            return true;
 
-		default:
-			return false;
-	}
+        default:
+            return false;
+    }
 }
 
 
@@ -315,21 +315,21 @@ bool node::is_type() const
  */
 node::sptr node::find_node(const std::string & name) const
 {
-	sptr_list::const_iterator it = std::find_if(
-		children.begin(),
-		children.end(),
-		boost::bind(
-			std::equal_to<std::string>(),
-			boost::ref(name),
-			bind(&node::get_name,_1)
-		)
-	);
+    sptr_list::const_iterator it = std::find_if(
+        children.begin(),
+        children.end(),
+        boost::bind(
+            std::equal_to<std::string>(),
+            boost::ref(name),
+            bind(&node::get_name,_1)
+        )
+    );
 
-	if(it != children.end())
-		return *it;
-	else
-		// Return an empty shared_ptr
-		return sptr();
+    if(it != children.end())
+        return *it;
+    else
+        // Return an empty shared_ptr
+        return sptr();
 }
 
 
@@ -339,7 +339,7 @@ node::sptr node::find_node(const std::string & name) const
  */
 const node::sptr_list & node::get_children() const
 {
-	return children;
+    return children;
 }
 
 
@@ -351,9 +351,9 @@ const node::sptr_list & node::get_children() const
  */
 void node::set_kind(kind::value value)
 {
-	bakery_assert_message(kind::Wrapper::has(value), "Invalid enumeration value.");
-	kind = value;
-	init_data();
+    bakery_assert_message(kind::Wrapper::has(value), "Invalid enumeration value.");
+    kind = value;
+    init_data();
 }
 
 
@@ -364,7 +364,7 @@ void node::set_kind(kind::value value)
  */
 void node::set_name(const std::string & value)
 {
-	name = value;
+    name = value;
 }
 
 
@@ -376,10 +376,10 @@ void node::set_name(const std::string & value)
  */
 void node::add_child(sptr n)
 {
-	children.push_back(n);
-	bakery_assert(n->parent == 0);
-	n->parent = this;
-	n->scope_node = this;
+    children.push_back(n);
+    bakery_assert(n->parent == 0);
+    n->parent = this;
+    n->scope_node = this;
 }
 
 
@@ -391,8 +391,8 @@ void node::add_child(sptr n)
  */
 void node::set_scope_node(node* value)
 {
-	bakery_assert(parent == 0);
-	scope_node = value;
+    bakery_assert(parent == 0);
+    scope_node = value;
 }
 
 
@@ -404,8 +404,8 @@ void node::set_scope_node(node* value)
  */
 void node::set_structure_data(const structure_data_t & value)
 {
-	bakery_assert(kind == kind::structure);
-	data = value;
+    bakery_assert(kind == kind::structure);
+    data = value;
 }
 
 
@@ -417,8 +417,8 @@ void node::set_structure_data(const structure_data_t & value)
  */
 void node::set_array_data(const array_data_t & value)
 {
-	bakery_assert(kind == kind::array);
-	data = value;
+    bakery_assert(kind == kind::array);
+    data = value;
 }
 
 
@@ -430,8 +430,8 @@ void node::set_array_data(const array_data_t & value)
  */
 void node::set_typedef_data(const typedef_data_t & value)
 {
-	bakery_assert(kind == kind::typedef_);
-	data = value;
+    bakery_assert(kind == kind::typedef_);
+    data = value;
 }
 
 
@@ -443,8 +443,8 @@ void node::set_typedef_data(const typedef_data_t & value)
  */
 void node::set_member_data(const member_data_t & value)
 {
-	bakery_assert(kind == kind::member);
-	data = value;
+    bakery_assert(kind == kind::member);
+    data = value;
 }
 
 
@@ -456,8 +456,8 @@ void node::set_member_data(const member_data_t & value)
  */
 void node::set_native_data(const native_data_t & value)
 {
-	bakery_assert(kind == kind::native);
-	data = value;
+    bakery_assert(kind == kind::native);
+    data = value;
 }
 
 
@@ -469,8 +469,8 @@ void node::set_native_data(const native_data_t & value)
  */
 void node::set_enum_value_data(const enum_value_data_t & value)
 {
-	bakery_assert(kind == kind::enum_value);
-	data = value;
+    bakery_assert(kind == kind::enum_value);
+    data = value;
 }
 
 
@@ -481,8 +481,8 @@ void node::set_enum_value_data(const enum_value_data_t & value)
  */
 void node::add_qualifier(node::qualifier::value q)
 {
-	bakery_assert_debug(qualifier::Wrapper::has(q));
-	qualifiers.push_back(q);
+    bakery_assert_debug(qualifier::Wrapper::has(q));
+    qualifiers.push_back(q);
 }
 
 
@@ -537,67 +537,67 @@ void node::merge_types(const sptr & b)
  */
 bool node::compile(compilation_log_t & compil_status)
 {
-	// There may be multiple namespace node having the same name (so they
-	// represent the same namespace). The merge_namespaces must have been called
-	// before any compilation.
+    // There may be multiple namespace node having the same name (so they
+    // represent the same namespace). The merge_namespaces must have been called
+    // before any compilation.
 
-	// Verify that there are no two child node with the same identifier. The
-	// parser cannot check that, or it may be complicated... whatever its
-	// not the job of the parser !
-	if(!check_children_names(compil_status))
-		return false;
+    // Verify that there are no two child node with the same identifier. The
+    // parser cannot check that, or it may be complicated... whatever its
+    // not the job of the parser !
+    if(!check_children_names(compil_status))
+        return false;
 
-	// Call compilation of the children
-	sptr_list::iterator it_end = children.end();
-	for(sptr_list::iterator it = children.begin(); it != it_end; ++it)
-		if(!(*it)->compile(compil_status))
-			return false;
+    // Call compilation of the children
+    sptr_list::iterator it_end = children.end();
+    for(sptr_list::iterator it = children.begin(); it != it_end; ++it)
+        if(!(*it)->compile(compil_status))
+            return false;
 
-	// Self compile
-	switch(kind)
-	{
-		case kind::none:
-		case kind::namespace_:
-		case kind::variant:
-		case kind::native:
-		case kind::template_type:
-			break;
+    // Self compile
+    switch(kind)
+    {
+        case kind::none:
+        case kind::namespace_:
+        case kind::variant:
+        case kind::native:
+        case kind::template_type:
+            break;
 
-		case kind::structure:
-			if(!compile_as_structure(compil_status))
-				return false;
-			break;
+        case kind::structure:
+            if(!compile_as_structure(compil_status))
+                return false;
+            break;
 
-		case kind::array:
-			if(!compile_as_array(compil_status))
-				return false;
-			break;
+        case kind::array:
+            if(!compile_as_array(compil_status))
+                return false;
+            break;
 
-		case kind::typedef_:
-			if(!compile_as_typedef(compil_status))
-				return false;
-			break;
+        case kind::typedef_:
+            if(!compile_as_typedef(compil_status))
+                return false;
+            break;
 
-		case kind::member:
-			if(!compile_as_member(compil_status))
-				return false;
-			break;
+        case kind::member:
+            if(!compile_as_member(compil_status))
+                return false;
+            break;
 
-		case kind::enum_:
-			if(!compile_as_enum(compil_status))
-				return false;
-			break;
+        case kind::enum_:
+            if(!compile_as_enum(compil_status))
+                return false;
+            break;
 
-		case kind::enum_value:
-			if(!compile_as_enum_value(compil_status))
-				return false;
-			break;
+        case kind::enum_value:
+            if(!compile_as_enum_value(compil_status))
+                return false;
+            break;
 
-		default:
-			bakery_unexpected_case();
-	}
+        default:
+            bakery_unexpected_case();
+    }
 
-	return true;
+    return true;
 }
 
 
@@ -606,42 +606,42 @@ bool node::compile(compilation_log_t & compil_status)
  */
 void node::init_data()
 {
-	switch(kind)
-	{
-		case kind::none:
-		case kind::namespace_:
-		case kind::variant:
-		case kind::enum_:
-		case kind::template_type:
-			break;
+    switch(kind)
+    {
+        case kind::none:
+        case kind::namespace_:
+        case kind::variant:
+        case kind::enum_:
+        case kind::template_type:
+            break;
 
-		case kind::array:
-			data = array_data_t();
-			break;
+        case kind::array:
+            data = array_data_t();
+            break;
 
-		case kind::typedef_:
-			data = typedef_data_t();
-			break;
+        case kind::typedef_:
+            data = typedef_data_t();
+            break;
 
-		case kind::enum_value:
-			data = enum_value_data_t();
-			break;
+        case kind::enum_value:
+            data = enum_value_data_t();
+            break;
 
-		case kind::member:
-			data = member_data_t();
-			break;
+        case kind::member:
+            data = member_data_t();
+            break;
 
-		case kind::native:
-			data = native_data_t();
-			break;
+        case kind::native:
+            data = native_data_t();
+            break;
 
-		case kind::structure:
-			data = structure_data_t();
-			break;
+        case kind::structure:
+            data = structure_data_t();
+            break;
 
-		default:
-			bakery_unexpected_case();
-	}
+        default:
+            bakery_unexpected_case();
+    }
 }
 
 
@@ -651,49 +651,49 @@ void node::init_data()
  */
 void node::merge_namespaces()
 {
-	if(children.size() <= 1)
-		return;
+    if(children.size() <= 1)
+        return;
 
-	sptr_list::iterator it_end = children.end();
+    sptr_list::iterator it_end = children.end();
 
-	for(sptr_list::iterator it1 = children.begin();
-		it1 != it_end;
-		++it1)
-	{
-		if( (*it1)->get_kind() == kind::namespace_ )
-		{
-			sptr_list::iterator it2 = it1;
-			it2++;
+    for(sptr_list::iterator it1 = children.begin();
+        it1 != it_end;
+        ++it1)
+    {
+        if( (*it1)->get_kind() == kind::namespace_ )
+        {
+            sptr_list::iterator it2 = it1;
+            it2++;
 
-			// Try to find a similare namespace node
-			while(it2 != it_end)
-			{
-				if(
-					( (*it2)->get_kind() == kind::namespace_ )
-					&& ( (*it1)->get_name() == (*it2)->get_name() )
-				){
-					// Ok, these namespaces are similar, merge them ! To do it,
-					// merge the second node into the first, and remove the
-					// second node from the children list.
-					(*it1)->merge(*it2);
-					sptr_list::iterator it_to_erase = it2;
-					it2++;
-					children.erase(it_to_erase);
-				}
-				else
-				{
-					it2++;
-				}
-			}
-		}
-	}
+            // Try to find a similare namespace node
+            while(it2 != it_end)
+            {
+                if(
+                    ( (*it2)->get_kind() == kind::namespace_ )
+                    && ( (*it1)->get_name() == (*it2)->get_name() )
+                ){
+                    // Ok, these namespaces are similar, merge them ! To do it,
+                    // merge the second node into the first, and remove the
+                    // second node from the children list.
+                    (*it1)->merge(*it2);
+                    sptr_list::iterator it_to_erase = it2;
+                    it2++;
+                    children.erase(it_to_erase);
+                }
+                else
+                {
+                    it2++;
+                }
+            }
+        }
+    }
 
-	// Recursively, merge namespaces of children.
-	std::for_each(
-		children.begin(),
-		children.end(),
-		boost::bind(&node::merge_namespaces, _1)
-	);
+    // Recursively, merge namespaces of children.
+    std::for_each(
+        children.begin(),
+        children.end(),
+        boost::bind(&node::merge_namespaces, _1)
+    );
 }
 
 
@@ -707,37 +707,37 @@ void node::merge_namespaces()
  */
 bool node::check_children_names(compilation_log_t & compil_status) const
 {
-	bool result = true;
+    bool result = true;
 
-	const sptr_list::const_iterator it_end = children.end();
-	for(sptr_list::const_iterator it1 = children.begin();
-		it1 != it_end;
-		++it1)
-	{
-		sptr_list::const_iterator it2 = it1;
-		for(it2++;
-			it2 != it_end;
-			++it2)
-		{
-			const std::string & name1 = (*it1)->get_name();
-			const std::string & name2 = (*it2)->get_name();
+    const sptr_list::const_iterator it_end = children.end();
+    for(sptr_list::const_iterator it1 = children.begin();
+        it1 != it_end;
+        ++it1)
+    {
+        sptr_list::const_iterator it2 = it1;
+        for(it2++;
+            it2 != it_end;
+            ++it2)
+        {
+            const std::string & name1 = (*it1)->get_name();
+            const std::string & name2 = (*it2)->get_name();
 
-			if((!name1.empty()) && (name1 == name2))
-			{
-				compil_status.add_message(
-					compilation_message_t(
-						compilation_message_type_t::error,
-						"a node with the name '"
-							+ (*it1)->get_name()
-							+ "' is already declared."
-					)
-				);
-				result = false;
-			}
-		}
-	}
+            if((!name1.empty()) && (name1 == name2))
+            {
+                compil_status.add_message(
+                    compilation_message_t(
+                        compilation_message_type_t::error,
+                        "a node with the name '"
+                            + (*it1)->get_name()
+                            + "' is already declared."
+                    )
+                );
+                result = false;
+            }
+        }
+    }
 
-	return result;
+    return result;
 }
 
 
@@ -753,26 +753,26 @@ bool node::check_children_names(compilation_log_t & compil_status) const
  */
 /*node::sptr node::solve_down(const path & path) const
 {
-	// Copy the path for local modifications
-	path p = path;
+    // Copy the path for local modifications
+    path p = path;
 
-	const path::token_list & tokens = path.get_tokens();
+    const path::token_list & tokens = path.get_tokens();
 
-	// Verify that the path is not empty.
-	if(tokens.empty())
-		throw core::exceptions::invalid_parameter("path", "the path is empty.",
-			HERE);
+    // Verify that the path is not empty.
+    if(tokens.empty())
+        throw core::exceptions::invalid_parameter("path", "the path is empty.",
+            HERE);
 
-	// Search for a node with the first token as name.
-	sptr first_node = find_node(tokens[0]);
+    // Search for a node with the first token as name.
+    sptr first_node = find_node(tokens[0]);
 
-	if((tokens.size() == 1) || (first_node.get() == 0))
-	{
-		return first_node;
-	}
+    if((tokens.size() == 1) || (first_node.get() == 0))
+    {
+        return first_node;
+    }
 
-	p.pop_front();
-	return first_node->solve_down(p);
+    p.pop_front();
+    return first_node->solve_down(p);
 }*/
 
 
@@ -788,64 +788,64 @@ bool node::check_children_names(compilation_log_t & compil_status) const
  */
 node::sptr node::solve_type_down(const path & a_path) const
 {
-	// Copy the path for local modifications
-	path p = a_path;
+    // Copy the path for local modifications
+    path p = a_path;
 
-	const path::token_list & tokens = a_path.get_tokens();
+    const path::token_list & tokens = a_path.get_tokens();
 
-	// Verify that the path is not empty.
-	bakery_assert_message(!tokens.empty(), "path is empty.");
+    // Verify that the path is not empty.
+    bakery_assert_message(!tokens.empty(), "path is empty.");
 
-	// Search for a type node with the first token as name.
-	// Note: we cache token[0] to avoid quering multiple time the element 0
-	// during the search loop.
-	const std::string & token_zero = tokens[0];
+    // Search for a type node with the first token as name.
+    // Note: we cache token[0] to avoid quering multiple time the element 0
+    // during the search loop.
+    const std::string & token_zero = tokens[0];
 
-	// If there is only one token in the node, search verifies that the node is
-	// a type. Otherwise, search applies on all nodes (the type node may be
-	// included in a non-type node).
-	sptr_list::const_iterator it;
+    // If there is only one token in the node, search verifies that the node is
+    // a type. Otherwise, search applies on all nodes (the type node may be
+    // included in a non-type node).
+    sptr_list::const_iterator it;
 
-	if(tokens.size() == 1)
-	{
-		it = std::find_if(
-			children.begin(),
-			children.end(),
-			[&](const sptr & x) -> bool
-			{
-				return x->is_type() && (x->get_name() == token_zero);
-			}
-		);
-	}
-	else
-	{
-		it = std::find_if(
-			children.begin(),
-			children.end(),
-			[&](const sptr & x) -> bool
-			{
-				return x->get_name() == token_zero;
-			}
-		);
-	}
+    if(tokens.size() == 1)
+    {
+        it = std::find_if(
+            children.begin(),
+            children.end(),
+            [&](const sptr & x) -> bool
+            {
+                return x->is_type() && (x->get_name() == token_zero);
+            }
+        );
+    }
+    else
+    {
+        it = std::find_if(
+            children.begin(),
+            children.end(),
+            [&](const sptr & x) -> bool
+            {
+                return x->get_name() == token_zero;
+            }
+        );
+    }
 
-	if(it == children.end())
-	{
-		// Return null pointer to indicate search didn't find anything.
-		return sptr();
-	}
-	else
-	{
-		if(tokens.size() == 1)
-		{
-			return *it;
-		}
-		else
-		{
-			p.pop_front();
-			return (*it)->solve_type_down(p);
-		}
-	}
+    if(it == children.end())
+    {
+        // Return null pointer to indicate search didn't find anything.
+        return sptr();
+    }
+    else
+    {
+        if(tokens.size() == 1)
+        {
+            return *it;
+        }
+        else
+        {
+            p.pop_front();
+            return (*it)->solve_type_down(p);
+        }
+    }
 }
 
 
@@ -860,38 +860,38 @@ node::sptr node::solve_type_down(const path & a_path) const
  */
 /*node::sptr node::solve(const path & path) const
 {
-	if(path.get_absolute())
-	{
-		if(scope_node == 0)
-		{
-			path p = path;
-			p.set_absolute(false);
-			return solve_down(p); // throw 1
-		}
-		else
-		{
-			return scope_node->solve(path); // throw 1
-		}
-	}
-	else
-	{
-		sptr s = solve_down(path);
-		if(s.get() == 0)
-		{
-			if(scope_node == 0)
-			{
-				return node::sptr();
-			}
-			else
-			{
-				return scope_node->solve(path); // throw 1
-			}
-		}
-		else
-		{
-			return s;
-		}
-	}
+    if(path.get_absolute())
+    {
+        if(scope_node == 0)
+        {
+            path p = path;
+            p.set_absolute(false);
+            return solve_down(p); // throw 1
+        }
+        else
+        {
+            return scope_node->solve(path); // throw 1
+        }
+    }
+    else
+    {
+        sptr s = solve_down(path);
+        if(s.get() == 0)
+        {
+            if(scope_node == 0)
+            {
+                return node::sptr();
+            }
+            else
+            {
+                return scope_node->solve(path); // throw 1
+            }
+        }
+        else
+        {
+            return s;
+        }
+    }
 
 }*/
 
@@ -907,38 +907,38 @@ node::sptr node::solve_type_down(const path & a_path) const
  */
 node::sptr node::solve_type(const path & a_path) const
 {
-	if(a_path.get_absolute())
-	{
-		if(scope_node == 0)
-		{
-			path p = a_path;
-			p.set_absolute(false);
-			return solve_type_down(p);
-		}
-		else
-		{
-			return scope_node->solve_type(a_path);
-		}
-	}
-	else
-	{
-		sptr s = solve_type_down(a_path);
-		if(s.get() == 0)
-		{
-			if(scope_node == 0)
-			{
-				return node::sptr();
-			}
-			else
-			{
-				return scope_node->solve_type(a_path);
-			}
-		}
-		else
-		{
-			return s;
-		}
-	}
+    if(a_path.get_absolute())
+    {
+        if(scope_node == 0)
+        {
+            path p = a_path;
+            p.set_absolute(false);
+            return solve_type_down(p);
+        }
+        else
+        {
+            return scope_node->solve_type(a_path);
+        }
+    }
+    else
+    {
+        sptr s = solve_type_down(a_path);
+        if(s.get() == 0)
+        {
+            if(scope_node == 0)
+            {
+                return node::sptr();
+            }
+            else
+            {
+                return scope_node->solve_type(a_path);
+            }
+        }
+        else
+        {
+            return s;
+        }
+    }
 }
 
 
@@ -955,58 +955,58 @@ node::sptr node::solve_type(const path & a_path) const
  */
 bool node::compile_as_structure(compilation_log_t & compil_status)
 {
-	for (type_instanciation_t & ti :
-		boost::get<structure_data_t>(data).heritance_list)
-	{
-		if (!compile_type_instanciation(ti, compil_status, this))
-		{
-			compil_status.add_message(
-				compilation_message_type_t::error,
-				"failed to compile the herited type '"
-					+ ti.print()
-					+ "' of the node '"
-					+ name
-					+ "'."
-				);
+    for (type_instanciation_t & ti :
+        boost::get<structure_data_t>(data).heritance_list)
+    {
+        if (!compile_type_instanciation(ti, compil_status, this))
+        {
+            compil_status.add_message(
+                compilation_message_type_t::error,
+                "failed to compile the herited type '"
+                    + ti.print()
+                    + "' of the node '"
+                    + name
+                    + "'."
+                );
 
-			return false;
-		}
-		else
-		{
-			// type has been solved. We need to verify that a structure can
-			// heritate from this type: this type must be a structure or a
-			// typedef.
-			kind::value hkind = ti.get_type_ptr()->get_kind();
-			bool correct_kind;
+            return false;
+        }
+        else
+        {
+            // type has been solved. We need to verify that a structure can
+            // heritate from this type: this type must be a structure or a
+            // typedef.
+            kind::value hkind = ti.get_type_ptr()->get_kind();
+            bool correct_kind;
 
-			switch(hkind)
-			{
-				case kind::structure:
-				case kind::typedef_:
-					correct_kind = true;
-					break;
+            switch(hkind)
+            {
+                case kind::structure:
+                case kind::typedef_:
+                    correct_kind = true;
+                    break;
 
-				default:
-					correct_kind = false;
-			}
+                default:
+                    correct_kind = false;
+            }
 
-			if(!correct_kind)
-			{
-				compil_status.add_message(
-					compilation_message_type_t::error,
-					"the structure '"
-						+ name
-						+ "' cannot heritate from the type '"
-						+ ti.print()
-						+ "'."
-					);
+            if(!correct_kind)
+            {
+                compil_status.add_message(
+                    compilation_message_type_t::error,
+                    "the structure '"
+                        + name
+                        + "' cannot heritate from the type '"
+                        + ti.print()
+                        + "'."
+                    );
 
-				return false;
-			}
-		}
-	}
+                return false;
+            }
+        }
+    }
 
-	return true;
+    return true;
 }
 
 
@@ -1023,17 +1023,17 @@ bool node::compile_as_structure(compilation_log_t & compil_status)
  */
 bool node::compile_as_array(compilation_log_t & compil_status)
 {
-	array_data_t & ad = boost::get<array_data_t>(data);
+    array_data_t & ad = boost::get<array_data_t>(data);
 
-	if (!compile_type_instanciation(ad.type_instanciation, compil_status, this))
-	{
-		compil_status.add_error("failed to compile array type of node '" + name
-			+ "'.");
+    if (!compile_type_instanciation(ad.type_instanciation, compil_status, this))
+    {
+        compil_status.add_error("failed to compile array type of node '" + name
+            + "'.");
 
-		return false;
-	}
+        return false;
+    }
 
-	return true;
+    return true;
 }
 
 
@@ -1050,18 +1050,18 @@ bool node::compile_as_array(compilation_log_t & compil_status)
  */
 bool node::compile_as_typedef(compilation_log_t & compil_status)
 {
-	if(!compile_type_instanciation(
-		boost::get<typedef_data_t>(data).type_instanciation,
-		compil_status, this))
-	{
-		compil_status.add_message(
-			compilation_message_type_t::error,
-			"failed to compile the type of the node " + name + "."
-		);
-		return false;
-	}
+    if(!compile_type_instanciation(
+        boost::get<typedef_data_t>(data).type_instanciation,
+        compil_status, this))
+    {
+        compil_status.add_message(
+            compilation_message_type_t::error,
+            "failed to compile the type of the node " + name + "."
+        );
+        return false;
+    }
 
-	return true;
+    return true;
 }
 
 
@@ -1078,17 +1078,17 @@ bool node::compile_as_typedef(compilation_log_t & compil_status)
  */
 bool node::compile_as_member(compilation_log_t & compil_status)
 {
-	if (!compile_type_instanciation(boost::get<member_data_t>(data)
-		.type_instanciation, compil_status, this))
-	{
-		compil_status.add_message(
-			compilation_message_type_t::error,
-			"failed to compile the type of the node " + name + "."
-		);
-		return false;
-	}
+    if (!compile_type_instanciation(boost::get<member_data_t>(data)
+        .type_instanciation, compil_status, this))
+    {
+        compil_status.add_message(
+            compilation_message_type_t::error,
+            "failed to compile the type of the node " + name + "."
+        );
+        return false;
+    }
 
-	return true;
+    return true;
 }
 
 
@@ -1105,107 +1105,107 @@ bool node::compile_as_member(compilation_log_t & compil_status)
  */
 bool node::compile_as_enum(compilation_log_t & compil_status)
 {
-	const sptr_list::iterator it_end = children.end();
+    const sptr_list::iterator it_end = children.end();
 
-	// Firstly, find the first fixed value.
-	int lowest_fixed = 0;
-	size_t lowest_fixed_index = 0;
-	sptr_list::iterator it;
-	sptr_list::iterator itx = children.begin();
+    // Firstly, find the first fixed value.
+    int lowest_fixed = 0;
+    size_t lowest_fixed_index = 0;
+    sptr_list::iterator it;
+    sptr_list::iterator itx = children.begin();
 
-	size_t index = 0;
-	for(it = children.begin(); it != it_end; ++it)
-	{
-		const enum_value_data_t & evd = (*it)->get_enum_value_data();
-		if(evd.get_fixed_value_flag())
-		{
-			lowest_fixed = evd.value;
-			lowest_fixed_index = index;
-			itx = it;
-			break;
-		}
+    size_t index = 0;
+    for(it = children.begin(); it != it_end; ++it)
+    {
+        const enum_value_data_t & evd = (*it)->get_enum_value_data();
+        if(evd.get_fixed_value_flag())
+        {
+            lowest_fixed = evd.value;
+            lowest_fixed_index = index;
+            itx = it;
+            break;
+        }
 
-		index++;
-	}
+        index++;
+    }
 
-	// Computes the decreasing value of the previous enumeration members.
-	int x = (lowest_fixed < (int)lowest_fixed_index)
-		?lowest_fixed:(int)lowest_fixed_index;
+    // Computes the decreasing value of the previous enumeration members.
+    int x = (lowest_fixed < (int)lowest_fixed_index)
+        ?lowest_fixed:(int)lowest_fixed_index;
 
-	sptr_list::iterator it2 = it;
-	index = lowest_fixed_index;
-	while(index > 0)
-	{
-		it2--;
-		index--;
+    sptr_list::iterator it2 = it;
+    index = lowest_fixed_index;
+    while(index > 0)
+    {
+        it2--;
+        index--;
 
-		// Verify that the numeric limit is not reached, before decrementing x.
-		if(x == std::numeric_limits<int>::min())
-		{
-			compil_status.add_message(
-				compilation_message_type_t::error,
-				"enumeration constraints results in a member value lowest than "
-					"the minimum possible int value."
-			);
-			return false;
-		}
+        // Verify that the numeric limit is not reached, before decrementing x.
+        if(x == std::numeric_limits<int>::min())
+        {
+            compil_status.add_message(
+                compilation_message_type_t::error,
+                "enumeration constraints results in a member value lowest than "
+                    "the minimum possible int value."
+            );
+            return false;
+        }
 
-		(*it2)->get_enum_value_data().value = --x;
-	}
+        (*it2)->get_enum_value_data().value = --x;
+    }
 
-	// Computes the increasing value of the next enumeration members.
-	x = lowest_fixed;
-	bool do_increment = false;
+    // Computes the increasing value of the next enumeration members.
+    x = lowest_fixed;
+    bool do_increment = false;
 
-	while(itx != it_end)
-	{
-		if(do_increment)
-		{
-			// Verify that the numeric limit is not reached, before incrementing
-			// x.
-			if(x == std::numeric_limits<int>::max())
-			{
-				compil_status.add_message(
-					compilation_message_type_t::error,
-					"enumeration constaints results in a member value higher "
-						"than the maximal possible int value."
-				);
-				return false;
-			}
+    while(itx != it_end)
+    {
+        if(do_increment)
+        {
+            // Verify that the numeric limit is not reached, before incrementing
+            // x.
+            if(x == std::numeric_limits<int>::max())
+            {
+                compil_status.add_message(
+                    compilation_message_type_t::error,
+                    "enumeration constaints results in a member value higher "
+                        "than the maximal possible int value."
+                );
+                return false;
+            }
 
-			// Increase x.
-			x++;
-		}
-		else
-		{
-			do_increment = true;
-		}
+            // Increase x.
+            x++;
+        }
+        else
+        {
+            do_increment = true;
+        }
 
-		// The member may define a fixed value.
-		const enum_value_data_t & evd = (*itx)->get_enum_value_data();
-		if(evd.get_fixed_value_flag())
-		{
-			// The fixed value must be higher or equal to x.
-			int fixed_value = evd.value;
-			if(fixed_value < x)
-			{
-				compil_status.add_message(
-					compilation_message_type_t::error,
-					"enumeraion member '" + (*itx)->get_name() + "' has a fixed "
-						"value " + str::from(fixed_value) + ", but this "
-						"value has already been reached by a previous node."
-				);
-				return false;
-			}
+        // The member may define a fixed value.
+        const enum_value_data_t & evd = (*itx)->get_enum_value_data();
+        if(evd.get_fixed_value_flag())
+        {
+            // The fixed value must be higher or equal to x.
+            int fixed_value = evd.value;
+            if(fixed_value < x)
+            {
+                compil_status.add_message(
+                    compilation_message_type_t::error,
+                    "enumeraion member '" + (*itx)->get_name() + "' has a fixed "
+                        "value " + str::from(fixed_value) + ", but this "
+                        "value has already been reached by a previous node."
+                );
+                return false;
+            }
 
-			x = fixed_value;
-		}
+            x = fixed_value;
+        }
 
-		(*itx)->get_enum_value_data().value = x;
-		++itx;
-	}
+        (*itx)->get_enum_value_data().value = x;
+        ++itx;
+    }
 
-	return true;
+    return true;
 }
 
 
@@ -1222,26 +1222,26 @@ bool node::compile_as_enum(compilation_log_t & compil_status)
  */
 bool node::compile_as_enum_value(compilation_log_t & compil_status)
 {
-	enum_value_data_t & evd = get_enum_value_data();
-	if(evd.get_fixed_value_flag())
-	{
-		mpz_class mpz_value(evd.get_value_str());
+    enum_value_data_t & evd = get_enum_value_data();
+    if(evd.get_fixed_value_flag())
+    {
+        mpz_class mpz_value(evd.get_value_str());
 
-		// Check that the requested value has an acceptable value.
-		if(!mpz_value.fits_sint_p())
-		{
-			compil_status.add_message(
-				compilation_message_type_t::error,
-				"enumeration value " + str::from(mpz_value) + " does not "
-					"fit an int."
-			);
-			return false;
-		}
+        // Check that the requested value has an acceptable value.
+        if(!mpz_value.fits_sint_p())
+        {
+            compil_status.add_message(
+                compilation_message_type_t::error,
+                "enumeration value " + str::from(mpz_value) + " does not "
+                    "fit an int."
+            );
+            return false;
+        }
 
-		evd.value = mpz_value.get_si();
-	}
+        evd.value = mpz_value.get_si();
+    }
 
-	return true;
+    return true;
 }
 
 
@@ -1255,78 +1255,78 @@ bool node::compile_as_enum_value(compilation_log_t & compil_status)
  * @return False is an error occurs during compilation.
  */
 bool node::compile_type_instanciation(
-	type_instanciation_t & ti,
-	compilation_log_t & compil_status,
-	node* scope_node
+    type_instanciation_t & ti,
+    compilation_log_t & compil_status,
+    node* scope_node
 )
 const
 {
-	// First step: solve the path to the base type.
-	if(ti.get_type_ptr() == 0)
-	{
-		const path & a_path = ti.get_type_path();
+    // First step: solve the path to the base type.
+    if(ti.get_type_ptr() == 0)
+    {
+        const path & a_path = ti.get_type_path();
 
-		// Try to find the type from the path.
-		sptr type_sptr = solve_type(a_path);
+        // Try to find the type from the path.
+        sptr type_sptr = solve_type(a_path);
 
-		if(type_sptr.get() == 0)
-		{
-			// type not found... bouhouoouou.
-			compil_status.add_message(
-				compilation_message_t(
-					compilation_message_type_t::error,
-					"type '" + a_path.print() + "' not found."
-				)
-			);
+        if(type_sptr.get() == 0)
+        {
+            // type not found... bouhouoouou.
+            compil_status.add_message(
+                compilation_message_t(
+                    compilation_message_type_t::error,
+                    "type '" + a_path.print() + "' not found."
+                )
+            );
 
-			return false;
-		}
-		else
-		{
-			// A node has been found ! by wait wait... it may not be a type !
-			// Lets check that.
-			if(!type_sptr->is_type())
-			{
-				// Ha Haaa ! There is a problem with that node !
-				compil_status.add_message(
-					compilation_message_t(
-						compilation_message_type_t::error,
-						"the node '" + a_path.print() + "' is not a type, but a "
-							+ kind::Wrapper::to_string(type_sptr->get_kind())
-							+ "."
-					)
-				);
-				return false;
-			}
+            return false;
+        }
+        else
+        {
+            // A node has been found ! by wait wait... it may not be a type !
+            // Lets check that.
+            if(!type_sptr->is_type())
+            {
+                // Ha Haaa ! There is a problem with that node !
+                compil_status.add_message(
+                    compilation_message_t(
+                        compilation_message_type_t::error,
+                        "the node '" + a_path.print() + "' is not a type, but a "
+                            + kind::Wrapper::to_string(type_sptr->get_kind())
+                            + "."
+                    )
+                );
+                return false;
+            }
 
-			// Everything is ok !
-			// Be carefull, give a simple pointer, not a shared_ptr.
-			ti.set_type_node_ptr(type_sptr.get());
-		}
-	}
+            // Everything is ok !
+            // Be carefull, give a simple pointer, not a shared_ptr.
+            ti.set_type_node_ptr(type_sptr.get());
+        }
+    }
 
-	if(ti.get_owning_node())
-	{
-		// Must compile the embeded node. Since this node has no parent, we must
-		// give it the scope node for type resolution.
-		ti.get_type_ptr()->set_scope_node(scope_node);
-		ti.get_type_ptr()->compile(compil_status);
-	}
+    if(ti.get_owning_node())
+    {
+        // Must compile the embeded node. Since this node has no parent, we must
+        // give it the scope node for type resolution.
+        ti.get_type_ptr()->set_scope_node(scope_node);
+        ti.get_type_ptr()->compile(compil_status);
+    }
 
-	/* Second step: solve each template argument. */
-	type_instanciation_t::parameter_list & pl = ti.get_parameters();
-	const type_instanciation_t::parameter_list::iterator it_end = pl.end();
-	for (type_instanciation_t::parameter_list::iterator it = pl.begin();
-		it != it_end;
-		it++
-	){
-		if(!compile_type_instanciation(*it, compil_status, scope_node))
-		{
-			return false;
-		}
-	}
+    /* Second step: solve each template argument. */
+    type_instanciation_t::parameter_list & pl = ti.get_parameters();
+    const type_instanciation_t::parameter_list::iterator it_end = pl.end();
+    for (type_instanciation_t::parameter_list::iterator it = pl.begin();
+        it != it_end;
+        it++
+    ){
+        if(!compile_type_instanciation(*it, compil_status, scope_node))
+        {
+            return false;
+        }
+    }
 
-	return true;
+    return true;
 }
 
 

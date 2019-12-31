@@ -34,10 +34,10 @@ namespace dat {
  * Constructor. All parts strings are initialized to empty strings.
  */
 floating::floating():
-	negative(false),
-	integer_string(),
-	decimal_string(),
-	exponent_string()
+    negative(false),
+    integer_string(),
+    decimal_string(),
+    exponent_string()
 {}
 
 
@@ -46,7 +46,7 @@ floating::floating():
  */
 bool floating::get_negative() const
 {
-	return negative;
+    return negative;
 }
 
 
@@ -56,7 +56,7 @@ bool floating::get_negative() const
  */
 const std::string & floating::get_integer_string() const
 {
-	return integer_string;
+    return integer_string;
 }
 
 
@@ -66,7 +66,7 @@ const std::string & floating::get_integer_string() const
  */
 const std::string & floating::get_decimal_string() const
 {
-	return decimal_string;
+    return decimal_string;
 }
 
 
@@ -76,7 +76,7 @@ const std::string & floating::get_decimal_string() const
  */
 const std::string & floating::get_exponent_string() const
 {
-	return exponent_string;
+    return exponent_string;
 }
 
 
@@ -85,7 +85,7 @@ const std::string & floating::get_exponent_string() const
  */
 bool floating::has_integer_part() const
 {
-	return !integer_string.empty();
+    return !integer_string.empty();
 }
 
 
@@ -94,7 +94,7 @@ bool floating::has_integer_part() const
  */
 bool floating::has_decimal_part() const
 {
-	return !decimal_string.empty();
+    return !decimal_string.empty();
 }
 
 
@@ -103,7 +103,7 @@ bool floating::has_decimal_part() const
  */
 bool floating::has_exponent_part() const
 {
-	return !exponent_string.empty();
+    return !exponent_string.empty();
 }
 
 
@@ -114,7 +114,7 @@ bool floating::has_exponent_part() const
  */
 void floating::set_negative(bool value)
 {
-	negative = value;
+    negative = value;
 }
 
 
@@ -125,8 +125,8 @@ void floating::set_negative(bool value)
  */
 void floating::set_integer_string(const std::string & value)
 {
-	bakery_assert(valid_format(value, true));
-	integer_string = value;
+    bakery_assert(valid_format(value, true));
+    integer_string = value;
 }
 
 
@@ -139,8 +139,8 @@ void floating::set_integer_string(const std::string & value)
  */
 void floating::set_decimal_string(const std::string & value)
 {
-	bakery_assert(valid_format(value, false));
-	decimal_string = value;
+    bakery_assert(valid_format(value, false));
+    decimal_string = value;
 }
 
 
@@ -153,8 +153,8 @@ void floating::set_decimal_string(const std::string & value)
  */
 void floating::set_exponent_string(const std::string & value)
 {
-	bakery_assert(valid_format(value, true));
-	exponent_string = value;
+    bakery_assert(valid_format(value, true));
+    exponent_string = value;
 }
 
 
@@ -168,28 +168,28 @@ void floating::set_exponent_string(const std::string & value)
  */
 bool floating::valid_format(const std::string & s, bool n)
 {
-	if(s.length() == 0)
-		return true;
+    if(s.length() == 0)
+        return true;
 
-	if(n)
-	{
-		char c0 = s[0];
-		if(!std::isdigit(c0) && !(c0=='-'))
-			return false;
-	}
+    if(n)
+    {
+        char c0 = s[0];
+        if(!std::isdigit(c0) && !(c0=='-'))
+            return false;
+    }
 
-	return std::find_if(
-		s.begin()+1,
-		s.end(),
-		boost::bind(
-			std::logical_not<bool>(),
-			boost::bind(
-				(int(*)(int))
-				&std::isdigit,
-				_1
-			)
-		)
-	) == s.end();
+    return std::find_if(
+        s.begin()+1,
+        s.end(),
+        boost::bind(
+            std::logical_not<bool>(),
+            boost::bind(
+                (int(*)(int))
+                &std::isdigit,
+                _1
+            )
+        )
+    ) == s.end();
 }
 
 

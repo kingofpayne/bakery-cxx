@@ -33,8 +33,8 @@ namespace rec {
  * Default constructor.
  */
 path::path():
-	absolute(false),
-	tokens()
+    absolute(false),
+    tokens()
 {}
 
 
@@ -43,7 +43,7 @@ path::path():
  */
 bool path::get_absolute() const
 {
-	return absolute;
+    return absolute;
 }
 
 
@@ -52,7 +52,7 @@ bool path::get_absolute() const
  */
 const path::token_list & path::get_tokens() const
 {
-	return tokens;
+    return tokens;
 }
 
 
@@ -61,23 +61,23 @@ const path::token_list & path::get_tokens() const
  */
 std::string path::print() const
 {
-	std::string result;
+    std::string result;
 
-	bool dotdot = absolute;
+    bool dotdot = absolute;
 
-	std::for_each(
-		tokens.begin(),
-		tokens.end(),
-		[&]( const std::string & val ){
-			if(dotdot){
-				result.append("::");
-			}
-			dotdot = true;
-			result.append(val);
-		}
-	);
+    std::for_each(
+        tokens.begin(),
+        tokens.end(),
+        [&]( const std::string & val ){
+            if(dotdot){
+                result.append("::");
+            }
+            dotdot = true;
+            result.append(val);
+        }
+    );
 
-	return result;
+    return result;
 }
 
 
@@ -88,7 +88,7 @@ std::string path::print() const
  */
 void path::push_back(const std::string & token)
 {
-	tokens.push_back(token);
+    tokens.push_back(token);
 }
 
 
@@ -99,8 +99,8 @@ void path::push_back(const std::string & token)
  */
 void path::pop_front()
 {
-	bakery_assert_message(!tokens.empty(), "path is empty.");
-	tokens.erase(tokens.begin());
+    bakery_assert_message(!tokens.empty(), "path is empty.");
+    tokens.erase(tokens.begin());
 }
 
 
@@ -111,7 +111,7 @@ void path::pop_front()
  */
 void path::set_absolute(bool value)
 {
-	absolute = value;
+    absolute = value;
 }
 
 

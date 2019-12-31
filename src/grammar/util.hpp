@@ -34,40 +34,40 @@ namespace grammar {
 
 struct def_node_sptr_creator
 {
-	typedef boost::shared_ptr<rec::node> result_type;
+    typedef boost::shared_ptr<rec::node> result_type;
 
-	boost::shared_ptr<rec::node> operator()() const
-	{
-		return boost::shared_ptr<rec::node>(
-			new rec::node(rec::node::kind::none));
-	}
+    boost::shared_ptr<rec::node> operator()() const
+    {
+        return boost::shared_ptr<rec::node>(
+            new rec::node(rec::node::kind::none));
+    }
 
-	boost::shared_ptr<rec::node> operator()(rec::node::kind::value kind) const
-	{
-		return boost::shared_ptr<rec::node>(new rec::node(kind));
-	}
+    boost::shared_ptr<rec::node> operator()(rec::node::kind::value kind) const
+    {
+        return boost::shared_ptr<rec::node>(new rec::node(kind));
+    }
 };
 
 
 /** Phoenix function to create easily initialized rec::node::sptr. */
 extern const boost::phoenix::function<def_node_sptr_creator>
-	create_def_node_sptr;
+    create_def_node_sptr;
 
 
 struct dat_node_sptr_creator
 {
-	typedef dat::node::sptr result_type;
+    typedef dat::node::sptr result_type;
 
-	dat::node::sptr operator()(dat::node::kind::value kind) const
-	{
-		return dat::node::sptr(new dat::node(kind));
-	}
+    dat::node::sptr operator()(dat::node::kind::value kind) const
+    {
+        return dat::node::sptr(new dat::node(kind));
+    }
 };
 
 
 /** Phoenix function to create easily initialized dat::node::sptr. */
 extern const boost::phoenix::function<dat_node_sptr_creator>
-	create_dat_node_sptr;
+    create_dat_node_sptr;
 
 
 } /* namespace grammar */

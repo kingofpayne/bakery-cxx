@@ -33,29 +33,29 @@ namespace grammar {
  */
 template <typename I> void generic_init_integer(rule_container<I> & rules)
 {
-	namespace qi = boost::spirit::qi;
-	using qi::_val;
-	using qi::_1;
+    namespace qi = boost::spirit::qi;
+    using qi::_val;
+    using qi::_1;
 
-	/* Example of matched strings:
-	 * 1
-	 * 465
-	 * -45
-	 * 6405646540654103210498406510 */
-	rules.integer = qi::lexeme
-	[
-		-qi::char_('-')[_val += _1]
-		>>
-		+(
-			qi::digit[_val += _1]
-		)
-	];		
+    /* Example of matched strings:
+     * 1
+     * 465
+     * -45
+     * 6405646540654103210498406510 */
+    rules.integer = qi::lexeme
+    [
+        -qi::char_('-')[_val += _1]
+        >>
+        +(
+            qi::digit[_val += _1]
+        )
+    ];        
 }
 
 
 template <> void init_integer<iterator>(rule_container<iterator> & rules)
 {
-	generic_init_integer<iterator>(rules);
+    generic_init_integer<iterator>(rules);
 }
 
 

@@ -33,7 +33,7 @@ namespace bakery {
  * Constructor
  */
 compilation_log_t::compilation_log_t():
-	error_count(0)
+    error_count(0)
 {}
 
 
@@ -42,7 +42,7 @@ compilation_log_t::compilation_log_t():
  */
 size_t compilation_log_t::get_error_count() const
 {
-	return error_count;
+    return error_count;
 }
 
 
@@ -51,29 +51,29 @@ size_t compilation_log_t::get_error_count() const
  */
 std::string compilation_log_t::print() const
 {
-	std::string r;
-	bool add_nl = false;
+    std::string r;
+    bool add_nl = false;
 
-	using boost::lambda::var;
+    using boost::lambda::var;
 
-	std::for_each(
-		messages.begin(),
-		messages.end(),
-		(
-			boost::lambda::if_then_else(
-				var(add_nl),
-				var(r) += "\n",
-				var(add_nl) = true
-			),
-			var(r) 
-				+= boost::lambda::bind(
-					&compilation_message_t::to_string,
-					boost::lambda::_1
-				)
-		)
-	);
+    std::for_each(
+        messages.begin(),
+        messages.end(),
+        (
+            boost::lambda::if_then_else(
+                var(add_nl),
+                var(r) += "\n",
+                var(add_nl) = true
+            ),
+            var(r) 
+                += boost::lambda::bind(
+                    &compilation_message_t::to_string,
+                    boost::lambda::_1
+                )
+        )
+    );
 
-	return r;
+    return r;
 }
 
 
@@ -84,10 +84,10 @@ std::string compilation_log_t::print() const
  */
 void compilation_log_t::add_message(const compilation_message_t & message)
 {
-	messages.push_back(message);
+    messages.push_back(message);
 
-	if (message.type == compilation_message_type_t::error)
-		error_count++;
+    if (message.type == compilation_message_type_t::error)
+        error_count++;
 }
 
 
@@ -98,10 +98,10 @@ void compilation_log_t::add_message(const compilation_message_t & message)
  * @param text Text of the message.
  */
 void compilation_log_t::add_message(
-	compilation_message_type_t type,
-	const std::string & text)
+    compilation_message_type_t type,
+    const std::string & text)
 {
-	add_message(compilation_message_t(type, text));
+    add_message(compilation_message_t(type, text));
 }
 
 
@@ -112,7 +112,7 @@ void compilation_log_t::add_message(
  */
 void compilation_log_t::add_error(const std::string & text)
 {
-	add_message(compilation_message_type_t::error, text);
+    add_message(compilation_message_type_t::error, text);
 }
 
 
@@ -123,7 +123,7 @@ void compilation_log_t::add_error(const std::string & text)
  */
 void compilation_log_t::add_warning(const std::string & text)
 {
-	add_message(compilation_message_type_t::warning, text);
+    add_message(compilation_message_type_t::warning, text);
 }
 
 

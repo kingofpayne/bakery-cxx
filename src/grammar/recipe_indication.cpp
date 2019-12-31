@@ -32,61 +32,61 @@ namespace grammar {
  * @param rules Reference over the rules container.
  */
 template <typename I>
-	void generic_init_recipe_indication(rule_container<I> & rules)
+    void generic_init_recipe_indication(rule_container<I> & rules)
 {
-	namespace qi = boost::spirit::qi;
-	using qi::_val;
-	using qi::_1;
-	using qi::_a;
-	using qi::char_;
+    namespace qi = boost::spirit::qi;
+    using qi::_val;
+    using qi::_1;
+    using qi::_a;
+    using qi::char_;
 
-	/* Relative path recipe file:
-	 * recipe "toto.def"
-	 *
-	 * Absolute path recipe file:
-	 * recipe <toto.def> */
-	rules.recipe_indication =
-		(
-			(
-				'"'
-				>>
-				(	
-					qi::eps[_a = std::string()]
-					>>
-					*((char_ - char_('"'))[ _a += _1 ])
-				)
-				[
-					bind(&file_indication_t::set_absolute, _val, false)
-				]
-				>>
-				'"'
-			)
-			|
-			(
-				'<'
-				>>
-				(	
-					qi::eps[_a = std::string()]
-					>>
-					*((char_ - char_('>'))[ _a += _1 ])
-				)
-				[
-					bind(&file_indication_t::set_absolute, _val, true)
-				]
-				>>
-				'>'
-			)
-		)
-		[
-			bind(&file_indication_t::set_path, _val, _a)
-		];
+    /* Relative path recipe file:
+     * recipe "toto.def"
+     *
+     * Absolute path recipe file:
+     * recipe <toto.def> */
+    rules.recipe_indication =
+        (
+            (
+                '"'
+                >>
+                (    
+                    qi::eps[_a = std::string()]
+                    >>
+                    *((char_ - char_('"'))[ _a += _1 ])
+                )
+                [
+                    bind(&file_indication_t::set_absolute, _val, false)
+                ]
+                >>
+                '"'
+            )
+            |
+            (
+                '<'
+                >>
+                (    
+                    qi::eps[_a = std::string()]
+                    >>
+                    *((char_ - char_('>'))[ _a += _1 ])
+                )
+                [
+                    bind(&file_indication_t::set_absolute, _val, true)
+                ]
+                >>
+                '>'
+            )
+        )
+        [
+            bind(&file_indication_t::set_path, _val, _a)
+        ];
 }
 
 
 template <>
-	void init_recipe_indication<iterator>(rule_container<iterator> & rules)
+    void init_recipe_indication<iterator>(rule_container<iterator> & rules)
 {
-	generic_init_recipe_indication<iterator>(rules);
+    generic_init_recipe_indication<iterator>(rules);
 }
 
 

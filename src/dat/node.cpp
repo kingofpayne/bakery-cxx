@@ -38,15 +38,15 @@ namespace dat {
 
 const std::string node::kind::strings[] =
 {
-	"none",
-	"assignment",
-	"string",
-	"floating", 
-	"identifier",
-	"bool_",
-	"group",
-	"variant",
-	"map_assignment"
+    "none",
+    "assignment",
+    "string",
+    "floating", 
+    "identifier",
+    "bool_",
+    "group",
+    "variant",
+    "map_assignment"
 };
 
 
@@ -54,10 +54,10 @@ const std::string node::kind::strings[] =
  * Default constructor.
  */
 node::node():
-	name(),
-	kind(kind::none),
-	children(),
-	data()
+    name(),
+    kind(kind::none),
+    children(),
+    data()
 {}
 
 
@@ -71,39 +71,39 @@ node::node():
  *        the enumeration node::kind::value.
  */
 node::node(kind::value _kind):
-	name(),
-	kind(_kind),
-	children()
+    name(),
+    kind(_kind),
+    children()
 {
-	bakery_assert(kind::wrapper::has(_kind));
+    bakery_assert(kind::wrapper::has(_kind));
 
-	switch(_kind)
-	{
-		case kind::group:
-		case kind::assignment:
-		case kind::map_assignment:
-		case kind::variant:
-			break;
+    switch(_kind)
+    {
+        case kind::group:
+        case kind::assignment:
+        case kind::map_assignment:
+        case kind::variant:
+            break;
 
-		case kind::string:
-			data = std::string();
-			break;
+        case kind::string:
+            data = std::string();
+            break;
 
-		case kind::floating:
-			data = floating();
-			break;
+        case kind::floating:
+            data = floating();
+            break;
 
-		case kind::identifier:
-			data = std::string();
-			break;
+        case kind::identifier:
+            data = std::string();
+            break;
 
-		case kind::bool_:
-			data = false;
-			break;
+        case kind::bool_:
+            data = false;
+            break;
 
-		default:
-			bakery_unexpected_case();
-	}
+        default:
+            bakery_unexpected_case();
+    }
 }
 
 
@@ -112,7 +112,7 @@ node::node(kind::value _kind):
  */
 node::kind::value node::get_kind() const
 {
-	return kind;
+    return kind;
 }
 
 
@@ -121,7 +121,7 @@ node::kind::value node::get_kind() const
  */
 const node::node_sptr_list & node::get_children() const
 {
-	return children;
+    return children;
 }
 
 
@@ -130,7 +130,7 @@ const node::node_sptr_list & node::get_children() const
  */
 const std::string & node::get_name() const
 {
-	return name;
+    return name;
 }
 
 
@@ -140,8 +140,8 @@ const std::string & node::get_name() const
  */
 const std::string & node::get_string() const
 {
-	bakery_assert(kind == kind::string);
-	return boost::get<const std::string>(data);
+    bakery_assert(kind == kind::string);
+    return boost::get<const std::string>(data);
 }
 
 
@@ -153,8 +153,8 @@ const std::string & node::get_string() const
  */
 const floating & node::get_floating() const
 {
-	bakery_assert(kind == kind::floating);
-	return boost::get<const floating>(data);
+    bakery_assert(kind == kind::floating);
+    return boost::get<const floating>(data);
 }
 
 
@@ -167,8 +167,8 @@ const floating & node::get_floating() const
  */
 const std::string & node::get_identifier() const
 {
-	bakery_assert(kind == kind::identifier);
-	return boost::get<const std::string>(data);
+    bakery_assert(kind == kind::identifier);
+    return boost::get<const std::string>(data);
 }
 
 
@@ -180,8 +180,8 @@ const std::string & node::get_identifier() const
  */
 bool node::get_bool() const
 {
-	bakery_assert(kind == kind::bool_);
-	return boost::get<bool>(data);
+    bakery_assert(kind == kind::bool_);
+    return boost::get<bool>(data);
 }
 
 
@@ -190,54 +190,54 @@ bool node::get_bool() const
  */
 std::string node::print() const
 {
-	std::string r;
+    std::string r;
 
-	if(name.empty())
-		r = "anonymous";
-	else
-		r = name;
+    if(name.empty())
+        r = "anonymous";
+    else
+        r = name;
 
-	r += " is " + kind::wrapper::to_string(kind);
+    r += " is " + kind::wrapper::to_string(kind);
 
-	if(!children.empty())
-	{
-		using boost::phoenix::ref;
-		using boost::phoenix::if_;
-		using namespace boost::phoenix::arg_names;
-		using boost::phoenix::lambda;
+    if(!children.empty())
+    {
+        using boost::phoenix::ref;
+        using boost::phoenix::if_;
+        using namespace boost::phoenix::arg_names;
+        using boost::phoenix::lambda;
 
-		r += " {\n";
-		std::string r2;
-		bool first = true;
+        r += " {\n";
+        std::string r2;
+        bool first = true;
 
-		std::for_each(
-			children.begin(),
-			children.end(),
-			(
-				[&](const node::sptr & x)
-				{
-					if (first)
-						first = false;
-					else
-						r2 += "\n" + x->print();
-				}
-			)
-		);
+        std::for_each(
+            children.begin(),
+            children.end(),
+            (
+                [&](const node::sptr & x)
+                {
+                    if (first)
+                        first = false;
+                    else
+                        r2 += "\n" + x->print();
+                }
+            )
+        );
 
-		r += indent(r2);
-		r += "\n}";
-	}
+        r += indent(r2);
+        r += "\n}";
+    }
 
-	switch(kind)
-	{
-		case kind::string:
-			r += " (" + get_string() + ")";
-			break;
+    switch(kind)
+    {
+        case kind::string:
+            r += " (" + get_string() + ")";
+            break;
 
-		default:;
-	}
+        default:;
+    }
 
-	return r;
+    return r;
 }
 
 
@@ -248,7 +248,7 @@ std::string node::print() const
  */
 void node::set_name(const std::string & value)
 {
-	name = value;
+    name = value;
 }
 
 
@@ -259,7 +259,7 @@ void node::set_name(const std::string & value)
  */
 void node::add_child(const node::sptr & c)
 {
-	children.push_back(c);
+    children.push_back(c);
 }
 
 
@@ -273,8 +273,8 @@ void node::add_child(const node::sptr & c)
  */
 void node::set_string(const std::string & value)
 {
-	bakery_assert(kind == kind::string);
-	data = value;
+    bakery_assert(kind == kind::string);
+    data = value;
 }
 
 
@@ -288,8 +288,8 @@ void node::set_string(const std::string & value)
  */
 void node::set_floating(const floating & value) 
 {
-	bakery_assert(kind == kind::floating);
-	data = value;
+    bakery_assert(kind == kind::floating);
+    data = value;
 }
 
 
@@ -304,8 +304,8 @@ void node::set_floating(const floating & value)
  */
 void node::set_identifier(const std::string & value)
 {
-	bakery_assert(kind == kind::identifier);
-	data = value;
+    bakery_assert(kind == kind::identifier);
+    data = value;
 }
 
 
@@ -320,8 +320,8 @@ void node::set_identifier(const std::string & value)
  */
 void node::set_bool(bool value)
 {
-	bakery_assert(kind == kind::bool_);
-	data = value;
+    bakery_assert(kind == kind::bool_);
+    data = value;
 }
 
 

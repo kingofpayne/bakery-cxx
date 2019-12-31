@@ -35,47 +35,47 @@ namespace rec {
  */
 class native_data_t
 {
-	public:
-		/**
-		 * Enumerates the different native types.
-		 */
-		struct class_t
-		{
-			enum value
-			{
-				null,
-				bool_,
-				char_,
-				short_,
-				int_,
-				float_,
-				double_,
-				string,
-				pair,
-				tuple,
-				list,
-				map
-			};
+    public:
+        /**
+         * Enumerates the different native types.
+         */
+        struct class_t
+        {
+            enum value
+            {
+                null,
+                bool_,
+                char_,
+                short_,
+                int_,
+                float_,
+                double_,
+                string,
+                pair,
+                tuple,
+                list,
+                map
+            };
 
-			static const std::string strings[];
+            static const std::string strings[];
 
-			typedef continuous_wrapper_t<
-					value,
-					strings,
-					null,
-					map
-				> Wrapper;
-		};
-		
-		native_data_t();
-		native_data_t(class_t::value);
-		std::string print() const;
-		class_t::value get_class() const;
-		void set_class(class_t::value);
-		
-	private:
-		/** Class */
-		class_t::value class_;
+            typedef continuous_wrapper_t<
+                    value,
+                    strings,
+                    null,
+                    map
+                > Wrapper;
+        };
+        
+        native_data_t();
+        native_data_t(class_t::value);
+        std::string print() const;
+        class_t::value get_class() const;
+        void set_class(class_t::value);
+        
+    private:
+        /** Class */
+        class_t::value class_;
 };
 
 

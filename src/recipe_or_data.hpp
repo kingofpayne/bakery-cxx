@@ -35,22 +35,22 @@ namespace bakery {
  */
 class recipe_or_data
 {
-	public:
-		recipe_or_data();
+    public:
+        recipe_or_data();
 
-		void set_recipe(const rec::recipe &);
-		void set_data(const dat::data &);
-		bool is_recipe() const;
-		bool is_data() const;
-		rec::recipe & get_recipe();
-		dat::data & get_data();
-		
-	private:
-		boost::variant<
-			int, /* int to hold nothing. */
-			rec::recipe,
-			dat::data
-		> value;	
+        void set_recipe(const rec::recipe &);
+        void set_data(const dat::data &);
+        bool is_recipe() const;
+        bool is_data() const;
+        rec::recipe & get_recipe();
+        dat::data & get_data();
+        
+    private:
+        boost::variant<
+            int, /* int to hold nothing. */
+            rec::recipe,
+            dat::data
+        > value;    
 };
 
 

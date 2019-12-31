@@ -43,21 +43,21 @@ namespace rec {
  */
 class path
 {
-	public:
-		typedef std::vector<std::string> token_list;
+    public:
+        typedef std::vector<std::string> token_list;
 
-		path();
-		bool get_absolute() const;
-		const token_list & get_tokens() const;
-		std::string print() const;
-		void push_back(const std::string &);
-		void pop_front();
-		void set_absolute(bool);
-	private:
-		/** True if the path is absolute. False by default. */
-		bool absolute;
-		/** Elements composing the path. */
-		token_list tokens;
+        path();
+        bool get_absolute() const;
+        const token_list & get_tokens() const;
+        std::string print() const;
+        void push_back(const std::string &);
+        void pop_front();
+        void set_absolute(bool);
+    private:
+        /** True if the path is absolute. False by default. */
+        bool absolute;
+        /** Elements composing the path. */
+        token_list tokens;
 };
 
 

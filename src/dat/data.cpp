@@ -31,7 +31,7 @@ namespace dat {
  */
 const node::sptr & data::get_root_node() const
 {
-	return root_node;
+    return root_node;
 }
 
 
@@ -40,7 +40,7 @@ const node::sptr & data::get_root_node() const
  */
 const recipe_indication_t & data::get_recipe_indication() const
 {
-	return recipe_indication;
+    return recipe_indication;
 }
 
 
@@ -49,12 +49,12 @@ const recipe_indication_t & data::get_recipe_indication() const
  */
 std::string data::print() const 
 {
-	std::string r;
+    std::string r;
 
-	r = "recipe " + recipe_indication.fi.print() + "\n";
-	r += root_node->print();
+    r = "recipe " + recipe_indication.fi.print() + "\n";
+    r += root_node->print();
 
-	return r;
+    return r;
 }
 
 
@@ -65,7 +65,7 @@ std::string data::print() const
  */
 void data::set_root_node(const node::sptr & value)
 {
-	root_node = value;
+    root_node = value;
 }
 
 
@@ -76,7 +76,7 @@ void data::set_root_node(const node::sptr & value)
  */
 void data::set_recipe_indication(const recipe_indication_t & value)
 {
-	recipe_indication = value;
+    recipe_indication = value;
 }
 
 

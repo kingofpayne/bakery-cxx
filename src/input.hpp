@@ -76,14 +76,14 @@ class input_t
             >::type selected_serializer_t;
 
             selected_serializer_t().template operator()<
-            	/* Type tranformation:
-            	 * from (int) to (int &)
-            	 * from (float) to (float &)
-            	 * etc. */
-            	typename boost::call_traits<T>::reference,
-            	input_t
+                /* Type tranformation:
+                 * from (int) to (int &)
+                 * from (float) to (float &)
+                 * etc. */
+                typename boost::call_traits<T>::reference,
+                input_t
             >(t, *this);
-        	return *this;
+            return *this;
          }
 
          /**

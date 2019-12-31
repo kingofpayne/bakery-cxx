@@ -44,99 +44,99 @@ namespace bakery {
  */
 class error_code_t
 {
-	public:
-		error_code_t(int);
-		error_code_t(const error_code_t &);
-		~error_code_t();
-		error_code_t & operator = (const error_code_t &);
-		bool fail() const;
-		bool good() const;
+    public:
+        error_code_t(int);
+        error_code_t(const error_code_t &);
+        ~error_code_t();
+        error_code_t & operator = (const error_code_t &);
+        bool fail() const;
+        bool good() const;
 
-		/**
-		 * Cast to bool operator. Using this cast operator marks the error code
-		 * as checked.
-		 *
-		 * Allows tests with a minimum of code:
-		 *
-		 * error_code_t x = foo();
-		 *
-		 * if (x)
-		 *     cerr << "Faillure." << endl;
-		 */
-		inline operator bool () const
-		{
-			return fail();
-		}
+        /**
+         * Cast to bool operator. Using this cast operator marks the error code
+         * as checked.
+         *
+         * Allows tests with a minimum of code:
+         *
+         * error_code_t x = foo();
+         *
+         * if (x)
+         *     cerr << "Faillure." << endl;
+         */
+        inline operator bool () const
+        {
+            return fail();
+        }
 
-		/**
-		 * Cast to int (return the value). Using this cast operator marks the
-		 * error code as checked.
-		 */
-		inline operator int () const
-		{
+        /**
+         * Cast to int (return the value). Using this cast operator marks the
+         * error code as checked.
+         */
+        inline operator int () const
+        {
             make_checked();
-			return value;
-		}
+            return value;
+        }
 
-		/**
-		 * @return Value of the error code.
-		 *
-		 * Calling this method marks the error code as checked.
-		 */
-		inline int get() const
-		{
-			make_checked();
-			return value;
-		}
+        /**
+         * @return Value of the error code.
+         *
+         * Calling this method marks the error code as checked.
+         */
+        inline int get() const
+        {
+            make_checked();
+            return value;
+        }
 
-	private:
-		/** Error state. If no error, this value is 0. */
-		int value;
-		/** Reference counter. Positive when the error code has not been
-		 * checked, otherwise negative. The absolute value of (*ref) gives the
-		 * number of instances which shares this error code. */
-		mutable int* ref;
+    private:
+        /** Error state. If no error, this value is 0. */
+        int value;
+        /** Reference counter. Positive when the error code has not been
+         * checked, otherwise negative. The absolute value of (*ref) gives the
+         * number of instances which shares this error code. */
+        mutable int* ref;
 
-		/**
-		 * Increments reference count.
-		 */
-		inline void inc_ref() const
-		{
-			if (*ref > 0)
-				(*ref)++;
-			else
-				(*ref)--;
-		}
+        /**
+         * Increments reference count.
+         */
+        inline void inc_ref() const
+        {
+            if (*ref > 0)
+                (*ref)++;
+            else
+                (*ref)--;
+        }
 
-		/**
-		 * Decrements reference count. Throws if the error is non zero and the
-		 * last reference is destroyed.
-		 */
-		inline void dec_ref() const
-		{
-			if (*ref > 0)
-			{
-				if (--(*ref) == 0)
-				{
-					delete ref;
-					bakery_assert(value == 0);
-				}
-			}
-			else
-			{
-				if (++(*ref) == 0)
-					delete ref;
-			}
-		}
+        /**
+         * Decrements reference count. Throws if the error is non zero and the
+         * last reference is destroyed.
+         */
+        inline void dec_ref() const
+        {
+            if (*ref > 0)
+            {
+                if (--(*ref) == 0)
+                {
+                    delete ref;
+                    bakery_assert(value == 0);
+                }
+            }
+            else
+            {
+                if (++(*ref) == 0)
+                    delete ref;
+            }
+        }
 
-		/**
-		 * Marks the error code as checked.
-		 */
-		inline void make_checked() const
-		{
-			if (*ref > 0)
-				*ref = - *ref;
-		}
+        /**
+         * Marks the error code as checked.
+         */
+        inline void make_checked() const
+        {
+            if (*ref > 0)
+                *ref = - *ref;
+        }
 };
 
 

@@ -38,57 +38,57 @@ namespace grammar {
  */
 template <typename I> void generic_init_def_array(rule_container<I> & rules)
 {
-	namespace qi = boost::spirit::qi;
-	using qi::_val;
-	using qi::_1;
-	using qi::_a;
-	using boost::phoenix::construct;
+    namespace qi = boost::spirit::qi;
+    using qi::_val;
+    using qi::_1;
+    using qi::_a;
+    using boost::phoenix::construct;
 
-		
-	rules.def_array =
-		qi::eps
-		[
-			_val = create_def_node_sptr(rec::node::kind::array)
-		]
-		>>
-		rules.def_type_instanciation_no_array
-		[
-			/* Initializes the array data */
-			_a = construct<rec::array_data_t>(),
-			/* Sets the type instanciation */
-			boost::phoenix::bind(&rec::array_data_t::type_instanciation, _a)
-				= _1
-		]
-		>>
-		+
-		(
-			qi::char_('[')
-			>>
-			(
-				qi::int_
-				[
-					boost::phoenix::bind(&rec::array_data_t::add_dim, _a, _1)
-				]
-				|
-				qi::eps
-					[ boost::phoenix::bind(&rec::array_data_t::add_dim, _a,
-					boost::phoenix::val(0)) ]
-			)
-			>>
-			qi::char_(']')
-		)
-		>>
-		/* Save the array data in the node */
-		qi::eps
-		[
-			boost::phoenix::bind(&rec::node::set_array_data, *_val, _a)
-		];
+        
+    rules.def_array =
+        qi::eps
+        [
+            _val = create_def_node_sptr(rec::node::kind::array)
+        ]
+        >>
+        rules.def_type_instanciation_no_array
+        [
+            /* Initializes the array data */
+            _a = construct<rec::array_data_t>(),
+            /* Sets the type instanciation */
+            boost::phoenix::bind(&rec::array_data_t::type_instanciation, _a)
+                = _1
+        ]
+        >>
+        +
+        (
+            qi::char_('[')
+            >>
+            (
+                qi::int_
+                [
+                    boost::phoenix::bind(&rec::array_data_t::add_dim, _a, _1)
+                ]
+                |
+                qi::eps
+                    [ boost::phoenix::bind(&rec::array_data_t::add_dim, _a,
+                    boost::phoenix::val(0)) ]
+            )
+            >>
+            qi::char_(']')
+        )
+        >>
+        /* Save the array data in the node */
+        qi::eps
+        [
+            boost::phoenix::bind(&rec::node::set_array_data, *_val, _a)
+        ];
 }
 
 
 template <> void init_def_array<iterator>(rule_container<iterator> & rules)
 {
-	generic_init_def_array<iterator>(rules);
+    generic_init_def_array<iterator>(rules);
 }
 
 

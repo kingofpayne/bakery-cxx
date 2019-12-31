@@ -36,18 +36,18 @@ namespace bakery {
  */
 std::string indent(const std::string & s)
 {
-	std::string k = "    ";
-	std::string r = k;
+    std::string k = "    ";
+    std::string r = k;
 
-	for(unsigned int i=0; i<s.length(); ++i){
-		char c = s[i];
-		r.push_back(c);
-		if(c == '\n'){
-			r += k;
-		}
-	}
+    for(unsigned int i=0; i<s.length(); ++i){
+        char c = s[i];
+        r.push_back(c);
+        if(c == '\n'){
+            r += k;
+        }
+    }
 
-	return r;
+    return r;
 }
 
 
@@ -63,41 +63,41 @@ std::string indent(const std::string & s)
  *            ^
  */
 std::string show_string_position(
-	const std::string & s,
-	const std::string::const_iterator i)
+    const std::string & s,
+    const std::string::const_iterator i)
 {
-	const std::string::const_iterator it_begin = s.begin();
-	const std::string::const_iterator it_end = s.end();
+    const std::string::const_iterator it_begin = s.begin();
+    const std::string::const_iterator it_end = s.end();
 
-	/* Firstly, we go backward to find the beginning of the line. */
-	std::string::const_iterator it_start = i;
-	while((*it_start != '\n') && (it_start != it_begin))
-		it_start--;
-	if(*it_start == '\n'){
-		/* Algorithm stopped at the end of a previous line, step one character
-		 * forward. */
-		it_start++;
-	}
+    /* Firstly, we go backward to find the beginning of the line. */
+    std::string::const_iterator it_start = i;
+    while((*it_start != '\n') && (it_start != it_begin))
+        it_start--;
+    if(*it_start == '\n'){
+        /* Algorithm stopped at the end of a previous line, step one character
+         * forward. */
+        it_start++;
+    }
 
-	/* Now, find the end of the line (or string) */
-	std::string::const_iterator it_stop = i;
-	while((*it_stop != '\n') && (it_stop != it_end))
-		it_stop++;
+    /* Now, find the end of the line (or string) */
+    std::string::const_iterator it_stop = i;
+    while((*it_stop != '\n') && (it_stop != it_end))
+        it_stop++;
 
-	std::string result;
-	std::for_each(
-		it_start,
-		it_stop,
-		boost::bind(
-			&std::string::push_back,
-			&result,
-			_1
-		)
-	);
+    std::string result;
+    std::for_each(
+        it_start,
+        it_stop,
+        boost::bind(
+            &std::string::push_back,
+            &result,
+            _1
+        )
+    );
 
-	result.insert(i-it_start, "[!]");
+    result.insert(i-it_start, "[!]");
 
-	return result;
+    return result;
 }
 
 
@@ -111,21 +111,21 @@ std::string show_string_position(
  * @param i The iterator.
  */
 unsigned int calculate_line_number(
-	const std::string & s,
-	const std::string::const_iterator i)
+    const std::string & s,
+    const std::string::const_iterator i)
 {
-	unsigned int line = 1;
-	std::string::const_iterator i_begin = s.begin();
-	std::for_each(
-		i_begin,
-		i,
-		boost::lambda::if_then(
-			boost::lambda::_1 == '\n',
-			boost::lambda::var(line)++
-		)
-	);
+    unsigned int line = 1;
+    std::string::const_iterator i_begin = s.begin();
+    std::for_each(
+        i_begin,
+        i,
+        boost::lambda::if_then(
+            boost::lambda::_1 == '\n',
+            boost::lambda::var(line)++
+        )
+    );
 
-	return line;
+    return line;
 }
 
 
@@ -136,9 +136,9 @@ unsigned int calculate_line_number(
  */
 boost::filesystem::path make_absolute(const boost::filesystem::path & path)
 {
-	return path.is_complete()
-		?path
-		:(boost::filesystem::current_path() / path);
+    return path.is_complete()
+        ?path
+        :(boost::filesystem::current_path() / path);
 }
 
 
@@ -151,47 +151,47 @@ boost::filesystem::path make_absolute(const boost::filesystem::path & path)
  * @return A path p, such as a/p corresponds to b.
  */
 boost::filesystem::path make_relative(boost::filesystem::path a,
-	boost::filesystem::path b)
+    boost::filesystem::path b)
 {
-	using namespace boost::filesystem;
+    using namespace boost::filesystem;
 
-	/* The result. */
-	path p;
+    /* The result. */
+    path p;
 
-	/* Make a and b absolutes. */
-	a = absolute(a);
-	b = absolute(b);
+    /* Make a and b absolutes. */
+    a = absolute(a);
+    b = absolute(b);
 
-	path::const_iterator
-		it_a(a.begin()),
-		it_b(b.begin()),
-		it_a_end(a.end()),
-		it_b_end(b.end());
+    path::const_iterator
+        it_a(a.begin()),
+        it_b(b.begin()),
+        it_a_end(a.end()),
+        it_b_end(b.end());
 
-	/* Find common directories by advancing iterators while the elements are
-	 * identical. */
-	while ((it_a != it_a_end) && (it_b != it_b_end) && (*it_a == *it_b))
-	{
-		it_a++;
-		it_b++;
-	}
+    /* Find common directories by advancing iterators while the elements are
+     * identical. */
+    while ((it_a != it_a_end) && (it_b != it_b_end) && (*it_a == *it_b))
+    {
+        it_a++;
+        it_b++;
+    }
 
-	/* Walk up directories. */
-	while (it_a != it_a_end)
-	{
-		if ((*it_a) != ".")
-			p /= "..";
-		it_a++;
-	}
+    /* Walk up directories. */
+    while (it_a != it_a_end)
+    {
+        if ((*it_a) != ".")
+            p /= "..";
+        it_a++;
+    }
 
-	/* Append the non-common part. */
-	while (it_b != it_b_end)
-	{
-		p /= *it_b;
-		it_b++;
-	}
+    /* Append the non-common part. */
+    while (it_b != it_b_end)
+    {
+        p /= *it_b;
+        it_b++;
+    }
 
-	return p;
+    return p;
 }
 
 
@@ -207,11 +207,11 @@ boost::filesystem::path make_relative(boost::filesystem::path a,
  * @return Deduced path.
  */
 boost::filesystem::path path_from_base(const boost::filesystem::path & base,
-	const boost::filesystem::path & path)
+    const boost::filesystem::path & path)
 {
-	return path.is_complete()
-		?path
-		:base/path;
+    return path.is_complete()
+        ?path
+        :base/path;
 }
 
 

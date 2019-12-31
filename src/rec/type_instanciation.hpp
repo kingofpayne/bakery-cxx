@@ -40,43 +40,43 @@ class node;
  */
 class type_instanciation_t
 {
-	public:
-		typedef std::vector<type_instanciation_t> parameter_list;
+    public:
+        typedef std::vector<type_instanciation_t> parameter_list;
 
-		type_instanciation_t();
-		std::string print() const;
+        type_instanciation_t();
+        std::string print() const;
         const path & get_type_path() const;
         bool is_unsigned() const;
-		const node* get_type_ptr() const;
-		node* get_type_ptr();
-		const parameter_list & get_parameters() const;
-		parameter_list & get_parameters();
-		bool get_owning_node() const;
+        const node* get_type_ptr() const;
+        node* get_type_ptr();
+        const parameter_list & get_parameters() const;
+        parameter_list & get_parameters();
+        bool get_owning_node() const;
         void set_type_path(const path &);
         void set_unsigned(bool);
-		void set_type_node_ptr(node*);
-		void set_type_node_sptr(boost::shared_ptr<node> &);
-		void add_parameter(const type_instanciation_t &);
+        void set_type_node_ptr(node*);
+        void set_type_node_sptr(boost::shared_ptr<node> &);
+        void add_parameter(const type_instanciation_t &);
 
-	private:
-		/** Name of the type. Used to resolve the type. */
+    private:
+        /** Name of the type. Used to resolve the type. */
         path type_path;
         /** Set to true when the type is declared as 'unsigned'. */
         bool unsigned_flag;
-		/** Flag indicating if the type_instanciation_t owns the pointer of its
-		 * node (true), or just hold a pointer to a node having a parent
-		 * (false). */
-		bool owning_node;
-		/** Pointer to the type, when resolved. If the type is owned by the
-		 * instanciation, it is stored as a shared_ptr. Otherwise, it is stored
-		 * as a simple pointer to avoid circular references, which are not
-		 * compatible with boost::shared_ptr. */
-		boost::variant<
-			node*,
-			boost::shared_ptr<node>
-		> type_node_ptr;
-		/** Template parameters */
-		parameter_list parameters;
+        /** Flag indicating if the type_instanciation_t owns the pointer of its
+         * node (true), or just hold a pointer to a node having a parent
+         * (false). */
+        bool owning_node;
+        /** Pointer to the type, when resolved. If the type is owned by the
+         * instanciation, it is stored as a shared_ptr. Otherwise, it is stored
+         * as a simple pointer to avoid circular references, which are not
+         * compatible with boost::shared_ptr. */
+        boost::variant<
+            node*,
+            boost::shared_ptr<node>
+        > type_node_ptr;
+        /** Template parameters */
+        parameter_list parameters;
 };
 
 

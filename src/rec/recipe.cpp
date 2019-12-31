@@ -31,7 +31,7 @@ namespace rec {
  */
 std::string recipe::print() const
 {
-	return "recipe " + the_node->print();
+    return "recipe " + the_node->print();
 }
 
 
@@ -40,7 +40,7 @@ std::string recipe::print() const
  */
 node::sptr recipe::get_node() const
 {
-	return the_node;
+    return the_node;
 }
 
 
@@ -49,7 +49,7 @@ node::sptr recipe::get_node() const
  */
 const std::list<file_indication_t> & recipe::get_included_files() const
 {
-	return included_files;
+    return included_files;
 }
 
 
@@ -60,7 +60,7 @@ const std::list<file_indication_t> & recipe::get_included_files() const
  */
 void recipe::set_node(node::sptr value)
 {
-	the_node = value;
+    the_node = value;
 }
 
 
@@ -73,12 +73,12 @@ void recipe::set_node(node::sptr value)
  */
 bool recipe::compile(compilation_log_t & compil_status)
 {
-	/* Similar namespaces must be merge before compiling. */
-	the_node->merge_namespaces();
+    /* Similar namespaces must be merge before compiling. */
+    the_node->merge_namespaces();
 
-	/* Now compile the root node, which recursively compiles all the tree, and
-	 * return the result. */
-	return the_node->compile(compil_status);
+    /* Now compile the root node, which recursively compiles all the tree, and
+     * return the result. */
+    return the_node->compile(compil_status);
 }
 
 
@@ -89,7 +89,7 @@ bool recipe::compile(compilation_log_t & compil_status)
  */
 void recipe::add_include_file(const file_indication_t & file_indication)
 {
-	included_files.push_back(file_indication);
+    included_files.push_back(file_indication);
 }
 
 

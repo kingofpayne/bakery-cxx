@@ -34,35 +34,35 @@ namespace grammar {
  */
 template <typename I> void generic_init_dat_map(rule_container<I> & rules)
 {
-	namespace qi = boost::spirit::qi;
-	using qi::_val;
-	using qi::_1;
-	using qi::char_;
-		
-	rules.dat_map =
-		qi::eps
-		[
-			_val = create_dat_node_sptr(dat::node::kind::group)
-		]
-		>>
-		char_('{')
-		>>
-		-(
-			rules.dat_map_assignment
-			[
-				boost::phoenix::bind(&dat::node::add_child, *_val, _1)
-			]
-			%
-			','
-		)
-		>>
-		char_('}');
+    namespace qi = boost::spirit::qi;
+    using qi::_val;
+    using qi::_1;
+    using qi::char_;
+        
+    rules.dat_map =
+        qi::eps
+        [
+            _val = create_dat_node_sptr(dat::node::kind::group)
+        ]
+        >>
+        char_('{')
+        >>
+        -(
+            rules.dat_map_assignment
+            [
+                boost::phoenix::bind(&dat::node::add_child, *_val, _1)
+            ]
+            %
+            ','
+        )
+        >>
+        char_('}');
 }
 
 
 template <> void init_dat_map<iterator>(rule_container<iterator> & rules)
 {
-	generic_init_dat_map<iterator>(rules);
+    generic_init_dat_map<iterator>(rules);
 }
 
 

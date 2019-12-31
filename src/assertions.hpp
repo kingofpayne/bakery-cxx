@@ -30,31 +30,31 @@ namespace bakery {
 
 
 void assertion_failed(const std::string &, const char*, int)
-	__attribute__ ((noreturn));
+    __attribute__ ((noreturn));
 
 
 } /* namespace bakery */
 
 
 #define bakery_assert(condition) \
-	if (!(condition)) \
-		::bakery::assertion_failed("("#condition")", __FILE__, __LINE__)
+    if (!(condition)) \
+        ::bakery::assertion_failed("("#condition")", __FILE__, __LINE__)
 
 #define bakery_assert_message(condition, message) \
-	if (!(condition)) \
-		::bakery::assertion_failed(message, __FILE__, __LINE__)
+    if (!(condition)) \
+        ::bakery::assertion_failed(message, __FILE__, __LINE__)
 
 #define bakery_abort() \
-	::bakery::assertion_failed("Execution aborted.", __FILE__, __LINE__)
+    ::bakery::assertion_failed("Execution aborted.", __FILE__, __LINE__)
 
 #define bakery_abort_message(message) \
-	::bakery::assertion_failed(message, __FILE__, __LINE__)
+    ::bakery::assertion_failed(message, __FILE__, __LINE__)
 
 #define bakery_unexpected_case() \
-	::bakery::assertion_failed("Unexpected case.", __FILE__, __LINE__)
+    ::bakery::assertion_failed("Unexpected case.", __FILE__, __LINE__)
 
 #define bakery_not_implemented() \
-	::bakery::assertion_failed("Not implemented.", __FILE__, __LINE__)
+    ::bakery::assertion_failed("Not implemented.", __FILE__, __LINE__)
 
 /**
  * This assertion should be used when you want to check some information
@@ -64,14 +64,14 @@ void assertion_failed(const std::string &, const char*, int)
  * with the optimisations. (in non debug mode).
  */
 #ifdef NDEBUG
-	#define bakery_assert_debug(condition) ((void)0)
-	#define bakery_assert_message_debug(condition, message) ((void)0)
+    #define bakery_assert_debug(condition) ((void)0)
+    #define bakery_assert_message_debug(condition, message) ((void)0)
 #else
-	#define bakery_assert_debug(condition) \
-		bakery_assert(condition)
+    #define bakery_assert_debug(condition) \
+        bakery_assert(condition)
 
-	#define bakery_assert_message_debug(condition, message) \
-		bakery_assert_message(condition, message)
+    #define bakery_assert_message_debug(condition, message) \
+        bakery_assert_message(condition, message)
 #endif
 
 

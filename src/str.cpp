@@ -44,7 +44,7 @@ namespace str {
  */
 std::string indent(const std::string & s)
 {
-	return boost::regex_replace( s, boost::regex("^"), "\t" );
+    return boost::regex_replace( s, boost::regex("^"), "\t" );
 }
 
 
@@ -59,10 +59,10 @@ std::string indent(const std::string & s)
  */
 std::string assert_load_from_file(const std::string & path)
 {
-	std::string x;
-	error_code_t ec = load_from_file(path, x);
-	bakery_assert_message(!ec, "Failed to open file '" + path + "'.");
-	return x;
+    std::string x;
+    error_code_t ec = load_from_file(path, x);
+    bakery_assert_message(!ec, "Failed to open file '" + path + "'.");
+    return x;
 }
 
 
@@ -78,26 +78,26 @@ std::string assert_load_from_file(const std::string & path)
  */
 error_code_t load_from_file(const std::string & path, std::string & out)
 {
-	std::ifstream stream(path.c_str(), std::ios::binary);
+    std::ifstream stream(path.c_str(), std::ios::binary);
 
-	/* Check if open failed */
-	if (stream.fail())
-		return 1;
+    /* Check if open failed */
+    if (stream.fail())
+        return 1;
 
-	stream.seekg(0, std::ios::end);
-	unsigned int length = stream.tellg();
-	stream.seekg(0, std::ios::beg);
+    stream.seekg(0, std::ios::end);
+    unsigned int length = stream.tellg();
+    stream.seekg(0, std::ios::beg);
 
-	/* Copy the file into a buffer of characters. Do not forget to add an extra
-	 * character to mark the end of the string with a zero. */
-	char* buffer = new char[length+1];
-	stream.read(buffer, length);
-	stream.close();
-	buffer[length] = 0;
+    /* Copy the file into a buffer of characters. Do not forget to add an extra
+     * character to mark the end of the string with a zero. */
+    char* buffer = new char[length+1];
+    stream.read(buffer, length);
+    stream.close();
+    buffer[length] = 0;
 
-	out = buffer;
-	delete[] buffer;
-	return 0;
+    out = buffer;
+    delete[] buffer;
+    return 0;
 }
 
 

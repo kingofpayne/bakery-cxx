@@ -38,73 +38,73 @@ namespace qi = boost::spirit::qi;
  * Main grammar which parses a recipe or data code.
  */
 template <typename I>
-	struct main:
-	qi::grammar<
-		I,
-		recipe_or_data(),
-		skipper
-	>
+    struct main:
+    qi::grammar<
+        I,
+        recipe_or_data(),
+        skipper
+    >
 {
-	main():
-		main::base_type(rules.recipe_or_data_)
-	{
-		/* Quoted string symbols */
-		rules.quoted_string_symbols.add
-			("\\\"", '\"')
-			("\\\\", '\\')
-			("\\n", '\n')
-			("\\t", '\t');
-		
-		init_recipe_or_data(rules);
-		init_identifier(rules);
-		init_quoted_string(rules);
-		init_integer(rules);
-		init_unsigned_integer(rules);
-		init_floating_number(rules);
-		init_path(rules); 
-		init_recipe(rules);
-		init_data(rules);
-		init_def_composite_content(rules);
-		init_def_namespace(rules);
-		init_def_template_argument_declaration(rules);
-		init_def_structure(rules);
-		init_def_array(rules);
-		init_def_variant(rules);
-		init_def_typedef(rules);	
-		init_def_enum(rules);
-		init_def_enum_value(rules);	
-		init_def_member(rules);	
-		init_def_type_instanciation(rules);
-		init_def_type_instanciation_no_array(rules);
-		init_recipe_indication(rules);
-		init_recipe_indication_new(rules);
-		init_dat_structure_content(rules);
-		init_dat_assignment(rules);
-		init_dat_value(rules);
-		init_dat_variant_value(rules);
-		init_dat_structure(rules);
-		init_dat_bool_value(rules);
-		init_dat_string_value(rules);
-		init_dat_floating_value(rules);
-		init_dat_identifier_value(rules);
-		init_dat_list(rules);
-		init_dat_map(rules);
-		init_dat_map_assignment(rules);
-		
-		/*boost::spirit::qi::on_error<boost::spirit::qi::fail>
+    main():
+        main::base_type(rules.recipe_or_data_)
+    {
+        /* Quoted string symbols */
+        rules.quoted_string_symbols.add
+            ("\\\"", '\"')
+            ("\\\\", '\\')
+            ("\\n", '\n')
+            ("\\t", '\t');
+        
+        init_recipe_or_data(rules);
+        init_identifier(rules);
+        init_quoted_string(rules);
+        init_integer(rules);
+        init_unsigned_integer(rules);
+        init_floating_number(rules);
+        init_path(rules); 
+        init_recipe(rules);
+        init_data(rules);
+        init_def_composite_content(rules);
+        init_def_namespace(rules);
+        init_def_template_argument_declaration(rules);
+        init_def_structure(rules);
+        init_def_array(rules);
+        init_def_variant(rules);
+        init_def_typedef(rules);    
+        init_def_enum(rules);
+        init_def_enum_value(rules);    
+        init_def_member(rules);    
+        init_def_type_instanciation(rules);
+        init_def_type_instanciation_no_array(rules);
+        init_recipe_indication(rules);
+        init_recipe_indication_new(rules);
+        init_dat_structure_content(rules);
+        init_dat_assignment(rules);
+        init_dat_value(rules);
+        init_dat_variant_value(rules);
+        init_dat_structure(rules);
+        init_dat_bool_value(rules);
+        init_dat_string_value(rules);
+        init_dat_floating_value(rules);
+        init_dat_identifier_value(rules);
+        init_dat_list(rules);
+        init_dat_map(rules);
+        init_dat_map_assignment(rules);
+        
+        /*boost::spirit::qi::on_error<boost::spirit::qi::fail>
         (
-           	global
+               global
           , std::cout
                 << val("Syntax error, expecting ")
-				<< _4
-				<< val(" here: \"")
-				<< construct<std::string>(_3, _2)
-				<< val("\"")	
+                << _4
+                << val(" here: \"")
+                << construct<std::string>(_3, _2)
+                << val("\"")    
                 << std::endl
         );*/
-	}
+    }
 
-	rule_container<I> rules;
+    rule_container<I> rules;
 };
 
 

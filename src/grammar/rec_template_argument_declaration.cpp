@@ -33,40 +33,40 @@ namespace grammar {
  * @param rules Reference over the rules container.
  */
 template <typename I>
-	void generic_init_def_template_argument_declaration
-	(rule_container<I> & rules)
+    void generic_init_def_template_argument_declaration
+    (rule_container<I> & rules)
 {
-	namespace qi = boost::spirit::qi;
-	using qi::_val;
-	using qi::_1;
-	using qi::_a;
+    namespace qi = boost::spirit::qi;
+    using qi::_val;
+    using qi::_1;
+    using qi::_a;
 
-	rules.def_template_argument_declaration =
-		qi::char_('<')[ _val ]
-		>>
-		(
-			rules.identifier
-			[
-				/* Create a node and store it into _a */
-				_a = create_def_node_sptr(rec::node::kind::template_type),
-				/* Set the name of the node to the identifier _1 */
-				boost::phoenix::bind(&rec::node::set_name, *_a, _1),
-				/* Push the node in the list */
-				boost::phoenix::push_back(_val, _a)	
-			]
-			%
-			','
-		)
-		>>
-		'>';
+    rules.def_template_argument_declaration =
+        qi::char_('<')[ _val ]
+        >>
+        (
+            rules.identifier
+            [
+                /* Create a node and store it into _a */
+                _a = create_def_node_sptr(rec::node::kind::template_type),
+                /* Set the name of the node to the identifier _1 */
+                boost::phoenix::bind(&rec::node::set_name, *_a, _1),
+                /* Push the node in the list */
+                boost::phoenix::push_back(_val, _a)    
+            ]
+            %
+            ','
+        )
+        >>
+        '>';
 }
 
 
 template <>
-	void init_def_template_argument_declaration<iterator>
-	(rule_container<iterator> & rules)
+    void init_def_template_argument_declaration<iterator>
+    (rule_container<iterator> & rules)
 {
-	generic_init_def_template_argument_declaration<iterator>(rules);
+    generic_init_def_template_argument_declaration<iterator>(rules);
 }
 
 

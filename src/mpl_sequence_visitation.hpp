@@ -38,7 +38,7 @@ namespace bakery {
  * @param <B> Higher index of range to visit.
  */
 template <typename S, int A, int B>
-	struct mpl_sequence_range_visitor;
+    struct mpl_sequence_range_visitor;
 
 
 /**
@@ -46,48 +46,48 @@ template <typename S, int A, int B>
  * only one element.
  */
 template <typename S, int A>
-	struct mpl_sequence_range_visitor<S, A, A>
+    struct mpl_sequence_range_visitor<S, A, A>
 {
-	/**
-	 * Process visitation.
-	 *
-	 * @param i Type index. For the current specialization, this parameter
-	 *        should be equal to A, so this may not be used...
-	 * @param v Visitation object.
-	 *
-	 * @param <V> Type of the visitation object.
-	 */
-	template <typename V>
-		static void visit(int i, V & v)
-	{
-		v.template visit<
-			typename boost::mpl::at<S, boost::mpl::int_<A>>::type
-		>();
-	}
+    /**
+     * Process visitation.
+     *
+     * @param i Type index. For the current specialization, this parameter
+     *        should be equal to A, so this may not be used...
+     * @param v Visitation object.
+     *
+     * @param <V> Type of the visitation object.
+     */
+    template <typename V>
+        static void visit(int i, V & v)
+    {
+        v.template visit<
+            typename boost::mpl::at<S, boost::mpl::int_<A>>::type
+        >();
+    }
 };
 
 
 template <typename S, int A, int B>
-	struct mpl_sequence_range_visitor
+    struct mpl_sequence_range_visitor
 {
-	static const int mid = (A+B)/2;
+    static const int mid = (A+B)/2;
 
-	/**
-	 * Process visitation.
-	 *
-	 * @param i Type index.
-	 * @param v Visitation object.
-	 *
-	 * @param <V> Type of the visitation object.
-	 */
-	template <typename V>
-		static void visit(int i, V & v)
-	{
-		if(i <= mid)
-			mpl_sequence_range_visitor<S, A, mid>::visit(i, v);
-		else
-			mpl_sequence_range_visitor<S, mid + 1, B>::visit(i, v);
-	}
+    /**
+     * Process visitation.
+     *
+     * @param i Type index.
+     * @param v Visitation object.
+     *
+     * @param <V> Type of the visitation object.
+     */
+    template <typename V>
+        static void visit(int i, V & v)
+    {
+        if(i <= mid)
+            mpl_sequence_range_visitor<S, A, mid>::visit(i, v);
+        else
+            mpl_sequence_range_visitor<S, mid + 1, B>::visit(i, v);
+    }
 };
 
 
@@ -107,12 +107,12 @@ template <typename S, int A, int B>
  * @param <V> Visitation functor type.
  */
 template <typename S, typename V>
-	void apply_mpl_sequence_visitor(int i, V & v)
+    void apply_mpl_sequence_visitor(int i, V & v)
 {
-	bakery_assert_message((i >= 0) && (i < S::size::value),
-		"invalid mpl sequence visitation index.");
+    bakery_assert_message((i >= 0) && (i < S::size::value),
+        "invalid mpl sequence visitation index.");
 
-	mpl_sequence_range_visitor<S, 0, S::size::value - 1>::visit(i, v);
+    mpl_sequence_range_visitor<S, 0, S::size::value - 1>::visit(i, v);
 }
 
 

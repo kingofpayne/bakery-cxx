@@ -36,21 +36,21 @@ namespace grammar {
  * @param dest Reference over the rule to be initialized.
  */
 template <typename I>
-	void generic_init_unsigned_integer(rule_container<I> & rules)
+    void generic_init_unsigned_integer(rule_container<I> & rules)
 {
-	namespace qi = boost::spirit::qi;
+    namespace qi = boost::spirit::qi;
 
-	rules.unsigned_integer = qi::lexeme
-	[
-		+( qi::digit[qi::_val += qi::_1] )
-	];
+    rules.unsigned_integer = qi::lexeme
+    [
+        +( qi::digit[qi::_val += qi::_1] )
+    ];
 }
 
 
 template <> void
-	init_unsigned_integer<iterator>(rule_container<iterator> & rules)
+    init_unsigned_integer<iterator>(rule_container<iterator> & rules)
 {
-	generic_init_unsigned_integer<iterator>(rules);
+    generic_init_unsigned_integer<iterator>(rules);
 }
 
 

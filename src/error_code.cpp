@@ -31,8 +31,8 @@ namespace bakery {
  * @param value_ Code - non zero for errors.
  */
 error_code_t::error_code_t(int value_):
-	value(value_),
-	ref(new int(1))
+    value(value_),
+    ref(new int(1))
 {}
 
 
@@ -43,10 +43,10 @@ error_code_t::error_code_t(int value_):
  * @param ec Error code top copy.
  */
 error_code_t::error_code_t(const error_code_t & ec):
-	value(ec.value),
-	ref(ec.ref)
+    value(ec.value),
+    ref(ec.ref)
 {
-	inc_ref();
+    inc_ref();
 }
 
 
@@ -55,7 +55,7 @@ error_code_t::error_code_t(const error_code_t & ec):
  */
 error_code_t::~error_code_t()
 {
-	dec_ref();
+    dec_ref();
 }
 
 
@@ -70,14 +70,14 @@ error_code_t::~error_code_t()
  */
 error_code_t & error_code_t::operator = (const error_code_t & source)
 {
-	if (this != &source)
-	{
-		dec_ref();
-		value = source.value;
-		ref = source.ref;
-		inc_ref();
-	}
-	return *this;
+    if (this != &source)
+    {
+        dec_ref();
+        value = source.value;
+        ref = source.ref;
+        inc_ref();
+    }
+    return *this;
 }
 
 
@@ -88,10 +88,10 @@ error_code_t & error_code_t::operator = (const error_code_t & source)
  */
 bool error_code_t::fail() const
 {
-	make_checked();
-	return value != 0;
+    make_checked();
+    return value != 0;
 }
-		
+        
 
 /**
  * @return true if there is no error.
@@ -100,8 +100,8 @@ bool error_code_t::fail() const
  */
 bool error_code_t::good() const
 {
-	make_checked();
-	return value == 0;
+    make_checked();
+    return value == 0;
 }
 
 

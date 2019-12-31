@@ -33,62 +33,62 @@ namespace grammar {
  */
 template <typename I> void generic_init_def_structure(rule_container<I> & rules)
 {
-	namespace qi = boost::spirit::qi;
-	using qi::_val;
-	using qi::_1;
-	using qi::_a;
-	using qi::_b;
-	using qi::_c;
+    namespace qi = boost::spirit::qi;
+    using qi::_val;
+    using qi::_1;
+    using qi::_a;
+    using qi::_b;
+    using qi::_c;
 
-	/* _a : name of the node
-	 * _b : list of template arguments */
-	rules.def_structure =
-		qi::string("struct")
-		>>
-		rules.identifier[_a = _1]
-		>>
-		-rules.def_template_argument_declaration[_b = _1]
-		>>
-		/* optional heritance declaration */
-		-(
-			qi::char_(':')
-			>>
-			rules.def_type_instanciation
-			[
-				boost::phoenix::bind(
-					&rec::structure_data_t::add_heritance_type, _c, _1)
-			] % ','
-		)
-		>>
-		'{'
-		>>
-		-(
-			rules.def_composite_content
-			[
-				_val = _1,
-				boost::phoenix::bind(&rec::node::set_name, *_val, _a),
-				boost::phoenix::bind(&rec::node::set_kind, *_val,
-					rec::node::kind::structure),
-				boost::phoenix::bind(
-					&rec::node::add_child_list<std::list<rec::node::sptr> >,
-					*_val,
-					_b
-				),
-				boost::phoenix::bind(
-					&rec::node::set_structure_data,
-					*_val,
-					_c
-				)
-			]
-		)
-		>>
-		'}';
+    /* _a : name of the node
+     * _b : list of template arguments */
+    rules.def_structure =
+        qi::string("struct")
+        >>
+        rules.identifier[_a = _1]
+        >>
+        -rules.def_template_argument_declaration[_b = _1]
+        >>
+        /* optional heritance declaration */
+        -(
+            qi::char_(':')
+            >>
+            rules.def_type_instanciation
+            [
+                boost::phoenix::bind(
+                    &rec::structure_data_t::add_heritance_type, _c, _1)
+            ] % ','
+        )
+        >>
+        '{'
+        >>
+        -(
+            rules.def_composite_content
+            [
+                _val = _1,
+                boost::phoenix::bind(&rec::node::set_name, *_val, _a),
+                boost::phoenix::bind(&rec::node::set_kind, *_val,
+                    rec::node::kind::structure),
+                boost::phoenix::bind(
+                    &rec::node::add_child_list<std::list<rec::node::sptr> >,
+                    *_val,
+                    _b
+                ),
+                boost::phoenix::bind(
+                    &rec::node::set_structure_data,
+                    *_val,
+                    _c
+                )
+            ]
+        )
+        >>
+        '}';
 }
 
 
 template <> void init_def_structure<iterator>(rule_container<iterator> & rules)
 {
-	generic_init_def_structure<iterator>(rules);
+    generic_init_def_structure<iterator>(rules);
 }
 
 

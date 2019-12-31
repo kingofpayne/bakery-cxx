@@ -34,86 +34,86 @@ namespace grammar {
  * @param rules Reference over the rules container.
  */
 template <typename I>
-	void generic_init_floating_number(rule_container<I> & rules)
+    void generic_init_floating_number(rule_container<I> & rules)
 {
-	namespace qi = boost::spirit::qi;
-	using qi::_val;
-	using qi::_1;
+    namespace qi = boost::spirit::qi;
+    using qi::_val;
+    using qi::_1;
 
-	/* floating numbers. May have different forms:
-	 * -45.12
-	 * -45
-	 * .12
-	 * -10.6e-78
-	 * .6e-78
-	 * e-78 (means 1.0e-78)
-	 * -.10.e-78
-	 *
-	 * The spirit || operator is very helpful. Ommiting the eventual first
-	 * minus symbol, differents possibilities are:
-	 *
-	 * N
-	 * N.N
-	 *  .N
-	 * N  eZ
-	 * N.NeZ
-	 *  .NeZ
-	 *    eZ
-	 *
-	 * We can reduce de first three possibilities to: X = N||(.N). Then we
-	 * have:
-	 *
-	 * X
-	 * XeZ
-	 *  eZ
-	 *
-	 * which can be reduced to W = X||(eZ). So finally, we have the
-	 * expression:
-	 *
-	 * ( Z || (.N) ) || (e Z) */
-	rules.floating_number = 
-		-(
-			qi::char_('-')
-			[
-				boost::phoenix::bind(&dat::floating::set_negative, _val,
-					true)
-			]
-		)
-		>>
-		(
-			rules.unsigned_integer
-			[
-				boost::phoenix::bind(&dat::floating::set_integer_string,
-					_val, _1)
-			]
-			||
-			(
-				qi::char_('.')
-				>>
-				rules.unsigned_integer
-				[
-					boost::phoenix::bind(&dat::floating::set_decimal_string,
-						_val, _1)
-				]
-			)
-		)
-		||
-		(
-			qi::char_('e')
-			>>
-			rules.integer
-			[
-				boost::phoenix::bind(&dat::floating::set_exponent_string,
-					_val, _1)
-			]
-		);
+    /* floating numbers. May have different forms:
+     * -45.12
+     * -45
+     * .12
+     * -10.6e-78
+     * .6e-78
+     * e-78 (means 1.0e-78)
+     * -.10.e-78
+     *
+     * The spirit || operator is very helpful. Ommiting the eventual first
+     * minus symbol, differents possibilities are:
+     *
+     * N
+     * N.N
+     *  .N
+     * N  eZ
+     * N.NeZ
+     *  .NeZ
+     *    eZ
+     *
+     * We can reduce de first three possibilities to: X = N||(.N). Then we
+     * have:
+     *
+     * X
+     * XeZ
+     *  eZ
+     *
+     * which can be reduced to W = X||(eZ). So finally, we have the
+     * expression:
+     *
+     * ( Z || (.N) ) || (e Z) */
+    rules.floating_number = 
+        -(
+            qi::char_('-')
+            [
+                boost::phoenix::bind(&dat::floating::set_negative, _val,
+                    true)
+            ]
+        )
+        >>
+        (
+            rules.unsigned_integer
+            [
+                boost::phoenix::bind(&dat::floating::set_integer_string,
+                    _val, _1)
+            ]
+            ||
+            (
+                qi::char_('.')
+                >>
+                rules.unsigned_integer
+                [
+                    boost::phoenix::bind(&dat::floating::set_decimal_string,
+                        _val, _1)
+                ]
+            )
+        )
+        ||
+        (
+            qi::char_('e')
+            >>
+            rules.integer
+            [
+                boost::phoenix::bind(&dat::floating::set_exponent_string,
+                    _val, _1)
+            ]
+        );
 }
 
 
 template <>
-	void init_floating_number<iterator>(rule_container<iterator> & rules)
+    void init_floating_number<iterator>(rule_container<iterator> & rules)
 {
-	generic_init_floating_number<iterator>(rules);
+    generic_init_floating_number<iterator>(rules);
 }
 
 

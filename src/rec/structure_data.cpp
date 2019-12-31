@@ -40,7 +40,7 @@ structure_data_t::structure_data_t()
  */
 void structure_data_t::add_heritance_type(const type_instanciation_t & type)
 {
-	heritance_list.push_back(type);
+    heritance_list.push_back(type);
 }
 
 

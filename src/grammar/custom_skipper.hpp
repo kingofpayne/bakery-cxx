@@ -40,24 +40,24 @@ namespace grammar {
  * Necessary to skip C-style comments.
  */
 template <typename Iterator>
-	struct custom_skipper: boost::spirit::qi::grammar<Iterator>
+    struct custom_skipper: boost::spirit::qi::grammar<Iterator>
 {
-	custom_skipper():
-		boost::spirit::qi::grammar<Iterator>::base_type(main_rule)
-	{
-		namespace qi = boost::spirit::qi;
-		namespace ascii = boost::spirit::ascii;
+    custom_skipper():
+        boost::spirit::qi::grammar<Iterator>::base_type(main_rule)
+    {
+        namespace qi = boost::spirit::qi;
+        namespace ascii = boost::spirit::ascii;
 
-		main_rule =
-			boost::spirit::ascii::space
-			|
-			boost::spirit::repository::confix("/*", "*/")
-				[*(qi::char_ - "*/")]
-			;
-	}
+        main_rule =
+            boost::spirit::ascii::space
+            |
+            boost::spirit::repository::confix("/*", "*/")
+                [*(qi::char_ - "*/")]
+            ;
+    }
 
-	/** Main skipping rule. */
-	boost::spirit::qi::rule<Iterator> main_rule;
+    /** Main skipping rule. */
+    boost::spirit::qi::rule<Iterator> main_rule;
 };
 
 

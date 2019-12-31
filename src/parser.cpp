@@ -39,35 +39,35 @@ namespace bakery {
  * @param log Where the error messages will be stored.
  */
 void parser::load_from_file(
-	const std::string & path,
-	recipe_or_data & recipe_or_data,
-	compilation_log_t & log)
+    const std::string & path,
+    recipe_or_data & recipe_or_data,
+    compilation_log_t & log)
 {
-	/* Load the file */
-	std::string content;
-	error_code_t ec = str::load_from_file(path, content);
+    /* Load the file */
+    std::string content;
+    error_code_t ec = str::load_from_file(path, content);
 
-	if (ec)
-	{
-		log.add_error("Failed to read file '" + path + "'.");
-		return;
-	}
+    if (ec)
+    {
+        log.add_error("Failed to read file '" + path + "'.");
+        return;
+    }
 
-	std::string::const_iterator it = content.begin();
-	const std::string::const_iterator it_end = content.end();
+    std::string::const_iterator it = content.begin();
+    const std::string::const_iterator it_end = content.end();
 
-	grammar::main<std::string::const_iterator> grammar;
+    grammar::main<std::string::const_iterator> grammar;
 
-	boost::spirit::qi::phrase_parse(it, it_end, grammar,
-		grammar::skipper(), recipe_or_data);
+    boost::spirit::qi::phrase_parse(it, it_end, grammar,
+        grammar::skipper(), recipe_or_data);
 
-	/* Check parse result. */
-	if (it != it_end)
-	{
-		log.add_error("in file '" + path + "' line "
-			+ str::from(calculate_line_number(content, it))
-			+ ", syntax error : " + show_string_position(content, it));
-	}
+    /* Check parse result. */
+    if (it != it_end)
+    {
+        log.add_error("in file '" + path + "' line "
+            + str::from(calculate_line_number(content, it))
+            + ", syntax error : " + show_string_position(content, it));
+    }
 }
 
 

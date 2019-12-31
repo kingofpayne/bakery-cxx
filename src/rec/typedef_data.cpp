@@ -30,7 +30,7 @@ namespace rec {
  * Default constructor.
  */
 typedef_data_t::typedef_data_t():
-	type_instanciation()
+    type_instanciation()
 {}
 
 
@@ -40,9 +40,9 @@ typedef_data_t::typedef_data_t():
  * @param type_instanciation_ The type instanciation.
  */
 typedef_data_t::typedef_data_t
-	(const type_instanciation_t & type_instanciation_)
+    (const type_instanciation_t & type_instanciation_)
 :
-	type_instanciation(type_instanciation_)
+    type_instanciation(type_instanciation_)
 {}
 
 
@@ -51,7 +51,7 @@ typedef_data_t::typedef_data_t
  */
 std::string typedef_data_t::print() const
 {
-	return type_instanciation.print();
+    return type_instanciation.print();
 }
 
 

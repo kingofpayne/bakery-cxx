@@ -33,8 +33,8 @@ namespace rec {
 type_instanciation_t::type_instanciation_t():
     type_path(),
     unsigned_flag(false),
-	owning_node(false),
-	type_node_ptr((node*)0)
+    owning_node(false),
+    type_node_ptr((node*)0)
 {}
 
 
@@ -43,15 +43,15 @@ type_instanciation_t::type_instanciation_t():
  */
 std::string type_instanciation_t::print() const
 {
-	std::string r = type_path.print();
+    std::string r = type_path.print();
 
-	const node* ptr = get_type_ptr();
-	if(ptr != 0)
-	{
-		r += " - " + ptr->print();
-	}
+    const node* ptr = get_type_ptr();
+    if(ptr != 0)
+    {
+        r += " - " + ptr->print();
+    }
 
-	return r;
+    return r;
 }
 
 
@@ -79,10 +79,10 @@ bool type_instanciation_t::is_unsigned() const
  */
 const node* type_instanciation_t::get_type_ptr() const
 {
-	if(owning_node)
-		return boost::get<boost::shared_ptr<node> >(type_node_ptr).get();
-	else
-		return boost::get<node*>(type_node_ptr);
+    if(owning_node)
+        return boost::get<boost::shared_ptr<node> >(type_node_ptr).get();
+    else
+        return boost::get<node*>(type_node_ptr);
 }
 
 
@@ -92,10 +92,10 @@ const node* type_instanciation_t::get_type_ptr() const
  */
 node* type_instanciation_t::get_type_ptr()
 {
-	if(owning_node)
-		return boost::get<boost::shared_ptr<node> >(type_node_ptr).get();
-	else
-		return boost::get<node*>(type_node_ptr);
+    if(owning_node)
+        return boost::get<boost::shared_ptr<node> >(type_node_ptr).get();
+    else
+        return boost::get<node*>(type_node_ptr);
 }
 
 
@@ -103,9 +103,9 @@ node* type_instanciation_t::get_type_ptr()
  * @return Const reference on the list of template parameters.
  */
 const type_instanciation_t::parameter_list &
-	type_instanciation_t::get_parameters() const
+    type_instanciation_t::get_parameters() const
 {
-	return parameters;
+    return parameters;
 }
 
 
@@ -114,7 +114,7 @@ const type_instanciation_t::parameter_list &
  */
 type_instanciation_t::parameter_list & type_instanciation_t::get_parameters()
 {
-	return parameters;
+    return parameters;
 }
 
 
@@ -123,7 +123,7 @@ type_instanciation_t::parameter_list & type_instanciation_t::get_parameters()
  */
 bool type_instanciation_t::get_owning_node() const
 {
-	return owning_node;
+    return owning_node;
 }
 
 
@@ -156,8 +156,8 @@ void type_instanciation_t::set_unsigned(bool value)
  */
 void type_instanciation_t::set_type_node_ptr(node* node)
 {
-	owning_node = false;
-	type_node_ptr = node;
+    owning_node = false;
+    type_node_ptr = node;
 }
 
 
@@ -168,7 +168,7 @@ void type_instanciation_t::set_type_node_ptr(node* node)
  */
 void type_instanciation_t::add_parameter(const type_instanciation_t & ti)
 {
-	parameters.push_back(ti);
+    parameters.push_back(ti);
 }
 
 
@@ -183,8 +183,8 @@ void type_instanciation_t::add_parameter(const type_instanciation_t & ti)
  */
 void type_instanciation_t::set_type_node_sptr(boost::shared_ptr<node> & node)
 {
-	owning_node = true;
-	type_node_ptr = node;
+    owning_node = true;
+    type_node_ptr = node;
 }
 
 

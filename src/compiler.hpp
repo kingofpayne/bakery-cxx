@@ -44,21 +44,21 @@ namespace compiler {
  */
 struct decompilation_state_t
 {
-	/** Reference to the input binary stream. */
-	std::ifstream & input;
-	/** Reference to the output data file. */
-	std::ofstream & output;
-	/** Bytes available from the input binary file. This is decreased during the
-	 * decompilation process. */
-	size_t size;
-	/** Stack of template instanciations. */
-	tti_stack_t tti_stack;
-	/** Indentation level. */
-	int indent_level;
-	/** Log, for info, warning and error messages. */
-	compilation_log_t & log;
+    /** Reference to the input binary stream. */
+    std::ifstream & input;
+    /** Reference to the output data file. */
+    std::ofstream & output;
+    /** Bytes available from the input binary file. This is decreased during the
+     * decompilation process. */
+    size_t size;
+    /** Stack of template instanciations. */
+    tti_stack_t tti_stack;
+    /** Indentation level. */
+    int indent_level;
+    /** Log, for info, warning and error messages. */
+    compilation_log_t & log;
 
-	void write_indent();
+    void write_indent();
 };
 
 
@@ -68,76 +68,76 @@ struct decompilation_state_t
  */
 struct compilation_state_t
 {
-	/** Reference to the output data stream. */
-	std::ostream & output;
-	/** Stack of the template instanciations. */
-	tti_stack_t tti_stack;
-	/** Log, for info, warning and error messages. */
-	compilation_log_t & log;
+    /** Reference to the output data stream. */
+    std::ostream & output;
+    /** Stack of the template instanciations. */
+    tti_stack_t tti_stack;
+    /** Log, for info, warning and error messages. */
+    compilation_log_t & log;
 };
 
 
 void compile(const std::string &, const std::string &,
-	const std::list<std::string> &, compilation_log_t &);
+    const std::list<std::string> &, compilation_log_t &);
 
 void decompile(const std::string &, const std::string &, const std::string &,
-	const std::list<std::string> &, compilation_log_t &);
+    const std::list<std::string> &, compilation_log_t &);
 
 void populate_node(rec::node::sptr);
 
 bool write_data(compilation_state_t &, const dat::data &, const std::string &,
-	const std::list<std::string> &);
+    const std::list<std::string> &);
 
 bool write_node(compilation_state_t &, const rec::type_instanciation_t &,
-	const dat::node &);
+    const dat::node &);
 
 bool write_template_type(compilation_state_t &,
-	const rec::type_instanciation_t &, const dat::node &);
+    const rec::type_instanciation_t &, const dat::node &);
 
 bool write_structure(compilation_state_t &, const rec::type_instanciation_t &,
-	const dat::node &);
+    const dat::node &);
 
 bool write_variant(compilation_state_t &, const rec::type_instanciation_t &,
-	const dat::node &);
+    const dat::node &);
 
 bool write_array(compilation_state_t &, const rec::type_instanciation_t &,
-	const dat::node &);
+    const dat::node &);
 
 bool write_array_dim(compilation_state_t &, const rec::type_instanciation_t &,
-	size_t, const dat::node &);
+    size_t, const dat::node &);
 
 bool write_typedef(compilation_state_t &, const rec::type_instanciation_t &,
-	const dat::node &);
+    const dat::node &);
 
 bool write_enum(compilation_state_t &, const rec::type_instanciation_t &,
-	const dat::node &);
+    const dat::node &);
 
 bool write_native(compilation_state_t &, const rec::type_instanciation_t &,
-	const dat::node &);
+    const dat::node &);
 
 bool write_native_pair(compilation_state_t &, const rec::type_instanciation_t &,
-	const dat::node &);
+    const dat::node &);
 
 bool write_native_tuple(compilation_state_t &,
-	const rec::type_instanciation_t &, const dat::node &);
+    const rec::type_instanciation_t &, const dat::node &);
 
 bool write_native_list(compilation_state_t &, const rec::type_instanciation_t &,
-	const dat::node &);
+    const dat::node &);
 
 bool write_native_map(compilation_state_t &, const rec::type_instanciation_t &,
-	const dat::node &);
+    const dat::node &);
 
 bool write_native_bool(compilation_state_t &, const rec::type_instanciation_t &,
-	const dat::node &);
+    const dat::node &);
 
 bool write_native_integer(compilation_state_t &,
-	const rec::type_instanciation_t &, const dat::node &);
+    const rec::type_instanciation_t &, const dat::node &);
 
 bool write_native_string(compilation_state_t &,
-	const rec::type_instanciation_t &, const dat::node &);
+    const rec::type_instanciation_t &, const dat::node &);
 
 bool write_native_floating(compilation_state_t &,
-	const rec::type_instanciation_t &, const dat::node &);
+    const rec::type_instanciation_t &, const dat::node &);
 
 bool read_data(decompilation_state_t &, const file_indication_t &,
     const std::string &, const std::list<std::string> &);
@@ -146,7 +146,7 @@ bool read_structure(decompilation_state_t &, const rec::type_instanciation_t &);
 bool read_varian(decompilation_state_t &, const rec::type_instanciation_t &);
 
 bool read_array_dim(decompilation_state_t &, const rec::type_instanciation_t &,
-	size_t);
+    size_t);
 
 bool read_enum(decompilation_state_t &, const rec::type_instanciation_t &);
 bool read_typedef(decompilation_state_t &, const rec::type_instanciation_t &);
@@ -165,57 +165,57 @@ bool read_type(decompilation_state_t &, const rec::type_instanciation_t &);
  *         remaining bytes.
  */
 template <typename T> static bool read_native_type(
-	decompilation_state_t & state, T & dest)
+    decompilation_state_t & state, T & dest)
 {
-	const size_t size = sizeof(T);
+    const size_t size = sizeof(T);
 
-	if (size > state.size)
-	{
-		state.log.add_message(
-			compilation_message_type_t::error,
-			"end of file reached, not enough bytes available.");
+    if (size > state.size)
+    {
+        state.log.add_message(
+            compilation_message_type_t::error,
+            "end of file reached, not enough bytes available.");
 
-		return false;
-	}
-	else
-	{
-		state.input.read((char*)&dest, size);
-		state.size -= size;
-		return true;
-	}
+        return false;
+    }
+    else
+    {
+        state.input.read((char*)&dest, size);
+        state.size -= size;
+        return true;
+    }
 }
 
 
 bool read_template_type(decompilation_state_t &,
-	const rec::type_instanciation_t &);
+    const rec::type_instanciation_t &);
 
 bool read_native(decompilation_state_t &, const rec::type_instanciation_t &);
 
 bool read_native_bool(decompilation_state_t &,
-	const rec::type_instanciation_t &);
+    const rec::type_instanciation_t &);
 
 bool read_native_integer(decompilation_state_t &,
-	const rec::type_instanciation_t &);
+    const rec::type_instanciation_t &);
 
 bool read_native_floating(decompilation_state_t &,
-	const rec::type_instanciation_t &);
+    const rec::type_instanciation_t &);
 
 bool read_native_string(decompilation_state_t &,
-	const rec::type_instanciation_t &);
+    const rec::type_instanciation_t &);
 
 bool read_native_tuple(decompilation_state_t &,
-	const rec::type_instanciation_t &);
+    const rec::type_instanciation_t &);
 
 bool read_native_list(decompilation_state_t &,
-	const rec::type_instanciation_t &);
+    const rec::type_instanciation_t &);
 
 bool read_native_map(decompilation_state_t &,
-	const rec::type_instanciation_t &);
+    const rec::type_instanciation_t &);
 
 bool floating_to_mpf(mpf_class &, const dat::floating &, compilation_log_t &);
 
 bool check_template_parameter_count(const rec::type_instanciation_t &,
-	compilation_log_t &);
+    compilation_log_t &);
 
 bool merge_included_recipe_files(rec::recipe &, const std::string &,
     const std::list<std::string> &, std::list<std::string> &, compilation_log_t &);

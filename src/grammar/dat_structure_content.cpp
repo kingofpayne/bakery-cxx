@@ -33,37 +33,37 @@ namespace grammar {
  * @param rules Reference over the rules container.
  */
 template <typename I>
-	void generic_init_dat_structure_content(rule_container<I> & rules)
+    void generic_init_dat_structure_content(rule_container<I> & rules)
 {
-	namespace qi = boost::spirit::qi;
-	using qi::_val;
-	using qi::_1;
+    namespace qi = boost::spirit::qi;
+    using qi::_val;
+    using qi::_1;
 
-	rules.dat_structure_content =
-		qi::eps
-		[
-			_val = create_dat_node_sptr(dat::node::kind::group)
-		]
-		>>
-		-(
-			(
-				rules.dat_assignment
-				[
-					boost::phoenix::bind(&dat::node::add_child, *_val, _1)
-				]
-				%
-				';'
-			)
-			>>
-			-qi::char_(';')
-		);		
+    rules.dat_structure_content =
+        qi::eps
+        [
+            _val = create_dat_node_sptr(dat::node::kind::group)
+        ]
+        >>
+        -(
+            (
+                rules.dat_assignment
+                [
+                    boost::phoenix::bind(&dat::node::add_child, *_val, _1)
+                ]
+                %
+                ';'
+            )
+            >>
+            -qi::char_(';')
+        );        
 }
 
 
 template <>
-	void init_dat_structure_content<iterator>(rule_container<iterator> & rules)
+    void init_dat_structure_content<iterator>(rule_container<iterator> & rules)
 {
-	generic_init_dat_structure_content<iterator>(rules);
+    generic_init_dat_structure_content<iterator>(rules);
 }
 
 

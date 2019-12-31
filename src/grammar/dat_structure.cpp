@@ -33,20 +33,20 @@ namespace grammar {
  */
 template <typename I> void generic_init_dat_structure(rule_container<I> & rules)
 {
-	namespace qi = boost::spirit::qi;
+    namespace qi = boost::spirit::qi;
 
-	rules.dat_structure = 
-		qi::char_('{')
-		>>
-		rules.dat_structure_content[ qi::_val = qi::_1 ]
-		>>
-		qi::char_('}');
+    rules.dat_structure = 
+        qi::char_('{')
+        >>
+        rules.dat_structure_content[ qi::_val = qi::_1 ]
+        >>
+        qi::char_('}');
 }
 
 
 template <> void init_dat_structure<iterator>(rule_container<iterator> & rules)
 {
-	generic_init_dat_structure<iterator>(rules);
+    generic_init_dat_structure<iterator>(rules);
 }
 
 

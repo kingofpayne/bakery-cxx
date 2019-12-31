@@ -34,53 +34,53 @@ namespace grammar {
  */
 template <typename I> void generic_init_def_enum(rule_container<I> & rules)
 {
-	namespace qi = boost::spirit::qi;
-	using qi::_val;
-	using qi::_1;
+    namespace qi = boost::spirit::qi;
+    using qi::_val;
+    using qi::_1;
 
-	/* Example:
-	 *
-	 * enum X {
-	 *     toto,
-	 *     titi,
-	 *     pouet = 4
-	 * }
-	 */
-	rules.def_enum =
-		qi::eps
-		[
-			_val = create_def_node_sptr(rec::node::kind::enum_)
-		]
-		>>
-		qi::string("enum")
-		>>
-		rules.identifier
-		[
-			boost::phoenix::bind(&rec::node::set_name, *_val, _1)
-		]
-		>>
-		'{'
-		>>
-		-(
-			(
-				rules.def_enum_value
-				[
-					boost::phoenix::bind(&rec::node::add_child, *_val, _1)
-				]
-				%
-				qi::char_(',')
-			)
-			>>
-			-qi::char_(',')
-		)
-		>>
-		'}';
+    /* Example:
+     *
+     * enum X {
+     *     toto,
+     *     titi,
+     *     pouet = 4
+     * }
+     */
+    rules.def_enum =
+        qi::eps
+        [
+            _val = create_def_node_sptr(rec::node::kind::enum_)
+        ]
+        >>
+        qi::string("enum")
+        >>
+        rules.identifier
+        [
+            boost::phoenix::bind(&rec::node::set_name, *_val, _1)
+        ]
+        >>
+        '{'
+        >>
+        -(
+            (
+                rules.def_enum_value
+                [
+                    boost::phoenix::bind(&rec::node::add_child, *_val, _1)
+                ]
+                %
+                qi::char_(',')
+            )
+            >>
+            -qi::char_(',')
+        )
+        >>
+        '}';
 }
 
 
 template <> void init_def_enum<iterator>(rule_container<iterator> & rules)
 {
-	generic_init_def_enum<iterator>(rules);
+    generic_init_def_enum<iterator>(rules);
 }
 
 

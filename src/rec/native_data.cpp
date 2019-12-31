@@ -29,18 +29,18 @@ namespace rec {
 
 const std::string native_data_t::class_t::strings[] =
 {
-	"null",
-	"bool",
-	"char",
-	"short",
-	"int",
-	"float",
-	"double",
-	"string",
-	"pair",
-	"tuple",
-	"list",
-	"map"
+    "null",
+    "bool",
+    "char",
+    "short",
+    "int",
+    "float",
+    "double",
+    "string",
+    "pair",
+    "tuple",
+    "list",
+    "map"
 };
 
 
@@ -48,7 +48,7 @@ const std::string native_data_t::class_t::strings[] =
  * Constructor
  */
 native_data_t::native_data_t():
-	class_(class_t::null)
+    class_(class_t::null)
 {}
 
 
@@ -61,9 +61,9 @@ native_data_t::native_data_t():
  *        the native_data::class_t::value enumeration.
  */
 native_data_t::native_data_t(class_t::value _class_):
-	class_(_class_)
+    class_(_class_)
 {
-	bakery_assert_message(class_t::Wrapper::has(_class_), "Bad class value.");
+    bakery_assert_message(class_t::Wrapper::has(_class_), "Bad class value.");
 }
 
 
@@ -72,7 +72,7 @@ native_data_t::native_data_t(class_t::value _class_):
  */
 std::string native_data_t::print() const
 {
-	return "class = " + class_t::Wrapper::to_string(class_);
+    return "class = " + class_t::Wrapper::to_string(class_);
 }
 
 
@@ -81,7 +81,7 @@ std::string native_data_t::print() const
  */
 native_data_t::class_t::value native_data_t::get_class() const
 {
-	return class_;
+    return class_;
 }
 
 
@@ -92,8 +92,8 @@ native_data_t::class_t::value native_data_t::get_class() const
  */
 void native_data_t::set_class(class_t::value value)
 {
-	bakery_assert_message(class_t::Wrapper::has(value), "Bad class value.");
-	class_ = value;
+    bakery_assert_message(class_t::Wrapper::has(value), "Bad class value.");
+    class_ = value;
 }
 
 

@@ -44,74 +44,74 @@ namespace dat {
  */
 class node
 {
-	public:
-		typedef boost::shared_ptr<node> sptr;
-		typedef std::list<sptr> node_sptr_list;
+    public:
+        typedef boost::shared_ptr<node> sptr;
+        typedef std::list<sptr> node_sptr_list;
 
-		/**
-		 * Enumerates the different kind of nodes.
-		 *
-		 * 'group' nodes are used for structures, arrays... They generally are
-		 * nodes with children.
-		 */
-		struct kind
-		{
-			enum value
-			{
-				none,
-				assignment,
-				string,
-				floating,
-				identifier,
-				bool_,
-				group,
-				variant,
-				map_assignment
-			};
+        /**
+         * Enumerates the different kind of nodes.
+         *
+         * 'group' nodes are used for structures, arrays... They generally are
+         * nodes with children.
+         */
+        struct kind
+        {
+            enum value
+            {
+                none,
+                assignment,
+                string,
+                floating,
+                identifier,
+                bool_,
+                group,
+                variant,
+                map_assignment
+            };
 
-			static const std::string strings[];
+            static const std::string strings[];
 
-			typedef continuous_wrapper_t<
-					value,
-				   	strings,
-					none,
-					map_assignment
-				> wrapper;
-		};
+            typedef continuous_wrapper_t<
+                    value,
+                       strings,
+                    none,
+                    map_assignment
+                > wrapper;
+        };
 
-		node();
-		node(kind::value);
-		kind::value get_kind() const;
-		const node_sptr_list & get_children() const;
-		const std::string & get_name() const;
-		const std::string & get_string() const;
-		const std::string & get_identifier() const;
-		const floating & get_floating() const;
-		bool get_bool() const;
-		template <template <typename T, typename U> class Container>
-			Container<sptr, std::allocator<sptr> >
-			query_nodes(kind::value) const;
-		std::string print() const;
-		void set_name(const std::string &);
-		void add_child(const sptr &);
-		void set_string(const std::string &);
-		void set_floating(const floating &);
-		void set_identifier(const std::string &);
-		void set_bool(bool);
+        node();
+        node(kind::value);
+        kind::value get_kind() const;
+        const node_sptr_list & get_children() const;
+        const std::string & get_name() const;
+        const std::string & get_string() const;
+        const std::string & get_identifier() const;
+        const floating & get_floating() const;
+        bool get_bool() const;
+        template <template <typename T, typename U> class Container>
+            Container<sptr, std::allocator<sptr> >
+            query_nodes(kind::value) const;
+        std::string print() const;
+        void set_name(const std::string &);
+        void add_child(const sptr &);
+        void set_string(const std::string &);
+        void set_floating(const floating &);
+        void set_identifier(const std::string &);
+        void set_bool(bool);
 
-	private:
-		/** Name of the node */
-		std::string name;
-		/** kind of the node. */
-		kind::value kind;
-		/** Sub nodes */
-		node_sptr_list children;
-		/** data, depending on the node kind. */
-		boost::variant<
-			std::string,
-			floating,
-			bool
-		> data;
+    private:
+        /** Name of the node */
+        std::string name;
+        /** kind of the node. */
+        kind::value kind;
+        /** Sub nodes */
+        node_sptr_list children;
+        /** data, depending on the node kind. */
+        boost::variant<
+            std::string,
+            floating,
+            bool
+        > data;
 };
 
 
@@ -126,27 +126,27 @@ class node
  * Note: Container takes two template arguments, like std::list.
  */
 template <template <typename T, typename U> class Container>
-	Container<node::sptr, std::allocator<node::sptr> >
-	node::query_nodes(kind::value kind) const
+    Container<node::sptr, std::allocator<node::sptr> >
+    node::query_nodes(kind::value kind) const
 {
-	using namespace boost::phoenix::arg_names;
+    using namespace boost::phoenix::arg_names;
 
-	Container<sptr, std::allocator<sptr> > result;
+    Container<sptr, std::allocator<sptr> > result;
 
-	std::for_each
-	(
-		children.begin(),
-		children.end(),
-		[&](const sptr & s)
-		{
-			if (s->get_kind() == kind)
-			{
-				result.push_back(s);
-			}
-		}
-	);
+    std::for_each
+    (
+        children.begin(),
+        children.end(),
+        [&](const sptr & s)
+        {
+            if (s->get_kind() == kind)
+            {
+                result.push_back(s);
+            }
+        }
+    );
 
-	return result;
+    return result;
 }
 
 

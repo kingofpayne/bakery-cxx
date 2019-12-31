@@ -29,7 +29,7 @@ namespace bakery {
  * Default constructor.
  */
 recipe_or_data::recipe_or_data():
-	value(0)
+    value(0)
 {}
 
 
@@ -40,7 +40,7 @@ recipe_or_data::recipe_or_data():
  */
 void recipe_or_data::set_recipe(const rec::recipe & value)
 {
-	this->value = value;
+    this->value = value;
 }
 
 
@@ -51,7 +51,7 @@ void recipe_or_data::set_recipe(const rec::recipe & value)
  */
 void recipe_or_data::set_data(const dat::data & value)
 {
-	this->value = value;
+    this->value = value;
 }
 
 
@@ -60,7 +60,7 @@ void recipe_or_data::set_data(const dat::data & value)
  */
 bool recipe_or_data::is_recipe() const
 {
-	return value.which() == 1;
+    return value.which() == 1;
 }
 
 
@@ -69,7 +69,7 @@ bool recipe_or_data::is_recipe() const
  */
 bool recipe_or_data::is_data() const
 {
-	return value.which() == 2;
+    return value.which() == 2;
 }
 
 
@@ -80,8 +80,8 @@ bool recipe_or_data::is_data() const
  */
 rec::recipe & recipe_or_data::get_recipe()
 {
-	bakery_assert_debug(is_recipe());
-	return boost::get<rec::recipe>(value);
+    bakery_assert_debug(is_recipe());
+    return boost::get<rec::recipe>(value);
 }
 
 
@@ -92,8 +92,8 @@ rec::recipe & recipe_or_data::get_recipe()
  */
 dat::data & recipe_or_data::get_data()
 {
-	bakery_assert_debug(is_data());
-	return boost::get<dat::data>(value);
+    bakery_assert_debug(is_data());
+    return boost::get<dat::data>(value);
 }
 
 

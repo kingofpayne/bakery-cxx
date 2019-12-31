@@ -33,34 +33,34 @@ namespace grammar {
  */
 template <typename I> void generic_init_recipe(rule_container<I> & rules)
 {
-	namespace qi = boost::spirit::qi;
-	using qi::_val;
-	using qi::_1;
-		
-	rules.recipe_ =
-		*(
-			"include"
-			>>
-			rules.recipe_indication
-			[
-				bind(&rec::recipe::add_include_file, _val, _1)
-			]
-			>>
-			';'
-		)
-		>>
-		rules.def_composite_content
-		[
-			boost::phoenix::bind(&rec::node::set_kind, *_1,
-				rec::node::kind::structure),
-			boost::phoenix::bind(&rec::recipe::set_node, _val, _1)
-		];
+    namespace qi = boost::spirit::qi;
+    using qi::_val;
+    using qi::_1;
+        
+    rules.recipe_ =
+        *(
+            "include"
+            >>
+            rules.recipe_indication
+            [
+                bind(&rec::recipe::add_include_file, _val, _1)
+            ]
+            >>
+            ';'
+        )
+        >>
+        rules.def_composite_content
+        [
+            boost::phoenix::bind(&rec::node::set_kind, *_1,
+                rec::node::kind::structure),
+            boost::phoenix::bind(&rec::recipe::set_node, _val, _1)
+        ];
 }
 
 
 template <> void init_recipe<iterator>(rule_container<iterator> & rules)
 {
-	generic_init_recipe<iterator>(rules);
+    generic_init_recipe<iterator>(rules);
 }
 
 

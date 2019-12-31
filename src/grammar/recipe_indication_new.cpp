@@ -32,20 +32,20 @@ namespace grammar {
  * @param rules Reference over the rules container.
  */
 template <typename I>
-	void generic_init_recipe_indication_new(rule_container<I> & rules)
+    void generic_init_recipe_indication_new(rule_container<I> & rules)
 {
-	namespace qi = boost::spirit::qi;
-	using qi::_val;
-	using qi::_1;
-	using qi::_a;
-	using qi::char_;
+    namespace qi = boost::spirit::qi;
+    using qi::_val;
+    using qi::_1;
+    using qi::_a;
+    using qi::char_;
 
-	/* Relative path recipe file:
-	 * recipe "toto.def" some_type
-	 *
-	 * Absolute path recipe file:
-	 * recipe <toto.def> some_type */
-	rules.recipe_indication_new =
+    /* Relative path recipe file:
+     * recipe "toto.def" some_type
+     *
+     * Absolute path recipe file:
+     * recipe <toto.def> some_type */
+    rules.recipe_indication_new =
         rules.recipe_indication
             [ boost::phoenix::bind(&recipe_indication_t::fi, _val) = _1 ]
         >>
@@ -55,9 +55,9 @@ template <typename I>
 
 
 template <>
-	void init_recipe_indication_new<iterator>(rule_container<iterator> & rules)
+    void init_recipe_indication_new<iterator>(rule_container<iterator> & rules)
 {
-	generic_init_recipe_indication_new<iterator>(rules);
+    generic_init_recipe_indication_new<iterator>(rules);
 }
 
 

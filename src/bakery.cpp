@@ -73,7 +73,7 @@ void bakery_t::include(const std::list<std::string> & dirs)
  */
 void bakery_t::include(const std::string & dir)
 {
-	include_directories.push_back(dir);
+    include_directories.push_back(dir);
 }
 
 
@@ -82,7 +82,7 @@ void bakery_t::include(const std::string & dir)
  */
 const std::list<std::string> & bakery_t::get_include_directories() const
 {
-	return include_directories;
+    return include_directories;
 }
 
 
@@ -98,67 +98,67 @@ input_t bakery_t::load(const std::string & path)
     bool has_rebuilt_flag = false;
     std::cout << "Loading resource " << path << "...";
 
-	/* Check that the data file exists. */
-	bakery_assert_message(boost::filesystem::exists(path),
-		"File '" + path + "' does not exist.");
+    /* Check that the data file exists. */
+    bakery_assert_message(boost::filesystem::exists(path),
+        "File '" + path + "' does not exist.");
 
     boost::filesystem::path bin_path(path);
     bin_path.replace_extension(".bin");
-	
-	/* Will get all compilation errors */
-	compilation_log_t log;
+    
+    /* Will get all compilation errors */
+    compilation_log_t log;
 
-	/* Check dates */
-	bool recompile = (!boost::filesystem::exists(bin_path)) || force_rebuild;
-	if (!recompile)
-	{
-		std::time_t dat_time = boost::filesystem::last_write_time(path);
-		std::time_t bin_time = boost::filesystem::last_write_time(bin_path);
-		if (dat_time > bin_time)
-			recompile = true;
-	}
+    /* Check dates */
+    bool recompile = (!boost::filesystem::exists(bin_path)) || force_rebuild;
+    if (!recompile)
+    {
+        std::time_t dat_time = boost::filesystem::last_write_time(path);
+        std::time_t bin_time = boost::filesystem::last_write_time(bin_path);
+        if (dat_time > bin_time)
+            recompile = true;
+    }
 
-	if (recompile)
-	{
-		/* Recompilation needed. */
-		std::cout << " rebuilding cache...";
+    if (recompile)
+    {
+        /* Recompilation needed. */
+        std::cout << " rebuilding cache...";
         std::flush(std::cout);
 
-		/* Compile */
-		compiler::compile(path, bin_path.c_str(), include_directories, log);
+        /* Compile */
+        compiler::compile(path, bin_path.c_str(), include_directories, log);
         has_rebuilt_flag = true;
 
-		/* Check for any error */
-		if (log.get_error_count() != 0)
-		{
-			std::cout << " failed." << std::endl;
+        /* Check for any error */
+        if (log.get_error_count() != 0)
+        {
+            std::cout << " failed." << std::endl;
 
-			std::cerr << "An error occured during compilation of ressource "
-				<< path 
-				<< ", below are listed the error messages reported during "
-				<< "compilation."
-				<< std::endl
-				<< log.print()
-				<< std::endl;
+            std::cerr << "An error occured during compilation of ressource "
+                << path 
+                << ", below are listed the error messages reported during "
+                << "compilation."
+                << std::endl
+                << log.print()
+                << std::endl;
 
-			/* Remove file since it is not correct
-			 * (compiler writes in it during all the compilation process and
-			 * does not use a buffer before outputing the result). */
-			boost::filesystem::remove(bin_path);
-			/* Stop program execution, this is unrecoverable ! */
-			bakery_abort_message("Cannot load ressource " + path + ".");
-		}
-	}
+            /* Remove file since it is not correct
+             * (compiler writes in it during all the compilation process and
+             * does not use a buffer before outputing the result). */
+            boost::filesystem::remove(bin_path);
+            /* Stop program execution, this is unrecoverable ! */
+            bakery_abort_message("Cannot load ressource " + path + ".");
+        }
+    }
 
     std::ifstream* stream =
         new std::ifstream(bin_path.string(), std::ios::binary);
 
-	if (!stream->is_open())
-	{
-		std::cout << " failed." << std::endl;
+    if (!stream->is_open())
+    {
+        std::cout << " failed." << std::endl;
         delete stream;
         return input_t(0, false);
-	}
+    }
 
     return input_t(stream, has_rebuilt_flag); /* input_t takes pointer ownership of stream */
 }

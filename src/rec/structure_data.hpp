@@ -36,12 +36,12 @@ namespace rec {
  */
 struct structure_data_t
 {
-	structure_data_t();
-	void add_heritance_type(const type_instanciation_t &);
+    structure_data_t();
+    void add_heritance_type(const type_instanciation_t &);
 
-	/** types from which the structure heritates. Note: the order is
-	 * relevant, a std::set cannot be used. */
-	std::vector<type_instanciation_t> heritance_list;
+    /** types from which the structure heritates. Note: the order is
+     * relevant, a std::set cannot be used. */
+    std::vector<type_instanciation_t> heritance_list;
 };
 
 

@@ -45,32 +45,32 @@ namespace dat {
  */
 class floating
 {
-	public:
-		floating();
-		
-		bool get_negative() const;
-		const std::string & get_integer_string() const;
-		const std::string & get_decimal_string() const;
-		const std::string & get_exponent_string() const;
-		bool has_integer_part() const;
-		bool has_decimal_part() const;
-		bool has_exponent_part() const;
-		void set_negative(bool);
-		void set_integer_string(const std::string &);
-		void set_decimal_string(const std::string &);
-		void set_exponent_string(const std::string &);
+    public:
+        floating();
+        
+        bool get_negative() const;
+        const std::string & get_integer_string() const;
+        const std::string & get_decimal_string() const;
+        const std::string & get_exponent_string() const;
+        bool has_integer_part() const;
+        bool has_decimal_part() const;
+        bool has_exponent_part() const;
+        void set_negative(bool);
+        void set_integer_string(const std::string &);
+        void set_decimal_string(const std::string &);
+        void set_exponent_string(const std::string &);
 
-	private:
-		/** True for a negative floating. */
-		bool negative;
-		/** Integer number before the '.' separator. */
-		std::string integer_string;
-		/** Integer number after the '.' separator. */
-		std::string decimal_string;
-		/** Integer string of the exponent. */
-		std::string exponent_string;
+    private:
+        /** True for a negative floating. */
+        bool negative;
+        /** Integer number before the '.' separator. */
+        std::string integer_string;
+        /** Integer number after the '.' separator. */
+        std::string decimal_string;
+        /** Integer string of the exponent. */
+        std::string exponent_string;
 
-		static bool valid_format(const std::string &, bool);
+        static bool valid_format(const std::string &, bool);
 };
 
 

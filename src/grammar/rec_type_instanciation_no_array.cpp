@@ -32,17 +32,17 @@ namespace grammar {
  * @param rules Reference over the rules container.
  */
 template <typename I> void
-	generic_init_def_type_instanciation_no_array(rule_container<I> & rules)
+    generic_init_def_type_instanciation_no_array(rule_container<I> & rules)
 {
-	namespace qi = boost::spirit::qi;
-	using qi::_val;
-	using qi::_1;
+    namespace qi = boost::spirit::qi;
+    using qi::_val;
+    using qi::_1;
 
-	/* Examples:
-	 *
-	 * int
-	 * point<int>
-	 * list<point<double>> */
+    /* Examples:
+     *
+     * int
+     * point<int>
+     * list<point<double>> */
     rules.def_type_instanciation_no_array =
         -(
             qi::string("unsigned")
@@ -52,39 +52,39 @@ template <typename I> void
             ]
         )
         >>
-		rules.path
-		[
-			boost::phoenix::bind
-			(
-				&rec::type_instanciation_t::set_type_path,
-				_val,
-				_1
-			)
-		]
-		>>
-		/* With eventually a template argument list. */
-		-(
-			qi::char_('<')
-			>>
-			-(
-			 	rules.def_type_instanciation
-				[
-					boost::phoenix::bind(
-						&rec::type_instanciation_t::add_parameter, _val, _1)
-				]
-				%
-				qi::char_(',')
-			)
-			>>
-			qi::char_('>')
-		);
+        rules.path
+        [
+            boost::phoenix::bind
+            (
+                &rec::type_instanciation_t::set_type_path,
+                _val,
+                _1
+            )
+        ]
+        >>
+        /* With eventually a template argument list. */
+        -(
+            qi::char_('<')
+            >>
+            -(
+                 rules.def_type_instanciation
+                [
+                    boost::phoenix::bind(
+                        &rec::type_instanciation_t::add_parameter, _val, _1)
+                ]
+                %
+                qi::char_(',')
+            )
+            >>
+            qi::char_('>')
+        );
 
 }
 
 
 template <> void init_def_type_instanciation_no_array<iterator>(rule_container<iterator> & rules)
 {
-	generic_init_def_type_instanciation_no_array<iterator>(rules);
+    generic_init_def_type_instanciation_no_array<iterator>(rules);
 }
 
 

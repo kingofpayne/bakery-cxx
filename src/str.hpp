@@ -57,36 +57,36 @@ error_code_t load_from_file(const std::string &, std::string &);
  */
 template <typename T> T assert_hex_to(const std::string & hex_string)
 {
-	T result = 0;
-	const size_t s = hex_string.size();
+    T result = 0;
+    const size_t s = hex_string.size();
 
-	for (size_t i=0; i<s; ++i)
-	{
-		/* Fetch char. */
-		char c = hex_string[i];
+    for (size_t i=0; i<s; ++i)
+    {
+        /* Fetch char. */
+        char c = hex_string[i];
 
-		/* Convert char to a semi-octet. */
-		unsigned char x;
+        /* Convert char to a semi-octet. */
+        unsigned char x;
 
-		if ((c >= '0') && (c <= '9'))
-			x = c - '0';
-		else if ((c >= 'a') && (c <= 'f'))
-			x = c - 'a' + 0x10;
-		else if ((c >= 'A') && (c <= 'F'))
-			x = c - 'A' + 0x10;
-		else
-			bakery_abort_message("invalid hexadecimal string '" + hex_string
-				+ "'.");
+        if ((c >= '0') && (c <= '9'))
+            x = c - '0';
+        else if ((c >= 'a') && (c <= 'f'))
+            x = c - 'a' + 0x10;
+        else if ((c >= 'A') && (c <= 'F'))
+            x = c - 'A' + 0x10;
+        else
+            bakery_abort_message("invalid hexadecimal string '" + hex_string
+                + "'.");
 
-		/* Verify that the value will fit the numeric type. */
-		z_assert_message(
-			result <= (std::numeric_limits<T>::max() >> 4),
-			"hexadecimal string '" + hex_string + "' is too big.");
+        /* Verify that the value will fit the numeric type. */
+        z_assert_message(
+            result <= (std::numeric_limits<T>::max() >> 4),
+            "hexadecimal string '" + hex_string + "' is too big.");
 
-		result = (result << 4) | ((T)x);
-	}
+        result = (result << 4) | ((T)x);
+    }
 
-	return result;
+    return result;
 }
 
 
@@ -144,13 +144,13 @@ template <typename T> int size(const T& x)
  */
 template <typename T> std::string from(const std::list<T> & l)
 {
-	std::ostringstream stm;
-	stm << "[";
-	for( const T & v : l ){
-	    stm << v;
-		stm << ", ";
-	}
-	stm << "]";
+    std::ostringstream stm;
+    stm << "[";
+    for( const T & v : l ){
+        stm << v;
+        stm << ", ";
+    }
+    stm << "]";
     return stm.str();
 }
 
@@ -167,13 +167,13 @@ template <typename T> std::string from(const std::list<T> & l)
  */
 template <typename T> std::string floating_to_string(T x)
 {
-	std::ostringstream s;
-	/* digits10 is the number of decimal digits the floating type can represent
-	 * without any loss in precision. We add +1 for rounding for best
-	 * approximation. */
-	s.precision(std::numeric_limits<T>::digits10+1);
-	s << x;
-	return s.str();
+    std::ostringstream s;
+    /* digits10 is the number of decimal digits the floating type can represent
+     * without any loss in precision. We add +1 for rounding for best
+     * approximation. */
+    s.precision(std::numeric_limits<T>::digits10+1);
+    s << x;
+    return s.str();
 }
 
 
@@ -187,15 +187,15 @@ template <typename T> std::string floating_to_string(T x)
  */
 template <typename T> T assert_to(std::string s)
 {
-	std::istringstream stm(s);
-	T result;
-	stm >> result;
+    std::istringstream stm(s);
+    T result;
+    stm >> result;
 
-	bakery_assert_message(
-		(stm.tellg() == s.size()),
-		"String conversion failed.");
+    bakery_assert_message(
+        (stm.tellg() == s.size()),
+        "String conversion failed.");
 
-	return result;
+    return result;
 }
 
 
@@ -211,10 +211,10 @@ template <typename T> T assert_to(std::string s)
  */
 template <typename T> error_code_t to(std::string s, T & out)
 {
-	std::istringstream stm(s);
-	T result;
-	stm >> out;
-	return (stm.tellg() == s.size())?0:1;
+    std::istringstream stm(s);
+    T result;
+    stm >> out;
+    return (stm.tellg() == s.size())?0:1;
 }
 
 

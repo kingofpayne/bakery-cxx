@@ -34,12 +34,12 @@ namespace bakery {
 std::string indent(const std::string &);
 
 std::string show_string_position (
-	const std::string &,
-	const std::string::const_iterator);
+    const std::string &,
+    const std::string::const_iterator);
 
 unsigned int calculate_line_number(
-	const std::string &,
-	const std::string::const_iterator);
+    const std::string &,
+    const std::string::const_iterator);
 
 
 /**
@@ -52,16 +52,16 @@ unsigned int calculate_line_number(
  */
 template <typename T> void stream_write_binary(std::ostream & s, const T & d)
 {
-	s.write((char*)(&d), sizeof(d));
+    s.write((char*)(&d), sizeof(d));
 }
 
 
 /* These functions are a complement of boost::filesystem library. */
 boost::filesystem::path make_absolute(const boost::filesystem::path &);
 boost::filesystem::path make_relative(boost::filesystem::path,
-	boost::filesystem::path);
+    boost::filesystem::path);
 boost::filesystem::path path_from_base(const boost::filesystem::path &,
-	const boost::filesystem::path &);
+    const boost::filesystem::path &);
 
 
 } /* namespace bakery */

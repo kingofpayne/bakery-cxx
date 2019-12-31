@@ -36,44 +36,44 @@ namespace grammar {
  */
 template <typename I> void generic_init_path(rule_container<I> & rules)
 {
-	namespace qi = boost::spirit::qi;
-	using qi::_val;
-	using qi::_1;
+    namespace qi = boost::spirit::qi;
+    using qi::_val;
+    using qi::_1;
 
-	/* Examples:
-	 *
-	 * ::toto::tutu::Mytype
-	 * tadam::waou::x
-	 * toto */
-	rules.path =
-	(
-		-(
-			qi::string("::")
-			[
-				boost::phoenix::bind(&rec::path::set_absolute, _val, true)
-			]
-		)
-		>>
-		rules.identifier
-		[
-			boost::phoenix::bind(&rec::path::push_back, _val, _1)
-		]
-		>>
-		*(
-			qi::string("::")
-			>>
-			rules.identifier
-			[
-				boost::phoenix::bind(&rec::path::push_back, _val, _1)
-			]
-		)
-	);	
+    /* Examples:
+     *
+     * ::toto::tutu::Mytype
+     * tadam::waou::x
+     * toto */
+    rules.path =
+    (
+        -(
+            qi::string("::")
+            [
+                boost::phoenix::bind(&rec::path::set_absolute, _val, true)
+            ]
+        )
+        >>
+        rules.identifier
+        [
+            boost::phoenix::bind(&rec::path::push_back, _val, _1)
+        ]
+        >>
+        *(
+            qi::string("::")
+            >>
+            rules.identifier
+            [
+                boost::phoenix::bind(&rec::path::push_back, _val, _1)
+            ]
+        )
+    );    
 }
 
 
 template <> void init_path<iterator>(rule_container<iterator> & rules) 
 {
-	generic_init_path<iterator>(rules);
+    generic_init_path<iterator>(rules);
 }
 
 

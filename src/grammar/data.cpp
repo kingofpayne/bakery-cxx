@@ -33,27 +33,27 @@ namespace grammar {
  */
 template <typename I> void generic_init_data(rule_container<I> & rules)
 {
-	namespace qi = boost::spirit::qi;
-	using qi::_val;
-	using qi::_1;
+    namespace qi = boost::spirit::qi;
+    using qi::_val;
+    using qi::_1;
 
-	rules.data =
-		"recipe"
-		>> rules.recipe_indication_new
-		[
-			bind(&dat::data::set_recipe_indication, _val, _1)
-		]
-		>> ';'
-		>> rules.dat_structure_content
-		[	
-			boost::phoenix::bind(&dat::data::set_root_node, _val, _1)
-		];
+    rules.data =
+        "recipe"
+        >> rules.recipe_indication_new
+        [
+            bind(&dat::data::set_recipe_indication, _val, _1)
+        ]
+        >> ';'
+        >> rules.dat_structure_content
+        [    
+            boost::phoenix::bind(&dat::data::set_root_node, _val, _1)
+        ];
 }
 
 
 template <> void init_data<iterator>(rule_container<iterator> & rules)
 {
-	generic_init_data<iterator>(rules);
+    generic_init_data<iterator>(rules);
 }
 
 

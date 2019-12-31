@@ -36,27 +36,27 @@ namespace grammar {
  */
 template <typename I> void generic_init_dat_value(rule_container<I> & rules)
 {
-	namespace qi = boost::spirit::qi;
-	using qi::_val;
-	using qi::_1;
+    namespace qi = boost::spirit::qi;
+    using qi::_val;
+    using qi::_1;
 
-	rules.dat_value =
-	(
-	 	rules.dat_variant_value[_val = _1]
-		| rules.dat_bool_value[_val = _1]
-		| rules.dat_string_value[_val = _1]
-		| rules.dat_floating_value[_val = _1]		
-		| rules.dat_identifier_value[_val = _1]
-		| rules.dat_structure[_val = _1]
-		| rules.dat_list[_val = _1]
-		| rules.dat_map[_val = _1]
-	);
+    rules.dat_value =
+    (
+         rules.dat_variant_value[_val = _1]
+        | rules.dat_bool_value[_val = _1]
+        | rules.dat_string_value[_val = _1]
+        | rules.dat_floating_value[_val = _1]        
+        | rules.dat_identifier_value[_val = _1]
+        | rules.dat_structure[_val = _1]
+        | rules.dat_list[_val = _1]
+        | rules.dat_map[_val = _1]
+    );
 }
 
 
 template <> void init_dat_value<iterator>(rule_container<iterator> & rules)
 {
-	generic_init_dat_value<iterator>(rules);
+    generic_init_dat_value<iterator>(rules);
 }
 
 

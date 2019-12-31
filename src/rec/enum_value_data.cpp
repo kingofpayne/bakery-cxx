@@ -29,9 +29,9 @@ namespace bakery {
  * Constructor.
  */
 enum_value_data_t::enum_value_data_t():
-	value(0),
-	fixed_value_flag(false),
-	value_str()
+    value(0),
+    fixed_value_flag(false),
+    value_str()
 {}
 
 
@@ -40,7 +40,7 @@ enum_value_data_t::enum_value_data_t():
  */
 const std::string & enum_value_data_t::get_value_str() const
 {
-	return value_str;
+    return value_str;
 }
 
 
@@ -49,7 +49,7 @@ const std::string & enum_value_data_t::get_value_str() const
  */
 bool enum_value_data_t::get_fixed_value_flag() const
 {
-	return fixed_value_flag;
+    return fixed_value_flag;
 }
 
 
@@ -60,8 +60,8 @@ bool enum_value_data_t::get_fixed_value_flag() const
  */
 void enum_value_data_t::set_fixed_value(const std::string & v)
 {
-	fixed_value_flag = true;
-	value_str = v;
+    fixed_value_flag = true;
+    value_str = v;
 }
 
 

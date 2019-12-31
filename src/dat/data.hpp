@@ -37,18 +37,18 @@ namespace dat {
  */
 class data
 {
-	public:
-		const node::sptr & get_root_node() const;
-		const recipe_indication_t & get_recipe_indication() const;
-		std::string print() const;
-		void set_root_node(const node::sptr &);
-		void set_recipe_indication(const recipe_indication_t &);
+    public:
+        const node::sptr & get_root_node() const;
+        const recipe_indication_t & get_recipe_indication() const;
+        std::string print() const;
+        void set_root_node(const node::sptr &);
+        void set_recipe_indication(const recipe_indication_t &);
 
-	private:
-		/** Root node. */
-		node::sptr root_node;
-		/** Structure indicating where is located the recipe file. */
-		recipe_indication_t recipe_indication;
+    private:
+        /** Root node. */
+        node::sptr root_node;
+        /** Structure indicating where is located the recipe file. */
+        recipe_indication_t recipe_indication;
 };
 
 

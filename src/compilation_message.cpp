@@ -40,10 +40,10 @@ compilation_message_t::compilation_message_t()
  * @param text_ Text of the message.
  */
 compilation_message_t::compilation_message_t(compilation_message_type_t type_,
-	const std::string & text_)
+    const std::string & text_)
 :
-	type(type_),
-	text(text_)
+    type(type_),
+    text(text_)
 {}
 
 
@@ -52,21 +52,21 @@ compilation_message_t::compilation_message_t(compilation_message_type_t type_,
  */
 std::string compilation_message_t::to_string() const
 {
-	std::string h;
-	switch (type)
-	{
-		case compilation_message_type_t::error:
-			h = "Error";
-			break;
+    std::string h;
+    switch (type)
+    {
+        case compilation_message_type_t::error:
+            h = "Error";
+            break;
 
-		case compilation_message_type_t::warning:
-			h = "Warning";
-			break;
+        case compilation_message_type_t::warning:
+            h = "Warning";
+            break;
 
-		default:
-			bakery_unexpected_case();
-	}
-	return h + ": " + text;
+        default:
+            bakery_unexpected_case();
+    }
+    return h + ": " + text;
 }
 
 

@@ -49,10 +49,10 @@ namespace bakery {
  * };
  */
 template <typename T, const std::string strings[], T min, T max>
-	struct continuous_wrapper_t
+    struct continuous_wrapper_t
 {
-	static bool has(T);
-	static const std::string & to_string(T);
+    static bool has(T);
+    static const std::string & to_string(T);
 };
 
 
@@ -62,9 +62,9 @@ template <typename T, const std::string strings[], T min, T max>
  * @param value Value to test.
  */
 template <typename T, const std::string strings[], T min, T max>
-	bool continuous_wrapper_t<T, strings, min, max>::has(T value)
+    bool continuous_wrapper_t<T, strings, min, max>::has(T value)
 {
-	return (value >= min) && (value <= max);
+    return (value >= min) && (value <= max);
 }
 
 
@@ -77,11 +77,11 @@ template <typename T, const std::string strings[], T min, T max>
  *         the enumeration.
  */
 template <typename T, const std::string strings[], T min, T max>
-	const std::string &
-	continuous_wrapper_t<T, strings, min, max>::to_string(T value)
+    const std::string &
+    continuous_wrapper_t<T, strings, min, max>::to_string(T value)
 {
     bakery_assert_message(has(value), "Invalid enumeration value.");
-	return strings[value - min];
+    return strings[value - min];
 }
 
 

@@ -66,20 +66,20 @@ template <typename T> struct serializer;
  */
 template <typename E> struct serializer< arithmetic_wrapping_t<E> >
 {
-	/**
-	 * Serialization operator.
-	 *
-	 * @param u Object to be serialized.
-	 * @param io Reference to the end-point serializer.
-	 *
-	 * Template parameters:
-	 * - U: reference or const reference to T.
-	 * - IO: Input or Output.
-	 */
-	template <typename U, typename IO> void operator()(U u, IO & io)
-	{
-		io.trivial(u);
-	}
+    /**
+     * Serialization operator.
+     *
+     * @param u Object to be serialized.
+     * @param io Reference to the end-point serializer.
+     *
+     * Template parameters:
+     * - U: reference or const reference to T.
+     * - IO: Input or Output.
+     */
+    template <typename U, typename IO> void operator()(U u, IO & io)
+    {
+        io.trivial(u);
+    }
 };
 
 
@@ -93,13 +93,13 @@ template <typename E> struct enum_wrapping_t {};
  */
 template <typename E> struct serializer< enum_wrapping_t<E> >
 {
-	/**
-	 * Serialization operator.
-	 *
-	 * @param u Object to be serialized.
-	 * @param io Reference to the end-point serializer.
-	 * @tparam IO Input or Output.
-	 */
+    /**
+     * Serialization operator.
+     *
+     * @param u Object to be serialized.
+     * @param io Reference to the end-point serializer.
+     * @tparam IO Input or Output.
+     */
     template <typename U, typename IO> void operator()(E & u, IO & io)
     {
         int x;
@@ -114,38 +114,38 @@ template <typename E> struct serializer< enum_wrapping_t<E> >
  */
 template <> struct serializer<std::string>
 {
-	/**
-	 * Serialization operator, for input.
-	 *
-	 * @param u Object to be serialized.
-	 * @param io Reference to the end-point serializer.
+    /**
+     * Serialization operator, for input.
+     *
+     * @param u Object to be serialized.
+     * @param io Reference to the end-point serializer.
      * @tparam U std::string &
      * @tparam IO input_t
-	 */
-	template <typename U, typename IO> void operator()(std::string & u, IO & io)
-	{
-		size_t size = 0;
-		io(size);
-		u.resize(size);
+     */
+    template <typename U, typename IO> void operator()(std::string & u, IO & io)
+    {
+        size_t size = 0;
+        io(size);
+        u.resize(size);
         for (size_t i = 0; i < size; ++i)
             io(u[i]);
-	}
+    }
 
-	/**
-	 * Serialialization operator, for output.
-	 *
-	 * @param u Object to be serialized.
+    /**
+     * Serialialization operator, for output.
+     *
+     * @param u Object to be serialized.
      * @param io Reference to the end-point serializer.
      * @tparam U const std::sttring<T> &
      * @tparam IO output_t.
-	 */
-	template <typename U, typename IO>
-		void operator()(const std::string & u, IO & io)
-	{
-		io(u.size());
+     */
+    template <typename U, typename IO>
+        void operator()(const std::string & u, IO & io)
+    {
+        io(u.size());
         for (char c: u)
             io(c);
-	}
+    }
 };
 
 
@@ -153,41 +153,41 @@ template <> struct serializer<std::string>
  * serializer for all std::vector<R>.
  */
 template <typename T>
-	struct serializer<std::vector<T> >
+    struct serializer<std::vector<T> >
 {
-	/**
-	 * Serialization operator, for input.
-	 *
-	 * @param u Object to be serialized.
-	 * @param io Reference to the end-point serializer.
+    /**
+     * Serialization operator, for input.
+     *
+     * @param u Object to be serialized.
+     * @param io Reference to the end-point serializer.
      * @tparam U std::vector<T> &
      * @tparam IO Input
-	 */
-	template <typename U, typename IO>
-		void operator()(std::vector<T> & u, IO & io)
-	{
-		size_t size = 0;
-		io(size);
-		u.clear();
-		u.resize(size);
-		std::for_each(u.begin(), u.end(), io);
-	}
+     */
+    template <typename U, typename IO>
+        void operator()(std::vector<T> & u, IO & io)
+    {
+        size_t size = 0;
+        io(size);
+        u.clear();
+        u.resize(size);
+        std::for_each(u.begin(), u.end(), io);
+    }
 
 
-	/**
-	 * Serialialization operator, for output.
-	 *
-	 * @param u Object to be serialized.
+    /**
+     * Serialialization operator, for output.
+     *
+     * @param u Object to be serialized.
      * @param io Reference to the end-point serializer.
      * @tparam U const std::vector<T> &
      * @tparam IO Output.
-	 */
-	template <typename U, typename IO>
-		void operator()(const std::vector<T> & u, IO & io)
-	{
-		io(u.size());
-		std::for_each(u.begin(), u.end(), io);
-	}
+     */
+    template <typename U, typename IO>
+        void operator()(const std::vector<T> & u, IO & io)
+    {
+        io(u.size());
+        std::for_each(u.begin(), u.end(), io);
+    }
 };
 
 
@@ -195,46 +195,46 @@ template <typename T>
  * serializer for all std::list<R>.
  */
 template <typename T>
-	struct serializer<std::list<T> >
+    struct serializer<std::list<T> >
 {
-	/**
-	 * Serialization operator, for input.
-	 *
-	 * @param u Object to be serialized.
-	 * @param io Reference to the end-point serializer.
-	 *
-	 * Template parameters:
-	 * - U: std::list<T> &.
-	 * - IO: Input.
-	 */
-	template <typename U, typename IO>
-		void operator()(std::list<T> & u, IO & io)
-	{
-		size_t size = 0;
-		io(size);
-		u.clear();
-		u.resize(size);
+    /**
+     * Serialization operator, for input.
+     *
+     * @param u Object to be serialized.
+     * @param io Reference to the end-point serializer.
+     *
+     * Template parameters:
+     * - U: std::list<T> &.
+     * - IO: Input.
+     */
+    template <typename U, typename IO>
+        void operator()(std::list<T> & u, IO & io)
+    {
+        size_t size = 0;
+        io(size);
+        u.clear();
+        u.resize(size);
         for (auto & item: u)
             io(item);
-	}
+    }
 
 
-	/**
-	 * Serialialization operator, for output.
-	 *
-	 * @param u Object to be serialized.
-	 * @param io Reference to the end-point serializer.
-	 *
-	 * Template parameters:
-	 * - U: const std::list<T> &.
-	 * - IO: Output.
-	 */
-	template <typename U, typename IO>
-		void operator()(const std::list<T> & u, IO & io)
-	{
-		io(u.size());
-		std::for_each(u.begin(), u.end(), io);
-	}
+    /**
+     * Serialialization operator, for output.
+     *
+     * @param u Object to be serialized.
+     * @param io Reference to the end-point serializer.
+     *
+     * Template parameters:
+     * - U: const std::list<T> &.
+     * - IO: Output.
+     */
+    template <typename U, typename IO>
+        void operator()(const std::list<T> & u, IO & io)
+    {
+        io(u.size());
+        std::for_each(u.begin(), u.end(), io);
+    }
 };
 
 
@@ -242,23 +242,23 @@ template <typename T>
  * serializer for all std::pair<A, B>.
  */
 template <typename A, typename B>
-	struct serializer<std::pair<A, B> >
+    struct serializer<std::pair<A, B> >
 {
-	/**
-	 * Serialization operator.
-	 *
-	 * @param u Object to be serialized.
-	 * @param io Reference to the end-point serializer.
-	 *
-	 * Template parameters:
-	 * - U: const std::pair<A, B> & or std::pair<A, B> &.
-	 * - IO: Input or Output.
-	 */
-	template <typename U, typename IO>
-		void operator()(U u, IO & io)
-	{
-		io(u.first)(u.second);
-	}
+    /**
+     * Serialization operator.
+     *
+     * @param u Object to be serialized.
+     * @param io Reference to the end-point serializer.
+     *
+     * Template parameters:
+     * - U: const std::pair<A, B> & or std::pair<A, B> &.
+     * - IO: Input or Output.
+     */
+    template <typename U, typename IO>
+        void operator()(U u, IO & io)
+    {
+        io(u.first)(u.second);
+    }
 };
 
 
@@ -287,22 +287,22 @@ template <typename T> struct tuple_item_serializer_t<T, 0>
  */
 template <typename ... T> struct serializer<std::tuple<T ...>>
 {
-	/**
-	 * Serialization operator, for input.
-	 *
-	 * @param u Object to be serialized.
-	 * @param io Reference to the end-point serializer.
+    /**
+     * Serialization operator, for input.
+     *
+     * @param u Object to be serialized.
+     * @param io Reference to the end-point serializer.
      * @tparam U std::tuple<T ...> &
      * @tparam IO input_t
-	 */
-	template <typename U, typename IO>
+     */
+    template <typename U, typename IO>
         void operator()(std::tuple<T ...> & u, IO & io)
-	{
+    {
         tuple_item_serializer_t<
             std::tuple<T ...>,
             std::tuple_size<std::tuple<T ...>>::value - 1> x;
         x.read_tuple(u, io);
-	}
+    }
 };
 
 
@@ -310,61 +310,61 @@ template <typename ... T> struct serializer<std::tuple<T ...>>
  * serializer for all std::map<K, V>.
  */
 template <typename K, typename V>
-	struct serializer<std::map<K, V> >
+    struct serializer<std::map<K, V> >
 {
-	/**
-	 * Serialization operator, for input.
-	 *
-	 * @param u Object to be serialized.
-	 * @param io Reference to the end-point serializer.
-	 *
-	 * Template parameters:
-	 * - U: std::map<K, T> &.
-	 * - IO: Input.
-	 */
-	template <typename U, typename IO>
-		void operator()(std::map<K, V> & u, IO & io)
-	{
-		size_t size = 0;
-		io(size);
-		for(size_t x=0; x<size; ++x)
-		{
-			// Retrieve the key and the value
-			std::pair<K, V> kv;
-			io(kv);
+    /**
+     * Serialization operator, for input.
+     *
+     * @param u Object to be serialized.
+     * @param io Reference to the end-point serializer.
+     *
+     * Template parameters:
+     * - U: std::map<K, T> &.
+     * - IO: Input.
+     */
+    template <typename U, typename IO>
+        void operator()(std::map<K, V> & u, IO & io)
+    {
+        size_t size = 0;
+        io(size);
+        for(size_t x=0; x<size; ++x)
+        {
+            // Retrieve the key and the value
+            std::pair<K, V> kv;
+            io(kv);
 
-			// Store the element in the map
-			u[kv.first] = kv.second;
-		}
+            // Store the element in the map
+            u[kv.first] = kv.second;
+        }
 
-		// Verify that there were no two identical keys in the binary stream.
-		// During insertion, if a key is already present, the value is simply
-		// overwritten. In case of duplicate keys, the final size of the map
-		// will not match the expected size.
-		bakery_assert_message(size == u.size(),
-			"Map deserialization error: stream contains (key, value) couples "
-			"with identical keys.");
-	}
+        // Verify that there were no two identical keys in the binary stream.
+        // During insertion, if a key is already present, the value is simply
+        // overwritten. In case of duplicate keys, the final size of the map
+        // will not match the expected size.
+        bakery_assert_message(size == u.size(),
+            "Map deserialization error: stream contains (key, value) couples "
+            "with identical keys.");
+    }
 
 
-	/**
-	 * Serialialization operator, for output.
-	 *
-	 * @param u Object to be serialized.
-	 * @param io Reference to the end-point serializer.
-	 *
-	 * Template parameters:
-	 * - U: const std::map<K, V> &
-	 * - IO: Output.
-	 */
-	template <typename U, typename IO>
-		void operator()(const std::map<K, V> & u, IO & io)
-	{
-		io(u.size());
-		// map iterators return std::pair<K, V>, we can directly use the
-		// serializer<std::pair<A, B> > upper.
-		std::for_each(u.begin(), u.end(), io);
-	}
+    /**
+     * Serialialization operator, for output.
+     *
+     * @param u Object to be serialized.
+     * @param io Reference to the end-point serializer.
+     *
+     * Template parameters:
+     * - U: const std::map<K, V> &
+     * - IO: Output.
+     */
+    template <typename U, typename IO>
+        void operator()(const std::map<K, V> & u, IO & io)
+    {
+        io(u.size());
+        // map iterators return std::pair<K, V>, we can directly use the
+        // serializer<std::pair<A, B> > upper.
+        std::for_each(u.begin(), u.end(), io);
+    }
 };
 
 
@@ -373,31 +373,31 @@ template <typename K, typename V>
  * @param IO Input/output object type.
  */
 template <typename U, typename IO>
-	struct boost_variant_mpl_sequence_visitor_in
+    struct boost_variant_mpl_sequence_visitor_in
 {
-	/**
-	 * Constructor.
-	 *
-	 * @param u_ Serialized object.
-	 * @param io_ Input/output object.
-	 */
-	boost_variant_mpl_sequence_visitor_in(U & u_, IO & io_):
-		u(u_),
-		io(io_)
-	{}
+    /**
+     * Constructor.
+     *
+     * @param u_ Serialized object.
+     * @param io_ Input/output object.
+     */
+    boost_variant_mpl_sequence_visitor_in(U & u_, IO & io_):
+        u(u_),
+        io(io_)
+    {}
 
-	/** Serialized object. */
-	U & u;
+    /** Serialized object. */
+    U & u;
 
-	/** Input/output object. */
-	IO & io;
+    /** Input/output object. */
+    IO & io;
 
-	template <typename T>
-		void visit()
-	{
-		u = T();
-		io( boost::get<T>(u) );
-	}
+    template <typename T>
+        void visit()
+    {
+        u = T();
+        io( boost::get<T>(u) );
+    }
 };
 
 
@@ -441,31 +441,31 @@ template <typename U, typename O> struct variant_visitor_out_t
  * T0 is a over_sequence<T> where T is a MPL sequence.
  */
 template <typename T>
-	struct serializer<
-		boost::variant<
-			boost::detail::variant::over_sequence<T>
-		>
-	>
+    struct serializer<
+        boost::variant<
+            boost::detail::variant::over_sequence<T>
+        >
+    >
 {
-	typedef typename boost::variant<
-		boost::detail::variant::over_sequence<T>
-	> variant_type;
+    typedef typename boost::variant<
+        boost::detail::variant::over_sequence<T>
+    > variant_type;
 
-	template <typename U, typename IO>
-		void operator()(
-			U & u,
-			IO & io
-		)
-	{
-		unsigned int which;
-		io(which);
+    template <typename U, typename IO>
+        void operator()(
+            U & u,
+            IO & io
+        )
+    {
+        unsigned int which;
+        io(which);
 
-		boost_variant_mpl_sequence_visitor_in<U, IO> v(u, io);
-		apply_mpl_sequence_visitor<
-			T,
-			boost_variant_mpl_sequence_visitor_in<U, IO>
-		>((int)which, v);
-	}
+        boost_variant_mpl_sequence_visitor_in<U, IO> v(u, io);
+        apply_mpl_sequence_visitor<
+            T,
+            boost_variant_mpl_sequence_visitor_in<U, IO>
+        >((int)which, v);
+    }
 };
 
 
@@ -473,28 +473,28 @@ template <typename T>
 template <typename ... T>
 struct serializer< boost::variant<T ...> >{
 
-	typedef typename boost::variant<T ...> VariantType;
+    typedef typename boost::variant<T ...> VariantType;
 
-	template <typename U, typename IO> 
-	void operator()(
-		VariantType & u, 
-		IO & io
-	){
-		unsigned int which;
-		io(which);
+    template <typename U, typename IO> 
+    void operator()(
+        VariantType & u, 
+        IO & io
+    ){
+        unsigned int which;
+        io(which);
 
-		/* Verify the type index. */
-		bakery_assert_message(
-			which < sizeof ... (T),
-			"Invalid variant type id."
-		);
+        /* Verify the type index. */
+        bakery_assert_message(
+            which < sizeof ... (T),
+            "Invalid variant type id."
+        );
 
-		boost_variant_mpl_sequence_visitor_in<U, IO> v(u, io);
-		apply_mpl_sequence_visitor<
-			typename boost::variant<T ...>::types,
-			boost_variant_mpl_sequence_visitor_in<U, IO>
-		>((int)which, v);
-	}
+        boost_variant_mpl_sequence_visitor_in<U, IO> v(u, io);
+        apply_mpl_sequence_visitor<
+            typename boost::variant<T ...>::types,
+            boost_variant_mpl_sequence_visitor_in<U, IO>
+        >((int)which, v);
+    }
 
     template <typename U, typename IO> void
         operator ()(const boost::variant<T ...> & u, IO & io)

@@ -33,35 +33,35 @@ namespace grammar {
  */
 template <typename I> void generic_init_def_namespace(rule_container<I> & rules)
 {
-	namespace qi = boost::spirit::qi;
-	using qi::_val;
-	using qi::_1;
-	using qi::_a;
+    namespace qi = boost::spirit::qi;
+    using qi::_val;
+    using qi::_1;
+    using qi::_a;
 
-	rules.def_namespace =
-		qi::string("namespace")
-		>>
-		rules.identifier[_a = _1]
-		>>
-		'{'
-		>>
-		-(
-			rules.def_composite_content
-			[
-				_val = _1,
-				boost::phoenix::bind(&rec::node::set_name, *_val, _a),
-				boost::phoenix::bind(&rec::node::set_kind, *_val,
-					rec::node::kind::namespace_)
-			]
-		)
-		>>
-		'}';
+    rules.def_namespace =
+        qi::string("namespace")
+        >>
+        rules.identifier[_a = _1]
+        >>
+        '{'
+        >>
+        -(
+            rules.def_composite_content
+            [
+                _val = _1,
+                boost::phoenix::bind(&rec::node::set_name, *_val, _a),
+                boost::phoenix::bind(&rec::node::set_kind, *_val,
+                    rec::node::kind::namespace_)
+            ]
+        )
+        >>
+        '}';
 }
 
 
 template <> void init_def_namespace<iterator>(rule_container<iterator> & rules)
 {
-	generic_init_def_namespace<iterator>(rules);
+    generic_init_def_namespace<iterator>(rules);
 }
 
 

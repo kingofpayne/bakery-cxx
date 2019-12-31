@@ -33,59 +33,59 @@ namespace grammar {
  * @param rules Reference over the rules container.
  */
 template <typename I>
-	void generic_init_def_composite_content(rule_container<I> & rules)
+    void generic_init_def_composite_content(rule_container<I> & rules)
 {
-	namespace qi = boost::spirit::qi;
-	using qi::_val;
-	using qi::_1;
-		
-	/* A composite is a list of member and type nodes. */
-	rules.def_composite_content =
-		qi::eps[ _val = create_def_node_sptr() ]
-		>>
-		-(
-			(	
-			 	rules.def_namespace
-				[
-					boost::phoenix::bind(&rec::node::add_child, *_val, _1)
-				]
-				|
-			 	rules.def_structure
-				[
-					boost::phoenix::bind(&rec::node::add_child, *_val, _1)
-				]
-				|
-			 	rules.def_variant
-				[
-					boost::phoenix::bind(&rec::node::add_child, *_val, _1)
-				]
-				|
-				rules.def_typedef
-				[
-					boost::phoenix::bind(&rec::node::add_child, *_val, _1)
-				]
-				|
-				rules.def_enum
-				[
-					boost::phoenix::bind(&rec::node::add_child, *_val, _1)
-				]
-				|
-			 	rules.def_member
-				[
-					boost::phoenix::bind(&rec::node::add_child, *_val, _1)
-				]
-			) % ';'
-			>>
-			-qi::char_(';')
-		)
-		;
+    namespace qi = boost::spirit::qi;
+    using qi::_val;
+    using qi::_1;
+        
+    /* A composite is a list of member and type nodes. */
+    rules.def_composite_content =
+        qi::eps[ _val = create_def_node_sptr() ]
+        >>
+        -(
+            (    
+                 rules.def_namespace
+                [
+                    boost::phoenix::bind(&rec::node::add_child, *_val, _1)
+                ]
+                |
+                 rules.def_structure
+                [
+                    boost::phoenix::bind(&rec::node::add_child, *_val, _1)
+                ]
+                |
+                 rules.def_variant
+                [
+                    boost::phoenix::bind(&rec::node::add_child, *_val, _1)
+                ]
+                |
+                rules.def_typedef
+                [
+                    boost::phoenix::bind(&rec::node::add_child, *_val, _1)
+                ]
+                |
+                rules.def_enum
+                [
+                    boost::phoenix::bind(&rec::node::add_child, *_val, _1)
+                ]
+                |
+                 rules.def_member
+                [
+                    boost::phoenix::bind(&rec::node::add_child, *_val, _1)
+                ]
+            ) % ';'
+            >>
+            -qi::char_(';')
+        )
+        ;
 }
 
 
 template <>
-	void init_def_composite_content<iterator>(rule_container<iterator> & rules)
+    void init_def_composite_content<iterator>(rule_container<iterator> & rules)
 {
-	generic_init_def_composite_content<iterator>(rules);
+    generic_init_def_composite_content<iterator>(rules);
 }
 
 

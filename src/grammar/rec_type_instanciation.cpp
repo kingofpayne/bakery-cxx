@@ -32,33 +32,33 @@ namespace grammar {
  * @param rules Reference over the rules container.
  */
 template <typename I>
-	void generic_init_def_type_instanciation(rule_container<I> & rules)
+    void generic_init_def_type_instanciation(rule_container<I> & rules)
 {
-	namespace qi = boost::spirit::qi;
-	using qi::_val;
-	using qi::_1;
+    namespace qi = boost::spirit::qi;
+    using qi::_val;
+    using qi::_1;
 
-	/* Examples:
-	 *
-	 * int
-	 * point<int>
-	 * list<point<double>>
-	 */
+    /* Examples:
+     *
+     * int
+     * point<int>
+     * list<point<double>>
+     */
     rules.def_type_instanciation =
-		rules.def_array
-		[
-			boost::phoenix::bind(
-				&rec::type_instanciation_t::set_type_node_sptr, _val, _1)
-		]
-		|
-		rules.def_type_instanciation_no_array[_val = _1];
+        rules.def_array
+        [
+            boost::phoenix::bind(
+                &rec::type_instanciation_t::set_type_node_sptr, _val, _1)
+        ]
+        |
+        rules.def_type_instanciation_no_array[_val = _1];
 }
 
 
 template <>
-	void init_def_type_instanciation<iterator>(rule_container<iterator> & rules)
+    void init_def_type_instanciation<iterator>(rule_container<iterator> & rules)
 {
-	generic_init_def_type_instanciation<iterator>(rules);
+    generic_init_def_type_instanciation<iterator>(rules);
 }
 
 

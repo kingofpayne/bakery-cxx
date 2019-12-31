@@ -47,16 +47,16 @@ class bakery_t
 {
     public:
         bakery_t();
-		void include(const std::string &);
+        void include(const std::string &);
         void include(const std::list<std::string> &);
         const std::list<std::string> & get_include_directories() const;
         void set_force_rebuild(bool);
         bool get_force_rebuild() const;
         input_t load(const std::string &);
-	
+    
     private:
-        /** List of directories which may contain recipe files. */	
-		std::list<std::string> include_directories;
+        /** List of directories which may contain recipe files. */    
+        std::list<std::string> include_directories;
         /** Switch to force recompilation. */
         bool force_rebuild;
 };

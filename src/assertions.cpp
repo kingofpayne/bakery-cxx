@@ -34,11 +34,11 @@ namespace bakery {
  * @param line Error line number.
  */
 void assertion_failed(const std::string & message, const char* filename,
-	int line)
+    int line)
 {
-	std::cout << "Assertion failed: " << message << " (in " << filename << ':'
-		<< line << ")" << std::endl;
-	std::abort();
+    std::cout << "Assertion failed: " << message << " (in " << filename << ':'
+        << line << ")" << std::endl;
+    std::abort();
 }
 
 

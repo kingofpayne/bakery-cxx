@@ -36,12 +36,12 @@ namespace rec {
  */
 struct typedef_data_t
 {
-	typedef_data_t();
-	typedef_data_t(const type_instanciation_t &);
-	std::string print() const;
+    typedef_data_t();
+    typedef_data_t(const type_instanciation_t &);
+    std::string print() const;
 
-	/** The type instanciation of the typedef. */
-	type_instanciation_t type_instanciation;
+    /** The type instanciation of the typedef. */
+    type_instanciation_t type_instanciation;
 };
 
 

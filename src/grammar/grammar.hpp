@@ -63,101 +63,101 @@ typedef custom_skipper<iterator> skipper;
  * @param <I> Grammar iterator type.
  */
 template <typename I>
-	struct rule_container
+    struct rule_container
 {
-	boost::spirit::qi::symbols<char, char> quoted_string_symbols;
+    boost::spirit::qi::symbols<char, char> quoted_string_symbols;
 
-	boost::spirit::qi::rule<I, std::string(), skipper>
-		identifier,
-		integer,
-		unsigned_integer,
-		quoted_string;
+    boost::spirit::qi::rule<I, std::string(), skipper>
+        identifier,
+        integer,
+        unsigned_integer,
+        quoted_string;
 
-	boost::spirit::qi::rule<I, dat::floating(), skipper> floating_number;
+    boost::spirit::qi::rule<I, dat::floating(), skipper> floating_number;
 
-	boost::spirit::qi::rule<I, rec::path(), skipper> path;
+    boost::spirit::qi::rule<I, rec::path(), skipper> path;
 
-	/** recipe or data. */
-	boost::spirit::qi::rule<I, recipe_or_data(), skipper>
-		recipe_or_data_;
+    /** recipe or data. */
+    boost::spirit::qi::rule<I, recipe_or_data(), skipper>
+        recipe_or_data_;
 
-	/** recipe. */
-	boost::spirit::qi::rule<I, rec::recipe(), skipper>
-		recipe_;
+    /** recipe. */
+    boost::spirit::qi::rule<I, rec::recipe(), skipper>
+        recipe_;
 
-	/** Array type definition. */
-	boost::spirit::qi::rule<I, boost::spirit::qi::locals<rec::array_data_t>,
-		rec::node::sptr(), skipper> def_array;
+    /** Array type definition. */
+    boost::spirit::qi::rule<I, boost::spirit::qi::locals<rec::array_data_t>,
+        rec::node::sptr(), skipper> def_array;
 
-	boost::spirit::qi::rule<I, rec::node::sptr(), skipper>
-		def_enum;
+    boost::spirit::qi::rule<I, rec::node::sptr(), skipper>
+        def_enum;
 
-	/** Template argument list. */
-	boost::spirit::qi::rule<I, boost::spirit::qi::locals<rec::node::sptr>,
-		std::list<rec::node::sptr>(), skipper>
-		def_template_argument_declaration;
+    /** Template argument list. */
+    boost::spirit::qi::rule<I, boost::spirit::qi::locals<rec::node::sptr>,
+        std::list<rec::node::sptr>(), skipper>
+        def_template_argument_declaration;
 
-	boost::spirit::qi::rule<I, boost::spirit::qi::locals<rec::member_data_t>,
-		rec::node::sptr(), skipper> def_member;
+    boost::spirit::qi::rule<I, boost::spirit::qi::locals<rec::member_data_t>,
+        rec::node::sptr(), skipper> def_member;
 
-	boost::spirit::qi::rule<I, rec::type_instanciation_t(), skipper>
-		/* type instanciation for recipes. Includes array definition. */
-		def_type_instanciation,
-		/** type instanciation for recipes. Does not include array
-		 * definitions. */
-		def_type_instanciation_no_array;
+    boost::spirit::qi::rule<I, rec::type_instanciation_t(), skipper>
+        /* type instanciation for recipes. Includes array definition. */
+        def_type_instanciation,
+        /** type instanciation for recipes. Does not include array
+         * definitions. */
+        def_type_instanciation_no_array;
 
-	boost::spirit::qi::rule<I, rec::node::sptr(), skipper>
-		def_typedef,
-		def_composite_content;
+    boost::spirit::qi::rule<I, rec::node::sptr(), skipper>
+        def_typedef,
+        def_composite_content;
 
-	/* Namespace definition. */
-	boost::spirit::qi::rule<I, boost::spirit::qi::locals<std::string>,
-		rec::node::sptr(), skipper> def_namespace;
+    /* Namespace definition. */
+    boost::spirit::qi::rule<I, boost::spirit::qi::locals<std::string>,
+        rec::node::sptr(), skipper> def_namespace;
 
-	/* Structure definition. */
-	boost::spirit::qi::rule
-	<
-		I,
-		boost::spirit::qi::locals
-		<
-			std::string,
-			std::list<rec::node::sptr>,
-			rec::structure_data_t
-		>,
-		rec::node::sptr(),
-		skipper
-	> def_structure;
+    /* Structure definition. */
+    boost::spirit::qi::rule
+    <
+        I,
+        boost::spirit::qi::locals
+        <
+            std::string,
+            std::list<rec::node::sptr>,
+            rec::structure_data_t
+        >,
+        rec::node::sptr(),
+        skipper
+    > def_structure;
 
-	/* Variant definition. */
-	boost::spirit::qi::rule<I, boost::spirit::qi::locals<std::string,
-		std::list<rec::node::sptr> >, rec::node::sptr(), skipper>
-		def_variant;
+    /* Variant definition. */
+    boost::spirit::qi::rule<I, boost::spirit::qi::locals<std::string,
+        std::list<rec::node::sptr> >, rec::node::sptr(), skipper>
+        def_variant;
 
-	/* data rule. */
-	boost::spirit::qi::rule<I, dat::data(), skipper> data;
+    /* data rule. */
+    boost::spirit::qi::rule<I, dat::data(), skipper> data;
 
-	boost::spirit::qi::rule<I, dat::node::sptr(), skipper>
-		dat_bool_value,
-		dat_floating_value,
-		dat_identifier_value,
-		dat_string_value,
-		dat_structure_content,
-		dat_assignment,
-		dat_value,
-		dat_variant_value,
-		dat_list,
-		dat_map,
-		dat_map_assignment,
-		dat_structure;
+    boost::spirit::qi::rule<I, dat::node::sptr(), skipper>
+        dat_bool_value,
+        dat_floating_value,
+        dat_identifier_value,
+        dat_string_value,
+        dat_structure_content,
+        dat_assignment,
+        dat_value,
+        dat_variant_value,
+        dat_list,
+        dat_map,
+        dat_map_assignment,
+        dat_structure;
 
-	boost::spirit::qi::rule<I, boost::spirit::qi::locals<enum_value_data_t>,
-		rec::node::sptr(), skipper> def_enum_value;
+    boost::spirit::qi::rule<I, boost::spirit::qi::locals<enum_value_data_t>,
+        rec::node::sptr(), skipper> def_enum_value;
 
-	/** recipe indication. */
-	boost::spirit::qi::rule<I, boost::spirit::qi::locals<std::string>,
-		file_indication_t(), skipper>
-		recipe_indication;
+    /** recipe indication. */
+    boost::spirit::qi::rule<I, boost::spirit::qi::locals<std::string>,
+        file_indication_t(), skipper>
+        recipe_indication;
 
     boost::spirit::qi::rule<I, recipe_indication_t(), skipper>
         recipe_indication_new;
@@ -194,9 +194,9 @@ template <typename I> void init_def_namespace(rule_container<I> &);
 template <typename I> void init_def_structure(rule_container<I> &);
 template <typename I> void init_def_composite_content(rule_container<I> &);
 template <typename I>
-	void init_def_type_instanciation_no_array(rule_container<I> &);
+    void init_def_type_instanciation_no_array(rule_container<I> &);
 template <typename I>
-	void init_def_template_argument_declaration(rule_container<I> &);
+    void init_def_template_argument_declaration(rule_container<I> &);
 template <typename I> void init_data(rule_container<I> &);
 template <typename I> void init_dat_bool_value(rule_container<I> &);
 template <typename I> void init_dat_floating_value(rule_container<I> &);

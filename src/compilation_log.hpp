@@ -35,22 +35,22 @@ namespace bakery {
  */
 class compilation_log_t
 {
-	public:
-		compilation_log_t();
+    public:
+        compilation_log_t();
 
-		size_t get_error_count() const;
-		std::string print() const;
-		void add_message(const compilation_message_t &);
-		void add_message(compilation_message_type_t, const std::string &);
-		void add_error(const std::string &);
-		void add_warning(const std::string &);
+        size_t get_error_count() const;
+        std::string print() const;
+        void add_message(const compilation_message_t &);
+        void add_message(compilation_message_type_t, const std::string &);
+        void add_error(const std::string &);
+        void add_warning(const std::string &);
 
-	private:
-		/** List of the messages. */
-		std::list<compilation_message_t> messages;
-		/** Boolean indicating the error count. This member is calculated when
-		 * adding the messages to the status. */
-		size_t error_count;
+    private:
+        /** List of the messages. */
+        std::list<compilation_message_t> messages;
+        /** Boolean indicating the error count. This member is calculated when
+         * adding the messages to the status. */
+        size_t error_count;
 };
 
 

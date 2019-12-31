@@ -36,15 +36,15 @@ namespace rec {
  */
 struct member_data_t
 {
-	member_data_t();
-	std::string print() const;
-	bool has_default_value() const;
-		
-	/** The type instanciation of the member. */
-	type_instanciation_t type_instanciation;
-	/** Shared pointer to a default value node. If this pointer is null, no
-	 * default value is specified. */
-	dat::node::sptr default_value_node;
+    member_data_t();
+    std::string print() const;
+    bool has_default_value() const;
+        
+    /** The type instanciation of the member. */
+    type_instanciation_t type_instanciation;
+    /** Shared pointer to a default value node. If this pointer is null, no
+     * default value is specified. */
+    dat::node::sptr default_value_node;
 };
 
 

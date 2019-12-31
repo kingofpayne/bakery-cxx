@@ -34,21 +34,21 @@ namespace bakery {
  */
 class enum_value_data_t
 {
-	public:
-		enum_value_data_t();
-		const std::string & get_value_str() const;
-		bool get_fixed_value_flag() const;
-		void set_fixed_value(const std::string &);
+    public:
+        enum_value_data_t();
+        const std::string & get_value_str() const;
+        bool get_fixed_value_flag() const;
+        void set_fixed_value(const std::string &);
 
-		/** Value of the enumeration member. */
-		int value;
-				
-	private:
-		/** Flag indicating if a fixed value has been specified. */
-		bool fixed_value_flag;
-		/** The string value given in the recipe file. During compilation,
-		 * this is converted as an int (if fits) and stored in value. */
-		std::string value_str;
+        /** Value of the enumeration member. */
+        int value;
+                
+    private:
+        /** Flag indicating if a fixed value has been specified. */
+        bool fixed_value_flag;
+        /** The string value given in the recipe file. During compilation,
+         * this is converted as an int (if fits) and stored in value. */
+        std::string value_str;
 };
 
 

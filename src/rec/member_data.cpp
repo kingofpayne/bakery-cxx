@@ -30,8 +30,8 @@ namespace rec {
  * Default constructor.
  */
 member_data_t::member_data_t():
-	type_instanciation(),
-	default_value_node()
+    type_instanciation(),
+    default_value_node()
 {}
 
 
@@ -40,7 +40,7 @@ member_data_t::member_data_t():
  */
 std::string member_data_t::print() const
 {
-	return type_instanciation.print();
+    return type_instanciation.print();
 }
 
 
@@ -49,7 +49,7 @@ std::string member_data_t::print() const
  */
 bool member_data_t::has_default_value() const
 {
-	return default_value_node.get() != 0;
+    return default_value_node.get() != 0;
 }
 
 

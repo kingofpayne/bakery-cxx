@@ -38,19 +38,19 @@ namespace rec {
  */
 class recipe
 {
-	public:
-		std::string print() const;
-		node::sptr get_node() const;
-		const std::list<file_indication_t> & get_included_files() const;
-		void set_node(node::sptr);
-		bool compile(compilation_log_t &);
-		void add_include_file(const file_indication_t &);
+    public:
+        std::string print() const;
+        node::sptr get_node() const;
+        const std::list<file_indication_t> & get_included_files() const;
+        void set_node(node::sptr);
+        bool compile(compilation_log_t &);
+        void add_include_file(const file_indication_t &);
 
-	private:
-		/** Root node of the recipe. */
-		node::sptr the_node;
-		/** Included files. */
-		std::list<file_indication_t> included_files;
+    private:
+        /** Root node of the recipe. */
+        node::sptr the_node;
+        /** Included files. */
+        std::list<file_indication_t> included_files;
 };
 
 

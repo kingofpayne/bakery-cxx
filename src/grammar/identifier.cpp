@@ -34,25 +34,25 @@ namespace grammar {
  */
 template <typename I> void generic_init_identifier(rule_container<I> & rules)
 {
-	namespace qi = boost::spirit::qi;
-	using qi::_val;
-	using qi::_1;
-	using qi::char_;
+    namespace qi = boost::spirit::qi;
+    using qi::_val;
+    using qi::_1;
+    using qi::char_;
 
-	rules.identifier = qi::lexeme
-	[
-		( qi::alpha | char_('_') )
-			[ _val += _1 ]
-		>>
-		*( qi::alnum | char_('_') )
-			[ _val += _1 ]
-	];
+    rules.identifier = qi::lexeme
+    [
+        ( qi::alpha | char_('_') )
+            [ _val += _1 ]
+        >>
+        *( qi::alnum | char_('_') )
+            [ _val += _1 ]
+    ];
 }
 
 
 template <> void init_identifier<iterator>(rule_container<iterator> & rules)
 {
-	generic_init_identifier<iterator>(rules);
+    generic_init_identifier<iterator>(rules);
 }
 
 
