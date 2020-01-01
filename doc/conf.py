@@ -14,6 +14,9 @@
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 
+# Doxygen XML generation
+import subprocess
+subprocess.call('doxygen', shell=True)
 
 # -- Project information -----------------------------------------------------
 
@@ -31,6 +34,9 @@ release = '0.1'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    'sphinx.ext.imgmath',
+    'sphinx.ext.todo',
+    'breathe'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -61,3 +67,6 @@ html_css_files = ['custom_theme.css']
 
 # Added for readthedocs.org
 master_doc = 'index'
+
+breathe_projects = {'bakery': './doxygen/xml/'}
+breathe_default_project = 'bakery'

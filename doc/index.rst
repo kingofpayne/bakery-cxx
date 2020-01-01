@@ -12,7 +12,7 @@ Welcome to bakery's documentation!
 
    Getting started <getting_started.rst>
    Types <types.rst>
-
+   API <api.rst>
 
 Indices and tables
 ==================
