@@ -127,5 +127,15 @@ void compilation_log_t::add_warning(const std::string & text)
 }
 
 
+/**
+ * @return List of compilation messages.
+ */
+const std::list<compilation_message_t> &
+    compilation_log_t::get_messages() const
+{
+    return messages;
+}
+
+
 } /* namespace bakery */
 

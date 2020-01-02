@@ -29,7 +29,8 @@ namespace bakery {
 /**
  * Default constructor.
  */
-compilation_message_t::compilation_message_t()
+compilation_message_t::compilation_message_t():
+    type(compilation_message_type_t::info)
 {}
 
 
@@ -67,6 +68,26 @@ std::string compilation_message_t::to_string() const
             bakery_unexpected_case();
     }
     return h + ": " + text;
+}
+
+
+/**
+ * @return true if this has the same text and message type as other.
+ */
+bool compilation_message_t::operator == (const compilation_message_t & other)
+    const
+{
+    return (this->type == other.type) && (this->text == other.text);
+}
+
+
+/**
+ * @return true if this has a different text or message type as other.
+ */
+bool compilation_message_t::operator != (const compilation_message_t & other)
+    const
+{
+    return !(*this == other);
 }
 
 

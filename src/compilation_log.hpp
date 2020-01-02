@@ -44,6 +44,7 @@ class compilation_log_t
         void add_message(compilation_message_type_t, const std::string &);
         void add_error(const std::string &);
         void add_warning(const std::string &);
+        const std::list<compilation_message_t> & get_messages() const;
 
     private:
         /** List of the messages. */

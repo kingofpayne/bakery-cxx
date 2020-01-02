@@ -34,6 +34,7 @@ namespace bakery {
  */
 enum class compilation_message_type_t
 {
+    info,
     warning,
     error
 };
@@ -43,17 +44,19 @@ enum class compilation_message_type_t
  * Holds a message resulting from a compilation (error message, warning
  * message...).
  */
-struct compilation_message_t
+class compilation_message_t
 {
-    compilation_message_t();
-    compilation_message_t(compilation_message_type_t, const std::string &);
+    public:
+        compilation_message_t();
+        compilation_message_t(compilation_message_type_t, const std::string &);
+        std::string to_string() const;
+        bool operator == (const compilation_message_t &) const;
+        bool operator != (const compilation_message_t &) const;
 
-    std::string to_string() const;
-
-    /** Type of the message. */
-    compilation_message_type_t type;
-    /** Message. */
-    std::string text;
+        /** Type of the message. */
+        compilation_message_type_t type;
+        /** Message. */
+        std::string text;
 };
 
 
