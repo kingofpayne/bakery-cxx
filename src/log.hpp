@@ -23,7 +23,7 @@
 #define _BAKERY_LOG_HPP_
 
 
-#include "compilation_message.hpp"
+#include "log_message.hpp"
 #include <list>
 
 
@@ -40,15 +40,15 @@ class log_t
 
         size_t get_error_count() const;
         std::string print() const;
-        void add_message(const compilation_message_t &);
-        void add_message(compilation_message_type_t, const std::string &);
+        void add_message(const log_message_t &);
+        void add_message(log_message_type_t, const std::string &);
         void add_error(const std::string &);
         void add_warning(const std::string &);
-        const std::list<compilation_message_t> & get_messages() const;
+        const std::list<log_message_t> & get_messages() const;
 
     private:
         /** List of the messages. */
-        std::list<compilation_message_t> messages;
+        std::list<log_message_t> messages;
         /** Boolean indicating the error count. This member is calculated when
          * adding the messages to the status. */
         size_t error_count;

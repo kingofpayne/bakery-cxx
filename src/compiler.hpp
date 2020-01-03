@@ -172,7 +172,7 @@ template <typename T> static bool read_native_type(
     if (size > state.size)
     {
         state.log.add_message(
-            compilation_message_type_t::error,
+            log_message_type_t::error,
             "end of file reached, not enough bytes available.");
 
         return false;

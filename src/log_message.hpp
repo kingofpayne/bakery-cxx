@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2010, 2011, 2012, 2013
+ * Copyright (C) 2010-2020
  * Olivier Hériveaux.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,8 +19,8 @@
  */
 
 
-#ifndef _BAKERY_COMPILATION_MESSAGE_HPP_
-#define _BAKERY_COMPILATION_MESSAGE_HPP_
+#ifndef _BAKERY_LOG_MESSAGE_HPP_
+#define _BAKERY_LOG_MESSAGE_HPP_
 
 
 #include <string>
@@ -32,7 +32,7 @@ namespace bakery {
 /**
  * Compilation message types.
  */
-enum class compilation_message_type_t
+enum class log_message_type_t
 {
     info,
     warning,
@@ -44,17 +44,17 @@ enum class compilation_message_type_t
  * Holds a message resulting from a compilation (error message, warning
  * message...).
  */
-class compilation_message_t
+class log_message_t
 {
     public:
-        compilation_message_t();
-        compilation_message_t(compilation_message_type_t, const std::string &);
+        log_message_t();
+        log_message_t(log_message_type_t, const std::string &);
         std::string to_string() const;
-        bool operator == (const compilation_message_t &) const;
-        bool operator != (const compilation_message_t &) const;
+        bool operator == (const log_message_t &) const;
+        bool operator != (const log_message_t &) const;
 
         /** Type of the message. */
-        compilation_message_type_t type;
+        log_message_type_t type;
         /** Message. */
         std::string text;
 };

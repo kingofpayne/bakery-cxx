@@ -29,8 +29,7 @@ TEST_CASE("compilation_log_t")
     {
         bakery::log_t log;
         REQUIRE( log.get_error_count() == 0 );
-        REQUIRE( log.get_messages() ==
-            std::list<bakery::compilation_message_t>() );
+        REQUIRE( log.get_messages() == std::list<bakery::log_message_t>() );
         REQUIRE( log.print() == "" );
     }
 

@@ -67,7 +67,7 @@ std::string log_t::print() const
             ),
             var(r)
                 += boost::lambda::bind(
-                    &compilation_message_t::to_string,
+                    &log_message_t::to_string,
                     boost::lambda::_1
                 )
         )
@@ -82,11 +82,11 @@ std::string log_t::print() const
  *
  * @param message The message.
  */
-void log_t::add_message(const compilation_message_t & message)
+void log_t::add_message(const log_message_t & message)
 {
     messages.push_back(message);
 
-    if (message.type == compilation_message_type_t::error)
+    if (message.type == log_message_type_t::error)
         error_count++;
 }
 
@@ -98,10 +98,10 @@ void log_t::add_message(const compilation_message_t & message)
  * @param text Text of the message.
  */
 void log_t::add_message(
-    compilation_message_type_t type,
+    log_message_type_t type,
     const std::string & text)
 {
-    add_message(compilation_message_t(type, text));
+    add_message(log_message_t(type, text));
 }
 
 
@@ -112,7 +112,7 @@ void log_t::add_message(
  */
 void log_t::add_error(const std::string & text)
 {
-    add_message(compilation_message_type_t::error, text);
+    add_message(log_message_type_t::error, text);
 }
 
 
@@ -123,14 +123,14 @@ void log_t::add_error(const std::string & text)
  */
 void log_t::add_warning(const std::string & text)
 {
-    add_message(compilation_message_type_t::warning, text);
+    add_message(log_message_type_t::warning, text);
 }
 
 
 /**
  * @return List of compilation messages.
  */
-const std::list<compilation_message_t> &
+const std::list<log_message_t> &
     log_t::get_messages() const
 {
     return messages;

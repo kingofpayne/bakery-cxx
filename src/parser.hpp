@@ -26,7 +26,7 @@
 #include "grammar/main.hpp"
 #include <boost/filesystem.hpp>
 #include "log.hpp"
-#include "compilation_message.hpp"
+#include "log_message.hpp"
 
 
 namespace bakery {

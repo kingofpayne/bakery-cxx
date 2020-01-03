@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2010, 2011, 2012, 2013
+ * Copyright (C) 2010-2020
  * Olivier Hériveaux.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
  */
 
 
-#include "compilation_message.hpp"
+#include "log_message.hpp"
 #include "assertions.hpp"
 
 
@@ -29,8 +29,8 @@ namespace bakery {
 /**
  * Default constructor.
  */
-compilation_message_t::compilation_message_t():
-    type(compilation_message_type_t::info)
+log_message_t::log_message_t():
+    type(log_message_type_t::info)
 {}
 
 
@@ -40,7 +40,7 @@ compilation_message_t::compilation_message_t():
  * @param type_ Type of the message.
  * @param text_ Text of the message.
  */
-compilation_message_t::compilation_message_t(compilation_message_type_t type_,
+log_message_t::log_message_t(log_message_type_t type_,
     const std::string & text_)
 :
     type(type_),
@@ -51,16 +51,16 @@ compilation_message_t::compilation_message_t(compilation_message_type_t type_,
 /**
  * @return A string representing the message.
  */
-std::string compilation_message_t::to_string() const
+std::string log_message_t::to_string() const
 {
     std::string h;
     switch (type)
     {
-        case compilation_message_type_t::error:
+        case log_message_type_t::error:
             h = "Error";
             break;
 
-        case compilation_message_type_t::warning:
+        case log_message_type_t::warning:
             h = "Warning";
             break;
 
@@ -74,7 +74,7 @@ std::string compilation_message_t::to_string() const
 /**
  * @return true if this has the same text and message type as other.
  */
-bool compilation_message_t::operator == (const compilation_message_t & other)
+bool log_message_t::operator == (const log_message_t & other)
     const
 {
     return (this->type == other.type) && (this->text == other.text);
@@ -84,7 +84,7 @@ bool compilation_message_t::operator == (const compilation_message_t & other)
 /**
  * @return true if this has a different text or message type as other.
  */
-bool compilation_message_t::operator != (const compilation_message_t & other)
+bool log_message_t::operator != (const log_message_t & other)
     const
 {
     return !(*this == other);
