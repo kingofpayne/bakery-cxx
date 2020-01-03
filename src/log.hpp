@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2010, 2011, 2012, 2013, 2014
+ * Copyright (C) 2010-2020
  * Olivier Hériveaux.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,8 +19,8 @@
  */
 
 
-#ifndef _BAKERY_COMPILATION_LOG_HPP_
-#define _BAKERY_COMPILATION_LOG_HPP_
+#ifndef _BAKERY_LOG_HPP_
+#define _BAKERY_LOG_HPP_
 
 
 #include "compilation_message.hpp"
@@ -33,10 +33,10 @@ namespace bakery {
 /**
  * Log filled during the compilation or decompilation process.
  */
-class compilation_log_t
+class log_t
 {
     public:
-        compilation_log_t();
+        log_t();
 
         size_t get_error_count() const;
         std::string print() const;

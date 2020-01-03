@@ -23,7 +23,7 @@
 #define _BAKERY_BAKERY_HPP_
 
 
-#include "compilation_log.hpp"
+#include "log.hpp"
 #include "compiler.hpp"
 #include "error_code.hpp"
 #include "input.hpp"

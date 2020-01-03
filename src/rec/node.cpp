@@ -535,7 +535,7 @@ void node::merge_types(const sptr & b)
  *
  * @return False if a compilation error occurs.
  */
-bool node::compile(compilation_log_t & compil_status)
+bool node::compile(log_t & compil_status)
 {
     // There may be multiple namespace node having the same name (so they
     // represent the same namespace). The merge_namespaces must have been called
@@ -705,7 +705,7 @@ void node::merge_namespaces()
  *
  * @return True if there are no collisions.
  */
-bool node::check_children_names(compilation_log_t & compil_status) const
+bool node::check_children_names(log_t & compil_status) const
 {
     bool result = true;
 
@@ -953,7 +953,7 @@ node::sptr node::solve_type(const path & a_path) const
  *
  * this->kind == kind::structure
  */
-bool node::compile_as_structure(compilation_log_t & compil_status)
+bool node::compile_as_structure(log_t & compil_status)
 {
     for (type_instanciation_t & ti :
         boost::get<structure_data_t>(data).heritance_list)
@@ -1021,7 +1021,7 @@ bool node::compile_as_structure(compilation_log_t & compil_status)
  *
  * this->kind == kind::array
  */
-bool node::compile_as_array(compilation_log_t & compil_status)
+bool node::compile_as_array(log_t & compil_status)
 {
     array_data_t & ad = boost::get<array_data_t>(data);
 
@@ -1048,7 +1048,7 @@ bool node::compile_as_array(compilation_log_t & compil_status)
  *
  * this->kind == kind::typedef
  */
-bool node::compile_as_typedef(compilation_log_t & compil_status)
+bool node::compile_as_typedef(log_t & compil_status)
 {
     if(!compile_type_instanciation(
         boost::get<typedef_data_t>(data).type_instanciation,
@@ -1076,7 +1076,7 @@ bool node::compile_as_typedef(compilation_log_t & compil_status)
  *
  * this->kind == kind::member
  */
-bool node::compile_as_member(compilation_log_t & compil_status)
+bool node::compile_as_member(log_t & compil_status)
 {
     if (!compile_type_instanciation(boost::get<member_data_t>(data)
         .type_instanciation, compil_status, this))
@@ -1103,7 +1103,7 @@ bool node::compile_as_member(compilation_log_t & compil_status)
  *
  * this->kind == kind::enum_
  */
-bool node::compile_as_enum(compilation_log_t & compil_status)
+bool node::compile_as_enum(log_t & compil_status)
 {
     const sptr_list::iterator it_end = children.end();
 
@@ -1220,7 +1220,7 @@ bool node::compile_as_enum(compilation_log_t & compil_status)
  *
  * this->kind == kind::enum_value
  */
-bool node::compile_as_enum_value(compilation_log_t & compil_status)
+bool node::compile_as_enum_value(log_t & compil_status)
 {
     enum_value_data_t & evd = get_enum_value_data();
     if(evd.get_fixed_value_flag())
@@ -1254,12 +1254,8 @@ bool node::compile_as_enum_value(compilation_log_t & compil_status)
  *
  * @return False is an error occurs during compilation.
  */
-bool node::compile_type_instanciation(
-    type_instanciation_t & ti,
-    compilation_log_t & compil_status,
-    node* scope_node
-)
-const
+bool node::compile_type_instanciation(type_instanciation_t & ti, log_t & compil_status,
+    node* scope_node) const
 {
     // First step: solve the path to the base type.
     if(ti.get_type_ptr() == 0)

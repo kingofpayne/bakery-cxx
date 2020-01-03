@@ -38,10 +38,8 @@ namespace bakery {
  *        the result will be stored.
  * @param log Where the error messages will be stored.
  */
-void parser::load_from_file(
-    const std::string & path,
-    recipe_or_data & recipe_or_data,
-    compilation_log_t & log)
+void parser::load_from_file(const std::string & path,
+    recipe_or_data & recipe_or_data, log_t & log)
 {
     /* Load the file */
     std::string content;

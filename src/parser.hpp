@@ -25,7 +25,7 @@
 
 #include "grammar/main.hpp"
 #include <boost/filesystem.hpp>
-#include "compilation_log.hpp"
+#include "log.hpp"
 #include "compilation_message.hpp"
 
 
@@ -39,7 +39,7 @@ class parser
 {
     public:
         static void load_from_file(const std::string &, recipe_or_data &,
-            compilation_log_t &);
+            log_t &);
 };
 
 

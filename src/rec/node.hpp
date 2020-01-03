@@ -33,7 +33,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/variant.hpp>
 #include "../continuous_wrapper.hpp"
-#include "../compilation_log.hpp"
+#include "../log.hpp"
 #include <string>
 #include <vector>
 
@@ -149,10 +149,10 @@ class node
         void add_qualifier(qualifier::value);
         void merge(const sptr &);
         void merge_types(const sptr &);
-        bool compile(compilation_log_t &);
+        bool compile(log_t &);
         void merge_namespaces();
-        bool compile_type_instanciation(type_instanciation_t &,
-            compilation_log_t &, node*) const;
+        bool compile_type_instanciation(type_instanciation_t &, log_t &, node*)
+            const;
 
     private:
         /** kind of the node. */
@@ -179,15 +179,15 @@ class node
         std::list<qualifier::value> qualifiers;
 
         void init_data();
-        bool check_children_names(compilation_log_t &) const;
+        bool check_children_names(log_t &) const;
         sptr solve_type_down(const path &) const;
         sptr solve_type(const path &) const;
-        bool compile_as_structure(compilation_log_t &);
-        bool compile_as_array(compilation_log_t &);
-        bool compile_as_typedef(compilation_log_t &);
-        bool compile_as_member(compilation_log_t &);
-        bool compile_as_enum(compilation_log_t &);
-        bool compile_as_enum_value(compilation_log_t &);
+        bool compile_as_structure(log_t &);
+        bool compile_as_array(log_t &);
+        bool compile_as_typedef(log_t &);
+        bool compile_as_member(log_t &);
+        bool compile_as_enum(log_t &);
+        bool compile_as_enum_value(log_t &);
 };
 
 

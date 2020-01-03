@@ -106,7 +106,7 @@ input_t bakery_t::load(const std::string & path)
     bin_path.replace_extension(".bin");
 
     /* Will get all compilation errors */
-    compilation_log_t log;
+    log_t log;
 
     /* Check dates */
     bool recompile = (!boost::filesystem::exists(bin_path)) || force_rebuild;

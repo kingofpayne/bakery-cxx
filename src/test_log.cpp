@@ -20,14 +20,14 @@
 
 
 #include <catch2/catch.hpp>
-#include "compilation_log.hpp"
+#include "log.hpp"
 
 
 TEST_CASE("compilation_log_t")
 {
     SECTION("constructor")
     {
-        bakery::compilation_log_t log;
+        bakery::log_t log;
         REQUIRE( log.get_error_count() == 0 );
         REQUIRE( log.get_messages() ==
             std::list<bakery::compilation_message_t>() );
@@ -36,7 +36,7 @@ TEST_CASE("compilation_log_t")
 
     SECTION("add messages")
     {
-        bakery::compilation_log_t log;
+        bakery::log_t log;
         log.add_error("abcd");
         REQUIRE( log.get_error_count() == 1 );
         log.add_warning("defg");

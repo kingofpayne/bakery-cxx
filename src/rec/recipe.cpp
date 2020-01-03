@@ -71,7 +71,7 @@ void recipe::set_node(node::sptr value)
  *
  * @return False if an error occurs during compilation.
  */
-bool recipe::compile(compilation_log_t & compil_status)
+bool recipe::compile(log_t & compil_status)
 {
     /* Similar namespaces must be merge before compiling. */
     the_node->merge_namespaces();

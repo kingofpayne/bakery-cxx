@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2010, 2011, 2012, 2013, 2014
+ * Copyright (C) 2010-2020
  * Olivier Hériveaux.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
  */
 
 
-#include "compilation_log.hpp"
+#include "log.hpp"
 #include <algorithm>
 #include <boost/lambda/lambda.hpp>
 #include <boost/lambda/if.hpp>
@@ -32,7 +32,7 @@ namespace bakery {
 /**
  * Constructor
  */
-compilation_log_t::compilation_log_t():
+log_t::log_t():
     error_count(0)
 {}
 
@@ -40,7 +40,7 @@ compilation_log_t::compilation_log_t():
 /**
  * @return Count of error messages.
  */
-size_t compilation_log_t::get_error_count() const
+size_t log_t::get_error_count() const
 {
     return error_count;
 }
@@ -49,7 +49,7 @@ size_t compilation_log_t::get_error_count() const
 /**
  * @return A string representing the status. It contains all messages.
  */
-std::string compilation_log_t::print() const
+std::string log_t::print() const
 {
     std::string r;
     bool add_nl = false;
@@ -82,7 +82,7 @@ std::string compilation_log_t::print() const
  *
  * @param message The message.
  */
-void compilation_log_t::add_message(const compilation_message_t & message)
+void log_t::add_message(const compilation_message_t & message)
 {
     messages.push_back(message);
 
@@ -97,7 +97,7 @@ void compilation_log_t::add_message(const compilation_message_t & message)
  * @param type type of message.
  * @param text Text of the message.
  */
-void compilation_log_t::add_message(
+void log_t::add_message(
     compilation_message_type_t type,
     const std::string & text)
 {
@@ -110,7 +110,7 @@ void compilation_log_t::add_message(
  *
  * @param text Text of the message.
  */
-void compilation_log_t::add_error(const std::string & text)
+void log_t::add_error(const std::string & text)
 {
     add_message(compilation_message_type_t::error, text);
 }
@@ -121,7 +121,7 @@ void compilation_log_t::add_error(const std::string & text)
  *
  * @param text Text of the message.
  */
-void compilation_log_t::add_warning(const std::string & text)
+void log_t::add_warning(const std::string & text)
 {
     add_message(compilation_message_type_t::warning, text);
 }
@@ -131,7 +131,7 @@ void compilation_log_t::add_warning(const std::string & text)
  * @return List of compilation messages.
  */
 const std::list<compilation_message_t> &
-    compilation_log_t::get_messages() const
+    log_t::get_messages() const
 {
     return messages;
 }

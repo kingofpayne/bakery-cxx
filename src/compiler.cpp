@@ -58,7 +58,7 @@ void compile(
     const std::string & dat_path,
     const std::string & bin_path,
     const std::list<std::string> & include_directories,
-    compilation_log_t & log)
+    log_t & log)
 {
     /* Make dat_path and bin_path absolute. */
     boost::filesystem::path abs_dat_path = make_absolute(dat_path);
@@ -117,7 +117,7 @@ void decompile(
     const std::string & def_path,
     const std::string & dat_path,
     const std::list<std::string> & include_directories,
-    compilation_log_t & log)
+    log_t & log)
 {
     bool scan_inc_dirs = (def_path.size() >= 2) && (def_path[0] == '<') &&
         (def_path[def_path.size()-1] == '>');
@@ -1727,14 +1727,14 @@ bool read_structure(decompilation_state_t & state,
              * next bytes in the input binary stream are equal to the default
              * value of the member. */
 
-            compilation_log_t default_value_compilation_log;
+            log_t default_value_log;
 
             std::stringstream default_value_stream(std::ios::in | std::ios::out
                 | std::ios::binary);
 
             compilation_state_t default_value_compilation_state = {
                 default_value_stream,state.tti_stack,
-                default_value_compilation_log };
+                default_value_log };
 
             if (!write_node(default_value_compilation_state,
                 member_data.type_instanciation,
@@ -2542,7 +2542,7 @@ void populate_node(rec::node::sptr node)
 bool floating_to_mpf(
     mpf_class & out,
     const dat::floating & floating,
-    compilation_log_t & log)
+    log_t & log)
 {
     /* Get the integer value */
     mpf_class integer_part(0);
@@ -2607,7 +2607,7 @@ bool floating_to_mpf(
  * @return True if template argument count if right, false otherwise.
  */
 bool check_template_parameter_count(
-    const rec::type_instanciation_t & type_inst, compilation_log_t & log)
+    const rec::type_instanciation_t & type_inst, log_t & log)
 {
     std::list<rec::node::sptr> template_types = type_inst.get_type_ptr()
         ->query_nodes<std::list>(rec::node::kind::template_type);
@@ -2648,7 +2648,7 @@ bool merge_included_recipe_files(
     const std::string & current_directory,
     const std::list<std::string> & include_directories,
     std::list<std::string> & loaded_defs,
-    compilation_log_t & log)
+    log_t & log)
 {
     /* Retrieve the liste of included files by recipe. */
     const std::list<file_indication_t> & included_defs = def.get_included_files();
@@ -2744,7 +2744,7 @@ bool resolve_file_indication(
     const std::string & current_directory,
     const std::list<std::string> & include_directories,
     std::string & dest,
-    compilation_log_t & log)
+    log_t & log)
 {
     boost::filesystem::path the_path(fi.get_path());
 

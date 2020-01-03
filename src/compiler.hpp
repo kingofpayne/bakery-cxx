@@ -23,7 +23,7 @@
 #define _BAKERY_COMPILER_HPP_
 
 
-#include "compilation_log.hpp"
+#include "log.hpp"
 #include <algorithm>
 #include <fstream>
 #include "dat/data.hpp"
@@ -56,7 +56,7 @@ struct decompilation_state_t
     /** Indentation level. */
     int indent_level;
     /** Log, for info, warning and error messages. */
-    compilation_log_t & log;
+    log_t & log;
 
     void write_indent();
 };
@@ -73,15 +73,15 @@ struct compilation_state_t
     /** Stack of the template instanciations. */
     tti_stack_t tti_stack;
     /** Log, for info, warning and error messages. */
-    compilation_log_t & log;
+    log_t & log;
 };
 
 
 void compile(const std::string &, const std::string &,
-    const std::list<std::string> &, compilation_log_t &);
+    const std::list<std::string> &, log_t &);
 
 void decompile(const std::string &, const std::string &, const std::string &,
-    const std::list<std::string> &, compilation_log_t &);
+    const std::list<std::string> &, log_t &);
 
 void populate_node(rec::node::sptr);
 
@@ -212,16 +212,16 @@ bool read_native_list(decompilation_state_t &,
 bool read_native_map(decompilation_state_t &,
     const rec::type_instanciation_t &);
 
-bool floating_to_mpf(mpf_class &, const dat::floating &, compilation_log_t &);
+bool floating_to_mpf(mpf_class &, const dat::floating &, log_t &);
 
 bool check_template_parameter_count(const rec::type_instanciation_t &,
-    compilation_log_t &);
+    log_t &);
 
 bool merge_included_recipe_files(rec::recipe &, const std::string &,
-    const std::list<std::string> &, std::list<std::string> &, compilation_log_t &);
+    const std::list<std::string> &, std::list<std::string> &, log_t &);
 
 bool resolve_file_indication(const file_indication_t &, const std::string &,
-    const std::list<std::string> &, std::string &, compilation_log_t &);
+    const std::list<std::string> &, std::string &, log_t &);
 
 mpz_class make_mpz_10_power(unsigned int power);
 
