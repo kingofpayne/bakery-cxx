@@ -110,7 +110,7 @@ void log_t::add_message(
  *
  * @param text Text of the message.
  */
-void log_t::add_error(const std::string & text)
+void log_t::error(const std::string & text)
 {
     add_message(log_message_type_t::error, text);
 }
@@ -121,7 +121,7 @@ void log_t::add_error(const std::string & text)
  *
  * @param text Text of the message.
  */
-void log_t::add_warning(const std::string & text)
+void log_t::warning(const std::string & text)
 {
     add_message(log_message_type_t::warning, text);
 }

@@ -47,7 +47,7 @@ void parser::load_from_file(const std::string & path,
 
     if (ec)
     {
-        log.add_error("Failed to read file '" + path + "'.");
+        log.error("Failed to read file '" + path + "'.");
         return;
     }
 
@@ -62,7 +62,7 @@ void parser::load_from_file(const std::string & path,
     /* Check parse result. */
     if (it != it_end)
     {
-        log.add_error("in file '" + path + "' line "
+        log.error("in file '" + path + "' line "
             + str::from(calculate_line_number(content, it))
             + ", syntax error : " + show_string_position(content, it));
     }

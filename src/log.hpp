@@ -42,8 +42,8 @@ class log_t
         std::string print() const;
         void add_message(const log_message_t &);
         void add_message(log_message_type_t, const std::string &);
-        void add_error(const std::string &);
-        void add_warning(const std::string &);
+        void error(const std::string &);
+        void warning(const std::string &);
         const std::list<log_message_t> & get_messages() const;
 
     private:

@@ -36,10 +36,10 @@ TEST_CASE("compilation_log_t")
     SECTION("add messages")
     {
         bakery::log_t log;
-        log.add_error("abcd");
+        log.error("abcd");
         REQUIRE( log.get_error_count() == 1 );
-        log.add_warning("defg");
-        log.add_error("ijkl");
+        log.warning("defg");
+        log.error("ijkl");
         REQUIRE( log.get_error_count() == 2 );
         REQUIRE( log.print() ==
             "Error: abcd\n"

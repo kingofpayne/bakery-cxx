@@ -724,14 +724,8 @@ bool node::check_children_names(log_t & compil_status) const
 
             if((!name1.empty()) && (name1 == name2))
             {
-                compil_status.add_message(
-                    log_message_t(
-                        log_message_type_t::error,
-                        "a node with the name '"
-                            + (*it1)->get_name()
-                            + "' is already declared."
-                    )
-                );
+                compil_status.error("a node with the name '"
+                    + (*it1)->get_name() + "' is already declared.");
                 result = false;
             }
         }
@@ -960,15 +954,8 @@ bool node::compile_as_structure(log_t & compil_status)
     {
         if (!compile_type_instanciation(ti, compil_status, this))
         {
-            compil_status.add_message(
-                log_message_type_t::error,
-                "failed to compile the herited type '"
-                    + ti.print()
-                    + "' of the node '"
-                    + name
-                    + "'."
-                );
-
+            compil_status.error("failed to compile the herited type '"
+                + ti.print() + "' of the node '" + name + "'.");
             return false;
         }
         else
@@ -992,15 +979,8 @@ bool node::compile_as_structure(log_t & compil_status)
 
             if(!correct_kind)
             {
-                compil_status.add_message(
-                    log_message_type_t::error,
-                    "the structure '"
-                        + name
-                        + "' cannot heritate from the type '"
-                        + ti.print()
-                        + "'."
-                    );
-
+                compil_status.error("the structure '" + name
+                    + "' cannot heritate from the type '" + ti.print() + "'.");
                 return false;
             }
         }
@@ -1027,9 +1007,8 @@ bool node::compile_as_array(log_t & compil_status)
 
     if (!compile_type_instanciation(ad.type_instanciation, compil_status, this))
     {
-        compil_status.add_error("failed to compile array type of node '" + name
+        compil_status.error("failed to compile array type of node '" + name
             + "'.");
-
         return false;
     }
 
@@ -1054,10 +1033,8 @@ bool node::compile_as_typedef(log_t & compil_status)
         boost::get<typedef_data_t>(data).type_instanciation,
         compil_status, this))
     {
-        compil_status.add_message(
-            log_message_type_t::error,
-            "failed to compile the type of the node " + name + "."
-        );
+        compil_status.error("failed to compile the type of the node " + name
+            + ".");
         return false;
     }
 
@@ -1081,10 +1058,8 @@ bool node::compile_as_member(log_t & compil_status)
     if (!compile_type_instanciation(boost::get<member_data_t>(data)
         .type_instanciation, compil_status, this))
     {
-        compil_status.add_message(
-            log_message_type_t::error,
-            "failed to compile the type of the node " + name + "."
-        );
+        compil_status.error("failed to compile the type of the node " + name
+            + ".");
         return false;
     }
 
@@ -1142,11 +1117,8 @@ bool node::compile_as_enum(log_t & compil_status)
         // Verify that the numeric limit is not reached, before decrementing x.
         if(x == std::numeric_limits<int>::min())
         {
-            compil_status.add_message(
-                log_message_type_t::error,
-                "enumeration constraints results in a member value lowest than "
-                    "the minimum possible int value."
-            );
+            compil_status.error("enumeration constraints results in a member "
+                "value lowest than the minimum possible int value.");
             return false;
         }
 
@@ -1165,11 +1137,8 @@ bool node::compile_as_enum(log_t & compil_status)
             // x.
             if(x == std::numeric_limits<int>::max())
             {
-                compil_status.add_message(
-                    log_message_type_t::error,
-                    "enumeration constaints results in a member value higher "
-                        "than the maximal possible int value."
-                );
+                compil_status.error("enumeration constaints results in a member"
+                    " value higher than the maximal possible int value.");
                 return false;
             }
 
@@ -1189,12 +1158,10 @@ bool node::compile_as_enum(log_t & compil_status)
             int fixed_value = evd.value;
             if(fixed_value < x)
             {
-                compil_status.add_message(
-                    log_message_type_t::error,
-                    "enumeraion member '" + (*itx)->get_name() + "' has a fixed "
-                        "value " + str::from(fixed_value) + ", but this "
-                        "value has already been reached by a previous node."
-                );
+                compil_status.error("enumeraion member '" + (*itx)->get_name()
+                    + "' has a fixed value " + str::from(fixed_value)
+                    + ", but this value has already been reached by a previous "
+                    "node.");
                 return false;
             }
 
@@ -1230,11 +1197,8 @@ bool node::compile_as_enum_value(log_t & compil_status)
         // Check that the requested value has an acceptable value.
         if(!mpz_value.fits_sint_p())
         {
-            compil_status.add_message(
-                log_message_type_t::error,
-                "enumeration value " + str::from(mpz_value) + " does not "
-                    "fit an int."
-            );
+            compil_status.error("enumeration value " + str::from(mpz_value)
+                + " does not fit an int.");
             return false;
         }
 
@@ -1268,13 +1232,7 @@ bool node::compile_type_instanciation(type_instanciation_t & ti, log_t & compil_
         if(type_sptr.get() == 0)
         {
             // type not found... bouhouoouou.
-            compil_status.add_message(
-                log_message_t(
-                    log_message_type_t::error,
-                    "type '" + a_path.print() + "' not found."
-                )
-            );
-
+            compil_status.error("type '" + a_path.print() + "' not found.");
             return false;
         }
         else
@@ -1284,14 +1242,10 @@ bool node::compile_type_instanciation(type_instanciation_t & ti, log_t & compil_
             if(!type_sptr->is_type())
             {
                 // Ha Haaa ! There is a problem with that node !
-                compil_status.add_message(
-                    log_message_t(
-                        log_message_type_t::error,
-                        "the node '" + a_path.print() + "' is not a type, but a "
-                            + kind::Wrapper::to_string(type_sptr->get_kind())
-                            + "."
-                    )
-                );
+                compil_status.error("the node '" + a_path.print()
+                    + "' is not a type, but a "
+                    + kind::Wrapper::to_string(type_sptr->get_kind())
+                    + ".");
                 return false;
             }
 

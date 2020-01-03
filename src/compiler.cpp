@@ -69,7 +69,7 @@ void compile(
 
     if (!output.is_open())
     {
-        log.add_error("Failed to open file '" + abs_bin_path.string()
+        log.error("Failed to open file '" + abs_bin_path.string()
             + "' for output writing.");
         return;
     }
@@ -79,14 +79,14 @@ void compile(
 
     if (log.get_error_count() != 0)
     {
-        log.add_error("Error in data file '" + abs_dat_path.string() + "'.");
+        log.error("Error in data file '" + abs_dat_path.string() + "'.");
         return;
     }
 
     /* Check that the parser returned a data and not a recipe. */
     if (!recipe_or_data.is_data())
     {
-        log.add_error("File '" + abs_dat_path.string()
+        log.error("File '" + abs_dat_path.string()
             + "' could not be parsed as a data.");
         return;
     }
@@ -138,9 +138,8 @@ void decompile(
 
     if (!output_file.is_open())
     {
-        log.add_error("Failed to open file '" + abs_dat_path.string()
+        log.error("Failed to open file '" + abs_dat_path.string()
             + "' for output writing.");
-
         return;
     }
 
@@ -149,9 +148,8 @@ void decompile(
 
     if (!input_file.is_open())
     {
-        log.add_error("Failed to open input file '" + abs_bin_path.string()
+        log.error("Failed to open input file '" + abs_bin_path.string()
             + "'.");
-
         return;
     }
 
@@ -194,7 +192,7 @@ bool write_data(
         def_path,
         state.log) )
     {
-        state.log.add_error("recipe file not found.");
+        state.log.error("recipe file not found.");
         return false;
     }
 
@@ -204,18 +202,16 @@ bool write_data(
 
     if (state.log.get_error_count() != 0)
     {
-        state.log.add_error("Failed to parse main recipe file '"
+        state.log.error("Failed to parse main recipe file '"
             + def_path + "'.");
-
         return false;
     }
 
     /* Check the grammar returned a recipe. */
     if (!recipe_or_data.is_recipe())
     {
-        state.log.add_error("File '" + def_path
+        state.log.error("File '" + def_path
             + "' could not be parsed as a recipe.");
-
         return false;
     }
 
@@ -231,15 +227,13 @@ bool write_data(
         loaded_recipe_files,
         state.log ) )
     {
-        state.log.add_error(
-            "Failed to include some files into main recipe.");
+        state.log.error("Failed to include some files into main recipe.");
         return false;
     }
 
     if (state.log.get_error_count() != 0)
     {
-        state.log.add_error(
-            "Error occured while parsing included recipe files.");
+        state.log.error("Error occured while parsing included recipe files.");
         return false;
     }
 
@@ -305,7 +299,7 @@ bool write_node(compilation_state_t & state,
     /* Verify that the type is declared as 'unsigned' only for native types. */
     if (type_inst.is_unsigned() && (kind != rec::node::kind::native))
     {
-        state.log.add_error("Type '" + type_inst.print() + "' of node '"
+        state.log.error("Type '" + type_inst.print() + "' of node '"
             + data_node.print() + "' cannot be declared as unsigned.");
         return false;
     }
@@ -385,7 +379,7 @@ bool write_structure(compilation_state_t & state,
     /* Check data node's type. */
     if (data_node.get_kind() != dat::node::kind::group)
     {
-        state.log.add_error("expected a group node.");
+        state.log.error("expected a group node.");
         return false;
     }
 
@@ -422,9 +416,8 @@ bool write_structure(compilation_state_t & state,
     {
         if (!write_node(state, herited_type_inst, data_node))
         {
-            state.log.add_error("failed to write inherited data of type '"
+            state.log.error("failed to write inherited data of type '"
                 + herited_type_inst.print() + "'.");
-
             return false;
         }
     }
@@ -452,9 +445,8 @@ bool write_structure(compilation_state_t & state,
         /* A node cannot be optional if it has a default value. */
         if (has_default_value && node_is_optional)
         {
-            state.log.add_error("member '" + name + "' cannot be optional and "
+            state.log.error("member '" + name + "' cannot be optional and "
                 "have a default value at the same time.");
-
             return false;
         }
 
@@ -474,7 +466,7 @@ bool write_structure(compilation_state_t & state,
         if ((!data_is_defined) && (!node_is_optional)
             && (!has_default_value))
         {
-            state.log.add_error("data node '" + name + "' is missing.");
+            state.log.error("data node '" + name + "' is missing.");
             return false;
         }
 
@@ -524,10 +516,9 @@ bool write_variant(compilation_state_t & state,
     /* Check data node's type. */
     if (data_node.get_kind() != dat::node::kind::variant)
     {
-        state.log.add_error("expected a variant node, got a "
+        state.log.error("expected a variant node, got a "
             + dat::node::kind::wrapper::to_string(data_node.get_kind())
             + " node.");
-
         return false;
     }
 
@@ -542,10 +533,9 @@ bool write_variant(compilation_state_t & state,
 
     if (template_types.size() != template_parameters.size())
     {
-        state.log.add_error("wrong number of template parameters, "
+        state.log.error("wrong number of template parameters, "
             + str::from(template_types.size()) + " expected, got "
             + str::from(template_parameters.size()) + ".");
-
         return false;
     }
 
@@ -589,9 +579,8 @@ bool write_variant(compilation_state_t & state,
     /* Check that the member name is ok. */
     if (it_member_node == members.end())
     {
-        state.log.add_error("variant member '" + assigned_member_name
+        state.log.error("variant member '" + assigned_member_name
             + "' does not exist.");
-
         return false;
     }
 
@@ -601,7 +590,7 @@ bool write_variant(compilation_state_t & state,
     /* Verify that the member is not marked as optional */
     if (member_node->has_qualifier(rec::node::qualifier::optional))
     {
-        state.log.add_error("variant member '" + assigned_member_name
+        state.log.error("variant member '" + assigned_member_name
             + "' cannot be marked as optional since it belongs to a variant.");
 
         return false;
@@ -610,7 +599,7 @@ bool write_variant(compilation_state_t & state,
     /* Verify that the member has no default value. */
     if (member_node->get_member_data().has_default_value())
     {
-        state.log.add_error("variant member '" + assigned_member_name
+        state.log.error("variant member '" + assigned_member_name
             + "' cannot have a default value since it belongs to a variant.");
 
         return false;
@@ -626,7 +615,7 @@ bool write_variant(compilation_state_t & state,
     if (!write_node(state, member_node->get_member_data().type_instanciation,
         *sub_data_node))
     {
-        state.log.add_error("failed to write data of variant member '"
+        state.log.error("failed to write data of variant member '"
             + assigned_member_name + "'.");
 
         return false;
@@ -671,9 +660,7 @@ bool write_array(compilation_state_t & state,
             dim_desc.push_back(']');
         }
 
-        state.log.add_error("failed to write array of dimension " + dim_desc
-            + ".");
-
+        state.log.error("failed to write array of dimension " + dim_desc + ".");
         return false;
     }
 
@@ -700,7 +687,7 @@ bool write_array_dim(
     /* Check data node's type. */
     if (data_node.get_kind() != dat::node::kind::group)
     {
-        state.log.add_error("expected a group node.");
+        state.log.error("expected a group node.");
         return false;
     }
 
@@ -722,10 +709,9 @@ bool write_array_dim(
         /* Array size is fixed. Check that we have the right element count. */
         if (children.size() != dim_size)
         {
-            state.log.add_error("array dimension expected size is "
+            state.log.error("array dimension expected size is "
                 + str::from(dim_size) + " but got "
                 + str::from(children.size()) + " elements.");
-
             return false;
         }
     }
@@ -740,10 +726,9 @@ bool write_array_dim(
         {
             if (!write_node(state, array_data.type_instanciation, *n))
             {
-                state.log.add_error("failed to write array element number "
+                state.log.error("failed to write array element number "
                     + str::from(index) + " (in dimension " + str::from(dim + 1)
                     + ").");
-
                 return false;
             }
 
@@ -758,9 +743,8 @@ bool write_array_dim(
         {
             if (!write_array_dim(state, type_inst, dim + 1, *n))
             {
-                state.log.add_error("failed to write array element number "
+                state.log.error("failed to write array element number "
                     + str::from(index) + ".");
-
                 return false;
             }
 
@@ -828,16 +812,15 @@ bool write_enum(compilation_state_t & state,
     /* Check data node's type. */
     if (data_node.get_kind() != dat::node::kind::identifier)
     {
-        state.log.add_error("expected an identifier for the enumeration '"
+        state.log.error("expected an identifier for the enumeration '"
             + type_ptr->get_name() + "'.");
-
         return false;
     }
 
     /* Template argument count must be equal to zero. */
     if (type_inst.get_parameters().size() != 0)
     {
-        state.log.add_error("an enumeration cannot have template parameters.");
+        state.log.error("an enumeration cannot have template parameters.");
         return false;
     }
 
@@ -855,7 +838,7 @@ bool write_enum(compilation_state_t & state,
     else
     {
         /* Not found. */
-        state.log.add_error("'" + identifier
+        state.log.error("'" + identifier
             + "' is not a member of the enumeration '" + type_ptr->get_name()
             + "'.");
 
@@ -891,7 +874,7 @@ bool write_native(compilation_state_t & state,
             case rec::native_data_t::class_t::short_:
                 break;
             default:
-                state.log.add_error("Type '" + type_inst.print() +
+                state.log.error("Type '" + type_inst.print() +
                     "' of member '" + data_node.print() + "' cannot be declared"
                     " as unsigned.");
                 return false;
@@ -948,7 +931,7 @@ bool write_native_pair(compilation_state_t & state,
     /* Check data node's type. */
     if (data_node.get_kind() != dat::node::kind::group)
     {
-        state.log.add_error("expected a group node.");
+        state.log.error("expected a group node.");
         return false;
     }
 
@@ -957,9 +940,8 @@ bool write_native_pair(compilation_state_t & state,
     /* Children must have only two elements, no more. */
     if (children.size() != 2)
     {
-        state.log.add_error("nwrong number of elements in pair, 2 expected"
+        state.log.error("nwrong number of elements in pair, 2 expected"
             ", got " + str::from(children.size()) + ".");
-
         return false;
     }
 
@@ -973,9 +955,8 @@ bool write_native_pair(compilation_state_t & state,
     /* Up to 1 or 2 template parameters are expected. */
     if(! ((size == 1) || (size == 2)) )
     {
-        state.log.add_error("wrong number of template parameters, 1 or 2 "
+        state.log.error("wrong number of template parameters, 1 or 2 "
             "expected, got " + str::from(size) + ".");
-
         return false;
     }
 
@@ -997,14 +978,14 @@ bool write_native_pair(compilation_state_t & state,
 
     if (!write_node(state, type_of_a, **it_child))
     {
-        state.log.add_error("failed to write pair first element.");
+        state.log.error("failed to write pair first element.");
         return false;
     }
 
     /* Write the second element of the pair */
     if (!write_node(state, type_of_b, **(++it_child)))
     {
-        state.log.add_error("failed to write pair second element.");
+        state.log.error("failed to write pair second element.");
         return false;
     }
 
@@ -1027,7 +1008,7 @@ bool write_native_tuple(compilation_state_t & state,
     /* Check data node's type. */
     if (data_node.get_kind() != dat::node::kind::group)
     {
-        state.log.add_error("expected a group node.");
+        state.log.error("expected a group node.");
         return false;
     }
 
@@ -1043,16 +1024,15 @@ bool write_native_tuple(compilation_state_t & state,
     /* At least one template parameter should be present. */
     if (size == 0)
     {
-        state.log.add_error("wrong number of template parameters, at least "
+        state.log.error("wrong number of template parameters, at least "
             "1 expected, got 0.");
-
         return false;
     }
 
     /* Children size must be equal to tuple size. */
     if (children.size() != size)
     {
-        state.log.add_error("wrong number of elements in tuple, "
+        state.log.error("wrong number of elements in tuple, "
             + str::from(size) + " expected, got " + str::from(children.size())
             + ".");
 
@@ -1066,7 +1046,7 @@ bool write_native_tuple(compilation_state_t & state,
     {
         if (!write_node(state, template_parameters[index], *child))
         {
-            state.log.add_error("failed to write tuple element number "
+            state.log.error("failed to write tuple element number "
                 + str::from(index) + ".");
 
             return false;
@@ -1094,7 +1074,7 @@ bool write_native_list(compilation_state_t & state,
     /* Check data node's type. */
     if (data_node.get_kind() != dat::node::kind::group)
     {
-        state.log.add_error("expected a group node.");
+        state.log.error("expected a group node.");
         return false;
     }
 
@@ -1107,9 +1087,8 @@ bool write_native_list(compilation_state_t & state,
 
     if (template_parameters.size() != 1)
     {
-        state.log.add_error("wrong number of template parameters, 1 "
+        state.log.error("wrong number of template parameters, 1 "
             "expected, got " + str::from(template_parameters.size()) + ".");
-
         return false;
     }
 
@@ -1123,9 +1102,8 @@ bool write_native_list(compilation_state_t & state,
     {
         if (!write_node(state, template_parameters[0], *child))
         {
-            state.log.add_error("failed to write list element number "
+            state.log.error("failed to write list element number "
                 + str::from(index) + ".");
-
             return false;
         }
 
@@ -1151,7 +1129,7 @@ bool write_native_map(compilation_state_t & state,
     /* Check data node's type. */
     if (data_node.get_kind() != dat::node::kind::group)
     {
-        state.log.add_error("expected a group node.");
+        state.log.error("expected a group node.");
         return false;
     }
 
@@ -1164,9 +1142,8 @@ bool write_native_map(compilation_state_t & state,
 
     if (template_parameters.size() != 2)
     {
-        state.log.add_error("wrong number of template parameters, 2 "
+        state.log.error("wrong number of template parameters, 2 "
             "expected, got " + str::from(template_parameters.size()) + ".");
-
         return false;
     }
 
@@ -1190,9 +1167,8 @@ bool write_native_map(compilation_state_t & state,
         /* Write the key */
         if (!write_node(state, template_parameters[0], **it_data))
         {
-            state.log.add_error("failed to write map element "
+            state.log.error("failed to write map element "
                 + str::from(index) + " key.");
-
             return false;
         }
 
@@ -1202,9 +1178,8 @@ bool write_native_map(compilation_state_t & state,
         /* Write the value */
         if (!write_node(state, template_parameters[1], **it_data))
         {
-            state.log.add_error("failed to write map element "
+            state.log.error("failed to write map element "
                 + str::from(index) + " value.");
-
             return false;
         }
 
@@ -1229,7 +1204,7 @@ bool write_native_bool(compilation_state_t & state,
 {
     if (data_node.get_kind() != dat::node::kind::bool_)
     {
-        state.log.add_error("value must be a bool.");
+        state.log.error("value must be a bool.");
         return false;
     }
 
@@ -1255,7 +1230,7 @@ bool write_native_integer(compilation_state_t & state,
 
     if (data_node.get_kind() != dat::node::kind::floating)
     {
-        state.log.add_error("value must be a number.");
+        state.log.error("value must be a number.");
         return false;
     }
 
@@ -1264,13 +1239,13 @@ bool write_native_integer(compilation_state_t & state,
 
     if (floating.has_decimal_part())
     {
-        state.log.add_error("integer cannot have a decimal part.");
+        state.log.error("integer cannot have a decimal part.");
         return false;
     }
 
     if (floating.has_exponent_part())
     {
-        state.log.add_error("integer cannot have an exponent.");
+        state.log.error("integer cannot have an exponent.");
         return false;
     }
 
@@ -1295,7 +1270,7 @@ bool write_native_integer(compilation_state_t & state,
     {
         if (is_unsigned)
         {
-            state.log.add_error("value " + str::from(val) + " is negative, but"
+            state.log.error("value " + str::from(val) + " is negative, but"
                 " the type is unsigned.");
             return false;
         }
@@ -1310,7 +1285,7 @@ bool write_native_integer(compilation_state_t & state,
             if ( (!is_unsigned && !val.fits_sint_p())
                 || (is_unsigned && !val.fits_uint_p()) )
             {
-                state.log.add_error("value " + str::from(val)
+                state.log.error("value " + str::from(val)
                     + " does not fit an " + (is_unsigned ? "unsigned " : "")
                     + "int.");
                 return false;
@@ -1323,7 +1298,7 @@ bool write_native_integer(compilation_state_t & state,
             if ( (!is_unsigned && !val.fits_sshort_p()) ||
                 (is_unsigned && !val.fits_ushort_p()) )
             {
-                state.log.add_error("value " + str::from(val)
+                state.log.error("value " + str::from(val)
                     + " does not fit a " + (is_unsigned ? "unsigned " : "")
                     + "short.");
                 return false;
@@ -1347,7 +1322,7 @@ bool write_native_integer(compilation_state_t & state,
 
             if (!fits)
             {
-                state.log.add_error("value " + str::from(val)
+                state.log.error("value " + str::from(val)
                     + " does not fit a " + (is_unsigned ? "unsigned " : "")
                     + "char.");
                 return false;
@@ -1421,7 +1396,7 @@ bool write_native_floating(compilation_state_t & state,
 
     if (data_node.get_kind() != dat::node::kind::floating)
     {
-        state.log.add_error("value must be a floating number.");
+        state.log.error("value must be a floating number.");
         return false;
     }
 
@@ -1429,7 +1404,7 @@ bool write_native_floating(compilation_state_t & state,
 
     if (!floating_to_mpf(mpf, data_node.get_floating(), state.log))
     {
-        state.log.add_error("failed to synthesize the floating value.");
+        state.log.error("failed to synthesize the floating value.");
         return false;
     }
 
@@ -1440,9 +1415,8 @@ bool write_native_floating(compilation_state_t & state,
         {
             if (mpf > mpf_class(std::numeric_limits<float>::max()))
             {
-                state.log.add_error("floating value is bigger than the "
+                state.log.error("floating value is bigger than the "
                     "maximal value that a float can store.");
-
                 return false;
             }
             break;
@@ -1452,9 +1426,8 @@ bool write_native_floating(compilation_state_t & state,
         {
             if (mpf > mpf_class(std::numeric_limits<double>::max()))
             {
-                state.log.add_error("floating value is bigger than the "
+                state.log.error("floating value is bigger than the "
                     "maximal value that a double can store.");
-
                 return false;
             }
             break;
@@ -1471,9 +1444,8 @@ bool write_native_floating(compilation_state_t & state,
         {
             if (mpf < mpf_class(-std::numeric_limits<float>::max()))
             {
-                state.log.add_error("floating value is smaller than the minimal"
+                state.log.error("floating value is smaller than the minimal"
                     " value that a float can store.");
-
                 return false;
             }
             break;
@@ -1483,9 +1455,8 @@ bool write_native_floating(compilation_state_t & state,
         {
             if (mpf < mpf_class(-std::numeric_limits<double>::max()))
             {
-                state.log.add_error("floating value is smaller than the minimal"
+                state.log.error("floating value is smaller than the minimal"
                     " value that a double can store.");
-
                 return false;
             }
             break;
@@ -1528,7 +1499,7 @@ bool write_native_string(compilation_state_t & state,
 {
     if (data_node.get_kind() != dat::node::kind::string)
     {
-        state.log.add_error("value must be a string.");
+        state.log.error("value must be a string.");
         return false;
     }
 
@@ -1560,7 +1531,7 @@ bool read_data(decompilation_state_t & state,
     if (!resolve_file_indication(def_fi, current_directory, include_directories,
         def_path, state.log))
     {
-        state.log.add_error("Definition file not found.");
+        state.log.error("Definition file not found.");
         return false;
     }
 
@@ -1568,7 +1539,7 @@ bool read_data(decompilation_state_t & state,
 
     if (state.log.get_error_count())
     {
-        state.log.add_error("Error in recipe file '" + def_path + "'.");
+        state.log.error("Error in recipe file '" + def_path + "'.");
         return false;
     }
 
@@ -1576,9 +1547,7 @@ bool read_data(decompilation_state_t & state,
      * data file. */
     if (recipe_or_data.is_data())
     {
-        state.log.add_error("File '" + def_path
-            + "' is not a recipe file.");
-
+        state.log.error("File '" + def_path + "' is not a recipe file.");
         return false;
     }
 
@@ -1591,17 +1560,13 @@ bool read_data(decompilation_state_t & state,
         boost::filesystem::path(def_path).parent_path().string() + "/",
         include_directories, loaded_recipe_files, state.log))
     {
-        state.log.add_error("Failed to include some files into main "
-            "recipe.");
-
+        state.log.error("Failed to include some files into main recipe.");
         return false;
     }
 
     if (state.log.get_error_count())
     {
-        state.log.add_error("Error occured while parsing included recipe "
-            "files.");
-
+        state.log.error("Error occured while parsing included recipe files.");
         return false;
     }
 
@@ -1674,9 +1639,8 @@ bool read_structure(decompilation_state_t & state,
     {
         if (!read_type(state, inherited_type_inst))
         {
-            state.log.add_error("failed to read inherited data of type '"
+            state.log.error("failed to read inherited data of type '"
                 + inherited_type_inst.print() + "'.");
-
             return false;
         }
     }
@@ -1694,9 +1658,8 @@ bool read_structure(decompilation_state_t & state,
         /* A node cannot be optional if it has a default value. */
         if (has_default_value && node_is_optional)
         {
-            state.log.add_error("member '" + node->get_name() + "' cannot be "
+            state.log.error("member '" + node->get_name() + "' cannot be "
                 "optional and have a default value at the same time.");
-
             return false;
         }
 
@@ -1710,9 +1673,8 @@ bool read_structure(decompilation_state_t & state,
 
             if (!read_native_type(state, data_is_defined))
             {
-                state.log.add_error("failed to read optional flag of member '"
+                state.log.error("failed to read optional flag of member '"
                     + node->get_name() + "'.");
-
                 return false;
             }
 
@@ -1740,9 +1702,8 @@ bool read_structure(decompilation_state_t & state,
                 member_data.type_instanciation,
                 *(member_data.default_value_node)))
             {
-                state.log.add_error("failed to compile default value for "
+                state.log.error("failed to compile default value for "
                     "member '" + node->get_name() + "'.");
-
                 return false;
             }
 
@@ -1785,9 +1746,8 @@ bool read_structure(decompilation_state_t & state,
 
             if (!read_type(state, member_data.type_instanciation))
             {
-                state.log.add_error("failed to read data of member '"
+                state.log.error("failed to read data of member '"
                     + node->get_name() + "'.");
-
                 return false;
             }
 
@@ -1831,9 +1791,8 @@ bool read_variant(decompilation_state_t & state,
      * decompilation process, but it seems legit to show the error). */
     if (member->has_qualifier(rec::node::qualifier::optional))
     {
-        state.log.add_error("variant member '" + member_name
+        state.log.error("variant member '" + member_name
             + "' cannot be marked as optional since it belongs to a variant.");
-
         return false;
     }
 
@@ -1841,9 +1800,8 @@ bool read_variant(decompilation_state_t & state,
      * decompilation process, but it seems legit to show the error). */
     if (member->get_member_data().has_default_value())
     {
-        state.log.add_error("variant member '" + member_name
+        state.log.error("variant member '" + member_name
             + "' cannot have a default value since it belongs to a variant.");
-
         return false;
     }
 
@@ -1970,7 +1928,7 @@ bool read_enum(decompilation_state_t & state,
     /* Template argument count must be equal to zero. */
     if (type_inst.get_parameters().size() != 0)
     {
-        state.log.add_error("an enumeration cannot have template parameters.");
+        state.log.error("an enumeration cannot have template parameters.");
         return false;
     }
 
@@ -2262,7 +2220,7 @@ bool read_native_string(decompilation_state_t & state,
     /* Verify that the input stream has enough bytes remaining. */
     if (len > state.size)
     {
-        state.log.add_error("eof before end of string.");
+        state.log.error("eof before end of string.");
         return false;
     }
 
@@ -2350,9 +2308,8 @@ bool read_native_list(decompilation_state_t & state,
 
     if (template_parameters.size() != 1)
     {
-        state.log.add_error("wrong number of template parameters, 1 expected, "
+        state.log.error("wrong number of template parameters, 1 expected, "
             "got " + str::from(template_parameters.size()) + ".");
-
         return false;
     }
 
@@ -2405,9 +2362,8 @@ bool read_native_map(decompilation_state_t & state,
 
     if (template_parameters.size() != 2)
     {
-        state.log.add_error("wrong number of template parameters, 2 expected, "
+        state.log.error("wrong number of template parameters, 2 expected, "
             "got " + str::from(template_parameters.size()) + ".");
-
         return false;
     }
 
@@ -2567,7 +2523,7 @@ bool floating_to_mpf(
 
     if (!exponent_part.fits_sint_p())
     {
-        log.add_error("exponent is too big.");
+        log.error("exponent is too big.");
         return false;
     }
 
@@ -2616,12 +2572,11 @@ bool check_template_parameter_count(
 
     if (template_types.size() != template_parameters_size)
     {
-        log.add_error("wrong number of template parameters, "
+        log.error("wrong number of template parameters, "
             + str::from(template_types.size())
             + " expected, got "
             + str::from(template_parameters_size)
             + ".");
-
         return false;
     }
 
@@ -2662,7 +2617,7 @@ bool merge_included_recipe_files(
         if (!resolve_file_indication(included_def, current_directory,
             include_directories, p, log))
         {
-            log.add_error("Included file not found.");
+            log.error("Included file not found.");
             return false;
         }
 
@@ -2692,18 +2647,15 @@ bool merge_included_recipe_files(
 
             if (log.get_error_count() != 0)
             {
-                log.add_error("Failed to parse included recipe '" + p +
-                    "'.");
-
+                log.error("Failed to parse included recipe '" + p + "'.");
                 return false;
             }
 
             /* Check that the parser produced a rec::recipe. */
             if (!recipe_or_data.is_recipe())
             {
-                log.add_error("Included file '" + p
+                log.error("Included file '" + p
                     + "' could not be parsed as a recipe.");
-
                 return false;
             }
 
@@ -2762,7 +2714,7 @@ bool resolve_file_indication(
         else
         {
             /* File does not exists. */
-            log.add_error("File \"" + the_path.string() + "\" does not exists.");
+            log.error("File \"" + the_path.string() + "\" does not exists.");
             return false;
         }
     }
@@ -2779,7 +2731,7 @@ bool resolve_file_indication(
         else
         {
             /* File does not exists. */
-            log.add_error("File \"" + p.string() + "\" does not exists.");
+            log.error("File \"" + p.string() + "\" does not exists.");
             return false;
         }
     }
@@ -2797,7 +2749,7 @@ bool resolve_file_indication(
         }
 
         /* path not found. */
-        log.add_error("Cannot find file <" + fi.get_path() + ">.");
+        log.error("Cannot find file <" + fi.get_path() + ">.");
         return false;
     }
 }
