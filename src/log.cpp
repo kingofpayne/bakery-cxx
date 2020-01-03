@@ -137,5 +137,15 @@ const std::list<log_message_t> &
 }
 
 
+/**
+ * Deletes all the messages from the log.
+ */
+void log_t::clear()
+{
+    messages.clear();
+    error_count = 0;
+}
+
+
 } /* namespace bakery */
 

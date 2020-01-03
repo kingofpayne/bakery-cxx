@@ -46,4 +46,17 @@ TEST_CASE("compilation_log_t")
             "Warning: defg\n"
             "Error: ijkl" );
     }
+
+    SECTION("clear")
+    {
+        bakery::log_t log;
+        log.error("abcd");
+        log.warning("efgh");
+        log.error("ijkl");
+        REQUIRE( log.get_error_count() == 2 );
+        REQUIRE( log.get_messages().size() == 3 );
+        log.clear();
+        REQUIRE( log.get_error_count() == 0 );
+        REQUIRE( log.get_messages().size() == 0 );
+    }
 }
