@@ -100,4 +100,22 @@ void input_t::set_stream(std::istream* stream)
 }
 
 
+/**
+ * @return Compilation log.
+ */
+log_t & input_t::get_log()
+{
+    return log;
+}
+
+
+/**
+ * @return Compilation log.
+ */
+const log_t & input_t::get_log() const
+{
+    return log;
+}
+
+
 } /* namespace bakery */

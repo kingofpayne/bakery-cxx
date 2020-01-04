@@ -52,4 +52,20 @@ TEST_CASE("input_t")
         x.set_rebuilt(false);
         REQUIRE( x.has_rebuilt() == false );
     }
+
+    SECTION("log getter")
+    {
+        bakery::input_t x;
+        bakery::log_t & log = x.get_log();
+        /* avoid unused variable warning */
+        REQUIRE( log.get_error_count() == 0 );
+    }
+
+    SECTION("log const getter")
+    {
+        const bakery::input_t x;
+        const bakery::log_t & log = x.get_log();
+        /* avoid unused variable warning */
+        REQUIRE( log.get_error_count() == 0 );
+    }
 }
