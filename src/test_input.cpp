@@ -68,4 +68,15 @@ TEST_CASE("input_t")
         /* avoid unused variable warning */
         REQUIRE( log.get_error_count() == 0 );
     }
+
+    SECTION("log and good")
+    {
+        bakery::input_t x;
+        x.set_stream(new std::ifstream("README.md"));
+        REQUIRE( x.good() == true );
+        x.get_log().warning("abcd");
+        REQUIRE( x.good() == true );
+        x.get_log().error("abcd");
+        REQUIRE( x.good() == false );
+    }
 }

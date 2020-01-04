@@ -51,17 +51,17 @@ input_t::~input_t()
 
 /**
  * @return True if Bakery successfully opened the file. False if any error
- *         occured.
+ *         occured. Errors can be retrieved in the log.
  */
 bool input_t::good() const
 {
-    return (stream != 0) && ((bool)*stream);
+    return (stream != 0) && ((bool)*stream) && (log.get_error_count() == 0);
 }
 
 
 /**
  * @return True if Bakery successfully opened the file. False if any error
- *         occured.
+ *         occured. Errors can be retrieved in the log.
  */
 input_t::operator bool() const
 {
