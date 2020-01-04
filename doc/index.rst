@@ -10,7 +10,7 @@ Welcome to bakery's documentation!
    :maxdepth: 3
    :caption: Contents:
 
-   Getting started <getting_started.rst>
+   Tutorial <tutorial.rst>
    Types <types.rst>
    API <api.rst>
 

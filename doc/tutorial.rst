@@ -1,5 +1,5 @@
-Introduction
-============
+Tutorial
+========
 
 Bakery is a binary data asset loading library. It allows easy creation of data
 files using a C++-like syntax, provides just-in-time binary compilation and
@@ -13,7 +13,7 @@ you).
 
 
 Getting started
-===============
+---------------
 
 In the following very quick example, we want a video game program to load
 settings from a configuration file: screen resolution, fullscreen option,
@@ -98,3 +98,82 @@ loading the data will be really fast since no grammar parsing will happen this
 time. For this small example the difference won't be noticable, but when using
 large data files, such as a 3D animated model, this caching mechanism is really
 efficient.
+
+Dealing with errors
+-------------------
+
+Loading data can fail if there is an error in the **recipe** or **data** files.
+When calling the ``load`` method, Bakery will return an ``input_t`` object which
+stores the status of the compilation, and possible error messages. The following
+code is an example showing how to check and report errors:
+
+.. code-block:: c++
+    
+    ...
+    bakery::input_t input = bakery::load("settings.dat");
+    if (input) {
+        input >> width >> height >> fullscreen >> name >> difficulty;
+    } else {
+        std::cout << "Error during settings loading: " << std::endl;
+        input.get_log().print();
+    }
+
+Alternatively, use can't use ``verbose`` option to print loading messages in
+``std::cout``, and ``abort_on_error`` option to stop program execution when an
+error is encountered. Thoose option must be set using the ``bakery_t`` class:
+
+.. code-block:: c++
+    
+    ...
+    bakery::bakery_t bak;
+    bak.set_verbose(true);
+    bak.set_abort_on_error(true);
+    // load will call std::abort in case of failure
+    bakery::input_t input = bak.load("settings.dat");
+    input >> width >> height >> fullscreen >> name >> difficulty;
+
+
+Improving difficulty field
+--------------------------
+
+Currently, the ``difficulty`` field is defined as an integer, which is not very
+clear and allows the user setting any arbitrary value. To make the settings
+file better, we can use **enumerations** to restrict the possible values: here
+are the changes that can be made in the *recipe* file:
+
+.. code-block:: c++
+    :caption: settings.rec
+
+    enum difficulty_t {
+        easy,
+        normal,
+        hard,
+        nightmare
+    };
+    ...
+    difficulty_t difficulty;
+
+The ``difficulty`` field can now be defined in the data file this way:
+
+.. code-block:: c++
+    :caption: settings.dat
+
+    difficulty = easy;
+
+The ``difficulty`` field will still be encoded as an ``int`` in the binary file,
+so our program should still work as it expects an ``int`` during the
+deserialization. Bakery allows deserializing into C++ enumerations as well, but
+this is not detailed in this tutorial. The ``easy`` difficulty is encoded as 0,
+``normal`` as 1, ``hard`` as 2 and ``nightmare`` as 3. Bakery also allows
+defining the enumeration values in the *recipe* file like C does, but if not
+specified default values are set automatically.
+
+When building the settings binary file, bakery will check that the defined value
+for the ``difficulty`` matches a member of the ``difficulty_t`` type. However,
+for security issues, the value after deserialization MUST ALWAYS be checked
+against bad input value since an attacker may be able to forge an invalid binary
+file and bypass compilation. This rule of thumb is valid for any deserialized
+value!
+
+Bakery has many defined types, supports structures, variants, typedefs, and
+templates types... This allows creating very rich data formats!
