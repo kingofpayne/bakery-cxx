@@ -20,10 +20,6 @@
 
 
 #include "log.hpp"
-#include <algorithm>
-#include <boost/lambda/bind.hpp>
-#include <boost/lambda/if.hpp>
-#include <boost/lambda/lambda.hpp>
 #include <iostream>
 
 
@@ -55,24 +51,14 @@ std::string log_t::to_string() const
     std::string r;
     bool add_nl = false;
 
-    using boost::lambda::var;
-
-    std::for_each(
-        messages.begin(),
-        messages.end(),
-        (
-            boost::lambda::if_then_else(
-                var(add_nl),
-                var(r) += "\n",
-                var(add_nl) = true
-            ),
-            var(r)
-                += boost::lambda::bind(
-                    &log_message_t::to_string,
-                    boost::lambda::_1
-                )
-        )
-    );
+    for (const auto & m: messages)
+    {
+        if (add_nl)
+            r += "\n";
+        else
+            add_nl = true;
+        r += m.to_string();
+    }
 
     return r;
 }
