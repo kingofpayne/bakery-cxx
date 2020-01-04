@@ -52,6 +52,10 @@ class bakery_t
         const std::list<std::string> & get_include_directories() const;
         void set_force_rebuild(bool);
         bool get_force_rebuild() const;
+        void set_verbose(bool);
+        bool get_verbose() const;
+        void set_abort_on_error(bool);
+        bool get_abort_on_error() const;
         input_t load(const std::string &);
 
     private:
@@ -59,6 +63,12 @@ class bakery_t
         std::list<std::string> include_directories;
         /** Switch to force recompilation. */
         bool force_rebuild;
+        /** Verbose option. When enabled, bakery directly prints to stdout
+         * information when loading data and errors. */
+        bool verbose;
+        /** Abort on error option. When enabled, bakery calls std::abort when an
+         * error is encountered during data loading. */
+        bool abort_on_error;
 };
 
 

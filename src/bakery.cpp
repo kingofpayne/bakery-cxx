@@ -30,7 +30,9 @@ namespace bakery {
  * Default constructor.
  */
 bakery_t::bakery_t():
-    force_rebuild(false)
+    force_rebuild(false),
+    verbose(false),
+    abort_on_error(false)
 {}
 
 
@@ -51,6 +53,51 @@ void bakery_t::set_force_rebuild(bool value)
 bool bakery_t::get_force_rebuild() const
 {
     return force_rebuild;
+}
+
+
+/**
+ * Enable or disable verbosity. When enabled, bakery directly prints to stdout
+ * information when loading data, and error messages. Verbose option is disabled
+ * by default.
+ *
+ * @param value True to enable verbosity, false to disable.
+ */
+void bakery_t::set_verbose(bool value)
+{
+    verbose = value;
+}
+
+
+/**
+ * @return true if verbosity is enabled, false otherwise.
+ */
+bool bakery_t::get_verbose() const
+{
+    return verbose;
+}
+
+
+/**
+ * Enable or disable abort on error mode. When enabled, any error encountered
+ * during data loading will call std::abort to terminate the program in the most
+ * possible brutal way. This option is for thoose who don't want to deal with
+ * errors themselves.
+ *
+ * @param value True to abort on error, false to continue execution.
+ */
+void bakery_t::set_abort_on_error(bool value)
+{
+    abort_on_error = value;
+}
+
+
+/**
+ * @return true if bakery aborts on errors, false otherwise.
+ */
+bool bakery_t::get_abort_on_error() const
+{
+    return abort_on_error;
 }
 
 
@@ -96,7 +143,8 @@ const std::list<std::string> & bakery_t::get_include_directories() const
 input_t bakery_t::load(const std::string & path)
 {
     bool has_rebuilt_flag = false;
-    std::cout << "Loading resource " << path << "...";
+    if (verbose)
+        std::cout << "Loading resource " << path << "...";
 
     /* Check that the data file exists. */
     bakery_assert_message(boost::filesystem::exists(path),
@@ -123,8 +171,11 @@ input_t bakery_t::load(const std::string & path)
     if (recompile)
     {
         /* Recompilation needed. */
-        std::cout << " rebuilding cache...";
-        std::flush(std::cout);
+        if (verbose)
+        {
+            std::cout << " rebuilding cache...";
+            std::flush(std::cout);
+        }
 
         /* Compile */
         compiler::compile(path, bin_path.c_str(), include_directories, log);
@@ -133,21 +184,28 @@ input_t bakery_t::load(const std::string & path)
         /* Check for any error */
         if (log.get_error_count() != 0)
         {
-            std::cout << " failed." << std::endl;
+            if (verbose)
+            {
+                std::cout << " failed." << std::endl;
 
-            std::cerr << "An error occured during compilation of ressource "
-                << path
-                << ", below are listed the error messages reported during "
-                << "compilation."
-                << std::endl;
-            log.print();
+                std::cerr << "An error occured during compilation of ressource "
+                    << path
+                    << ", below are listed the error messages reported during "
+                    << "compilation."
+                    << std::endl;
+                log.print();
+            }
 
             /* Remove file since it is not correct
              * (compiler writes in it during all the compilation process and
              * does not use a buffer before outputing the result). */
             boost::filesystem::remove(bin_path);
-            /* Stop program execution, this is unrecoverable ! */
-            bakery_abort_message("Cannot load ressource " + path + ".");
+
+            if (abort_on_error)
+            {
+                /* Stop program execution, this is unrecoverable ! */
+                bakery_abort_message("Cannot load ressource " + path + ".");
+            }
         }
     }
 
@@ -156,8 +214,11 @@ input_t bakery_t::load(const std::string & path)
 
     if (!stream->is_open())
     {
-        std::cout << " failed." << std::endl;
+        if (verbose)
+            std::cout << " failed." << std::endl;
         delete stream;
+        if (abort_on_error)
+            bakery_abort_message("Failed to open binary stream " + path + ".");
         result.set_rebuilt(false);
     }
     else

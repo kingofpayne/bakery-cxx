@@ -32,6 +32,8 @@ TEST_CASE("bakery_t")
         REQUIRE( bk.get_include_directories().size() == 0 );
         REQUIRE( bk.get_include_directories() == std::list<std::string>() );
         REQUIRE( bk.get_force_rebuild() == false );
+        REQUIRE( bk.get_verbose() == false );
+        REQUIRE( bk.get_abort_on_error() == false );
     }
 
     /* Test include directory list management */
@@ -165,5 +167,27 @@ TEST_CASE("bakery_t")
         std::string value;
         input >> value;
         REQUIRE( value == "aaa" );
+    }
+
+    SECTION("verbose getter/setter")
+    {
+        bakery::bakery_t bak;
+        bak.set_verbose(false);
+        REQUIRE( bak.get_verbose() == false );
+        bak.set_verbose(true);
+        REQUIRE( bak.get_verbose() == true );
+        bak.set_verbose(false);
+        REQUIRE( bak.get_verbose() == false );
+    }
+
+    SECTION("abort_on_error getter/setter")
+    {
+        bakery::bakery_t bak;
+        bak.set_abort_on_error(false);
+        REQUIRE( bak.get_abort_on_error() == false );
+        bak.set_abort_on_error(true);
+        REQUIRE( bak.get_abort_on_error() == true );
+        bak.set_abort_on_error(false);
+        REQUIRE( bak.get_abort_on_error() == false );
     }
 }
