@@ -26,16 +26,10 @@ namespace bakery {
 
 
 /**
- * Constructor.
- *
- * @param stream Stream used for deserialization. Ownership is taken. Null is
- *        allowed, and this means bakery failed to build or load the file.
- * @param rebuilt_flag Indicates if the binary has been rebuilt or not.
+ * Default constructor. Set stream to null and rebuilt flag to false. The input
+ * cannot be deserialized after default construction.
  */
-input_t::input_t(std::istream* stream, bool rebuilt_flag):
-    stream(stream),
-    rebuilt_flag(rebuilt_flag)
-{}
+input_t::input_t(): stream(0), rebuilt_flag(false) {}
 
 
 /**
@@ -76,12 +70,33 @@ input_t::operator bool() const
 
 
 /**
+ * Set the rebuilt flag value. Called by bakery when loading a data file.
+ */
+void input_t::set_rebuilt(bool value)
+{
+    rebuilt_flag = value;
+}
+
+
+/**
  * @return True if the binary has been rebuilt. False if it has been loaded from
  *         cache.
  */
 bool input_t::has_rebuilt() const
 {
     return rebuilt_flag;
+}
+
+
+/**
+ * Sets the stream used for deserialization.
+ *
+ * @param stream Stream pointer. This class takes ownership of the pointer.
+ */
+void input_t::set_stream(std::istream* stream)
+{
+    delete this->stream;
+    this->stream = stream;
 }
 
 

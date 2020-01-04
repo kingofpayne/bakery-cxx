@@ -37,14 +37,16 @@ namespace bakery {
 class input_t
 {
     public:
-        input_t(std::istream*, bool);
+        input_t();
         ~input_t();
         input_t(const input_t &) = delete;
         input_t & operator = (const input_t &) = delete;
         input_t(input_t &&);
         operator bool() const;
         bool good() const;
+        void set_rebuilt(bool);
         bool has_rebuilt() const;
+        void set_stream(std::istream*);
 
         /**
          * Reads input into t using bakery deserialization.

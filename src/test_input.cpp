@@ -26,24 +26,30 @@
 
 TEST_CASE("input_t")
 {
-    SECTION("constructor a")
+    SECTION("default constructor")
     {
-        bakery::input_t x(0, false);
+        bakery::input_t x;
         REQUIRE( (bool)x == false );
+        REQUIRE( x.good() == false );
         REQUIRE( x.has_rebuilt() == false );
     }
 
-    SECTION("constructor b")
+    SECTION("stream setter and good")
     {
-        bakery::input_t x(new std::ifstream("README.md"), false);
+        bakery::input_t x;
+        x.set_stream(new std::ifstream("README.md"));
         REQUIRE( (bool)x == true );
-        REQUIRE( x.has_rebuilt() == false );
+        REQUIRE( x.good() == true );
     }
 
-    SECTION("constructor c")
+    SECTION("rebuilt setter/getter")
     {
-        bakery::input_t x(new std::ifstream("README.md"), true);
-        REQUIRE( (bool)x == true );
+        bakery::input_t x;
+        x.set_rebuilt(false);
+        REQUIRE( x.has_rebuilt() == false );
+        x.set_rebuilt(true);
         REQUIRE( x.has_rebuilt() == true );
+        x.set_rebuilt(false);
+        REQUIRE( x.has_rebuilt() == false );
     }
 }

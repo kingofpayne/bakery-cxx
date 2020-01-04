@@ -105,6 +105,8 @@ input_t bakery_t::load(const std::string & path)
     boost::filesystem::path bin_path(path);
     bin_path.replace_extension(".bin");
 
+    input_t result;
+
     /* Will get all compilation errors */
     log_t log;
 
@@ -157,10 +159,15 @@ input_t bakery_t::load(const std::string & path)
     {
         std::cout << " failed." << std::endl;
         delete stream;
-        return input_t(0, false);
+        result.set_rebuilt(false);
+    }
+    else
+    {
+        result.set_rebuilt(has_rebuilt_flag);
+        result.set_stream(stream);
     }
 
-    return input_t(stream, has_rebuilt_flag); /* input_t takes pointer ownership of stream */
+    return result;
 }
 
 
