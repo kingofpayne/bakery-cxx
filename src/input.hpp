@@ -39,10 +39,11 @@ class input_t
 {
     public:
         input_t();
+        input_t(input_t &&);
         ~input_t();
         input_t(const input_t &) = delete;
         input_t & operator = (const input_t &) = delete;
-        input_t(input_t &&);
+        input_t & operator = (input_t &&);
         operator bool() const;
         bool good() const;
         void set_rebuilt(bool);

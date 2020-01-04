@@ -147,5 +147,15 @@ void log_t::clear()
 }
 
 
+/**
+ * @return Number of messages in the log. To get the number of error messages,
+ *     use get_error_count.
+ */
+size_t log_t::size() const
+{
+    return messages.size();
+}
+
+
 } /* namespace bakery */
 

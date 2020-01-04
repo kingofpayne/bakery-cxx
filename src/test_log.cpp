@@ -59,4 +59,16 @@ TEST_CASE("compilation_log_t")
         REQUIRE( log.get_error_count() == 0 );
         REQUIRE( log.get_messages().size() == 0 );
     }
+
+    SECTION("size")
+    {
+        bakery::log_t log;
+        REQUIRE( log.size() == 0 );
+        log.error("abcd");
+        REQUIRE( log.size() == 1 );
+        log.warning("efgh");
+        REQUIRE( log.size() == 2 );
+        log.error("ijkl");
+        REQUIRE( log.size() == 3 );
+    }
 }

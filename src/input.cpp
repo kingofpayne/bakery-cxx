@@ -37,7 +37,14 @@ input_t::input_t(): stream(0), rebuilt_flag(false) {}
  *
  * @param Moved instance.
  */
-input_t::input_t(input_t && rhs): stream(rhs.stream) {}
+input_t::input_t(input_t && rhs):
+    stream(rhs.stream),
+    rebuilt_flag(rhs.rebuilt_flag),
+    log(std::move(rhs.log))
+{
+    rhs.stream = 0;
+    rhs.rebuilt_flag = false;
+}
 
 
 /**
@@ -46,6 +53,21 @@ input_t::input_t(input_t && rhs): stream(rhs.stream) {}
 input_t::~input_t()
 {
     delete stream;
+}
+
+
+/**
+ * Move assignment
+ */
+input_t & input_t::operator = (input_t&& other)
+{
+    delete stream;
+    this->stream = other.stream;
+    rebuilt_flag = other.rebuilt_flag;
+    other.rebuilt_flag = false;
+    other.stream = 0;
+    log = std::move(other.log);
+    return *this;
 }
 
 

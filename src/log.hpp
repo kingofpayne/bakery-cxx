@@ -46,6 +46,7 @@ class log_t
         void warning(const std::string &);
         const std::list<log_message_t> & get_messages() const;
         void clear();
+        size_t size() const;
 
     private:
         /** List of the messages. */
