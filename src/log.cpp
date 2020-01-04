@@ -21,9 +21,10 @@
 
 #include "log.hpp"
 #include <algorithm>
-#include <boost/lambda/lambda.hpp>
-#include <boost/lambda/if.hpp>
 #include <boost/lambda/bind.hpp>
+#include <boost/lambda/if.hpp>
+#include <boost/lambda/lambda.hpp>
+#include <iostream>
 
 
 namespace bakery {
@@ -49,7 +50,7 @@ size_t log_t::get_error_count() const
 /**
  * @return A string representing the status. It contains all messages.
  */
-std::string log_t::print() const
+std::string log_t::to_string() const
 {
     std::string r;
     bool add_nl = false;
@@ -74,6 +75,15 @@ std::string log_t::print() const
     );
 
     return r;
+}
+
+
+/**
+ * Print to std::cout all the messages.
+ */
+void log_t::print() const
+{
+    std::cout << to_string() << std::endl;
 }
 
 

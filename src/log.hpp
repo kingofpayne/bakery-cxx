@@ -39,7 +39,8 @@ class log_t
         log_t();
 
         size_t get_error_count() const;
-        std::string print() const;
+        void print() const;
+        std::string to_string() const;
         void add_message(const log_message_t &);
         void add_message(log_message_type_t, const std::string &);
         void error(const std::string &);

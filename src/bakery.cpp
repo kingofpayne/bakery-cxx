@@ -139,9 +139,8 @@ input_t bakery_t::load(const std::string & path)
                 << path
                 << ", below are listed the error messages reported during "
                 << "compilation."
-                << std::endl
-                << log.print()
                 << std::endl;
+            log.print();
 
             /* Remove file since it is not correct
              * (compiler writes in it during all the compilation process and

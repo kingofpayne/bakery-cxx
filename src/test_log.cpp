@@ -30,7 +30,7 @@ TEST_CASE("compilation_log_t")
         bakery::log_t log;
         REQUIRE( log.get_error_count() == 0 );
         REQUIRE( log.get_messages() == std::list<bakery::log_message_t>() );
-        REQUIRE( log.print() == "" );
+        REQUIRE( log.to_string() == "" );
     }
 
     SECTION("add messages")
@@ -41,7 +41,7 @@ TEST_CASE("compilation_log_t")
         log.warning("defg");
         log.error("ijkl");
         REQUIRE( log.get_error_count() == 2 );
-        REQUIRE( log.print() ==
+        REQUIRE( log.to_string() ==
             "Error: abcd\n"
             "Warning: defg\n"
             "Error: ijkl" );
