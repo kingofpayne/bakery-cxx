@@ -12,6 +12,7 @@ Welcome to bakery's documentation!
 
    Tutorial <tutorial.rst>
    Types <types.rst>
+   Serialization <serialization.rst>
    API <api.rst>
 
 Indices and tables
