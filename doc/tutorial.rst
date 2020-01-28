@@ -63,6 +63,13 @@ straightforward:
     bakery::input_t input = bakery::load("settings.dat");
     input >> width >> height >> fullscreen >> name >> difficulty;
 
+The last two lines can also be rewritten in the following shorter form:
+
+.. code-block:: c++
+    :caption: demo.cpp
+
+    bakery::load("settings.dat", width, height, fullscreen, name, difficulty);
+
 What's happening ?
 ------------------
 

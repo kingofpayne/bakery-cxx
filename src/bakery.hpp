@@ -35,6 +35,33 @@ namespace bakery {
 
 
 /**
+ * Deserialize an input into a destination variable.
+ * Commodity for bakery_t class.
+ *
+ * @param input input stream.
+ * @param t Reference to the destination variable.
+ */
+template <typename T> void deserialize_many(input_t & input, T& t)
+{
+    input >> t;
+}
+
+/**
+ * Deserialize an input into multiple destination variables.
+ * Commodity for bakery_t class.
+ *
+ * @param input input stream.
+ * @param t Reference to the destination variable.
+ */
+template <typename T, typename ... U>
+    void deserialize_many(input_t & input, T& t, U&... u)
+{
+    input >> t;
+    deserialize_many(input, u...);
+}
+
+
+/**
  * Can load or save bakery data files.
  *
  * Before loading data, options in the bakery can be configured. Directories to
@@ -58,6 +85,28 @@ class bakery_t
         bool get_abort_on_error() const;
         input_t load(const std::string &);
 
+        /**
+         * Load a bakery data file and deserialize it in destination variables.
+         *
+         * @param path Path to the datafile.
+         * @param dest Reference to destination variable.
+         * @return false in case of error (if abort_on_error is disabled), true
+         *     if data has been written into dest variables.
+         */
+        template <typename ... T> bool load(const std::string & path, T&... dest)
+        {
+            input_t input = load(path);
+            if (input)
+            {
+                deserialize_many(input, dest...);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
     private:
         /** List of directories which may contain recipe files. */
         std::list<std::string> include_directories;
@@ -73,6 +122,22 @@ class bakery_t
 
 
 input_t load(const std::string &);
+
+/**
+ * Load a bakery data file and deserialize it in destination variables.
+ * Rebuilds the binary cache if necessary.
+ * If options for loading data has to be set, use the bakery_t class instead.
+ *
+ * @param path Path to the datafile.
+ * @param dest Reference to destination variables.
+ * @return false in case of error, true if data has been written into dest
+ *     variables.
+ */
+template <typename ...T> bool load(const std::string & path, T&... dest)
+{
+    bakery_t b;
+    return b.load(path, dest...);
+}
 
 
 } /* namespace bakery */

@@ -102,13 +102,24 @@ TEST_CASE("bakery_t")
     }
 
     /* Test loading without bakery_t instanciation */
-    SECTION("load direct")
+    SECTION("load with input")
     {
         bakery::input_t input = bakery::load("tests/int_42.dat");
         REQUIRE( input.good() == true );
         int a;
         input >> a;
         REQUIRE( a == 42 );
+    }
+
+    /* Load methods with variadic template arguments. */
+    SECTION("load with args")
+    {
+        int a = 0;
+        std::string b;
+        bool result = bakery::load("tests/int_21_string_hello.dat", a, b);
+        REQUIRE( result == true );
+        REQUIRE( a == 21 );
+        REQUIRE( b == "Hello world!" );
     }
 
     /* Test all native types. */

@@ -136,6 +136,7 @@ const std::list<std::string> & bakery_t::get_include_directories() const
 /**
  * Load a bakery data file. Rebuilds the binary cache if necessary, or if the
  * force_build option is enabled.
+ * If options for loading data has to be set, use the bakery_t class instead.
  *
  * @param path Path to the datafile.
  * @return input_t for deserialization.

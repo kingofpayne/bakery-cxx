@@ -1,0 +1,4 @@
+recipe "int_string.rec";
+
+the_int = 21;
+the_string = "Hello world!"
