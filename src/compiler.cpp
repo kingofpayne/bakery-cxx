@@ -29,12 +29,55 @@
 #include "util.hpp"
 #include "str.hpp"
 #include "rec/util.hpp"
-#include "parser.hpp"
+#include "recipe_or_data.hpp"
+#include "grammar/main.hpp"
 #include <limits>
 
 
 namespace bakery {
 namespace compiler {
+
+
+/**
+ * Loads a recipe or data from a file.
+ *
+ * If this function fails to read the file, an error message is pushed in the
+ * parse status.
+ *
+ * @param path path to the file containing the recipe.
+ * @param recipe_or_data Reference to a recipe_or_data object in which
+ *        the result will be stored.
+ * @param log Where the error messages will be stored.
+ */
+void load_from_file(const std::string & path,
+    recipe_or_data & recipe_or_data, log_t & log)
+{
+    /* Load the file */
+    std::string content;
+    error_code_t ec = str::load_from_file(path, content);
+
+    if (ec)
+    {
+        log.error("Failed to read file '" + path + "'.");
+        return;
+    }
+
+    std::string::const_iterator it = content.begin();
+    const std::string::const_iterator it_end = content.end();
+
+    grammar::main<std::string::const_iterator> grammar;
+
+    boost::spirit::qi::phrase_parse(it, it_end, grammar,
+        grammar::skipper(), recipe_or_data);
+
+    /* Check parse result. */
+    if (it != it_end)
+    {
+        log.error("in file '" + path + "' line "
+            + str::from(calculate_line_number(content, it))
+            + ", syntax error : " + show_string_position(content, it));
+    }
+}
 
 
 /**
@@ -75,7 +118,7 @@ void compile(
     }
 
     recipe_or_data recipe_or_data;
-    parser::load_from_file(abs_dat_path.string(), recipe_or_data, log);
+    load_from_file(abs_dat_path.string(), recipe_or_data, log);
 
     if (log.get_error_count() != 0)
     {
@@ -198,7 +241,7 @@ bool write_data(
 
     /* Loads the recipe */
     recipe_or_data recipe_or_data;
-    parser::load_from_file(def_path, recipe_or_data, state.log);
+    load_from_file(def_path, recipe_or_data, state.log);
 
     if (state.log.get_error_count() != 0)
     {
@@ -1535,7 +1578,7 @@ bool read_data(decompilation_state_t & state,
         return false;
     }
 
-    parser::load_from_file(def_path, recipe_or_data, state.log);
+    load_from_file(def_path, recipe_or_data, state.log);
 
     if (state.log.get_error_count())
     {
@@ -2643,7 +2686,7 @@ bool merge_included_recipe_files(
 
             /* Loads the recipe. */
             recipe_or_data recipe_or_data;
-            parser::load_from_file(p, recipe_or_data, log);
+            load_from_file(p, recipe_or_data, log);
 
             if (log.get_error_count() != 0)
             {
