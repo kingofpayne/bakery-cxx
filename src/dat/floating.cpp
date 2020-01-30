@@ -125,7 +125,7 @@ void floating::set_negative(bool value)
  */
 void floating::set_integer_string(const std::string & value)
 {
-    bakery_assert(valid_format(value, true));
+    bakery_assert(valid_format(value, false));
     integer_string = value;
 }
 
@@ -171,15 +171,22 @@ bool floating::valid_format(const std::string & s, bool n)
     if(s.length() == 0)
         return true;
 
+    size_t offset = 0;
     if(n)
     {
         char c0 = s[0];
         if(!std::isdigit(c0) && !(c0=='-'))
             return false;
+        if (c0 == '-')
+        {
+            offset = 1;
+            if (s.length() == 1)
+                return false;
+        }
     }
 
     return std::find_if(
-        s.begin()+1,
+        s.begin() + offset,
         s.end(),
         boost::bind(
             std::logical_not<bool>(),

@@ -60,6 +60,8 @@ class floating
         void set_decimal_string(const std::string &);
         void set_exponent_string(const std::string &);
 
+        static bool valid_format(const std::string &, bool);
+
     private:
         /** True for a negative floating. */
         bool negative;
@@ -69,8 +71,6 @@ class floating
         std::string decimal_string;
         /** Integer string of the exponent. */
         std::string exponent_string;
-
-        static bool valid_format(const std::string &, bool);
 };
 
 
