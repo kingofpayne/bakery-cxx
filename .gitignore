@@ -1,3 +1,4 @@
 run-tests
 libbakery.a
 libbakery.so
+test-out

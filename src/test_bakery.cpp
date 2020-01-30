@@ -201,4 +201,6 @@ TEST_CASE("bakery_t")
         bak.set_abort_on_error(false);
         REQUIRE( bak.get_abort_on_error() == false );
     }
+
+    /* Test saving basic data and decompilation */
 }
