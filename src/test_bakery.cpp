@@ -203,4 +203,10 @@ TEST_CASE("bakery_t")
     }
 
     /* Test saving basic data and decompilation */
+    SECTION("save")
+    {
+        bakery::bakery_t bak;
+        bakery::log_t log = bak.save("tests/out.dat", "int_string.rec", 10,
+            std::string("wololo"));
+    }
 }

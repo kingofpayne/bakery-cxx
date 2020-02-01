@@ -50,6 +50,49 @@ class output_t
         log_t & get_log();
         const log_t & get_log() const;
 
+        /**
+         * Writes t into the output stream using bakery serialization.
+         *
+         * @param t Source data.
+         * @return this
+         */
+        template <typename T> output_t & operator << (const T & t)
+        {
+            return (*this)(t);
+        }
+
+        /**
+         * Writes t into the output stream using bakery serialization.
+         *
+         * @param t Source data.
+         * @return this
+         */
+        template <typename T> output_t & operator () (const T & t)
+        {
+            typedef typename std::conditional<
+                std::is_enum<T>::value,
+                serializer< enum_wrapping_t<T> >,
+                typename std::conditional<
+                    std::is_arithmetic<T>::value,
+                    serializer< arithmetic_wrapping_t<T> >,
+                    serializer<T>
+                >::type
+            >::type selected_serializer_t;
+            selected_serializer_t().template operator()<T, output_t>(t, *this);
+            return *this;
+        }
+
+        /**
+         * Trivially stores data by direct stream write.
+         *
+         * @param data Source data to be written (without transformation) into
+         *     the stream.
+         */
+        template <typename T> void trivial(const T & data)
+        {
+            stream->write((const char*)(&data), (std::streamsize)sizeof(T));
+        }
+
     private:
         /** Output stream for serialization. Owned. */
         std::ostream* stream;

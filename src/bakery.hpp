@@ -27,6 +27,7 @@
 #include "compiler.hpp"
 #include "error_code.hpp"
 #include "input.hpp"
+#include "output.hpp"
 #include <boost/filesystem.hpp>
 #include <iostream>
 
@@ -38,7 +39,7 @@ namespace bakery {
  * Deserialize an input into a destination variable.
  * Commodity for bakery_t class.
  *
- * @param input input stream.
+ * @param input Input stream.
  * @param t Reference to the destination variable.
  */
 template <typename T> void deserialize_many(input_t & input, T& t)
@@ -46,18 +47,48 @@ template <typename T> void deserialize_many(input_t & input, T& t)
     input >> t;
 }
 
+
 /**
  * Deserialize an input into multiple destination variables.
  * Commodity for bakery_t class.
  *
  * @param input input stream.
- * @param t Reference to the destination variable.
+ * @param t Reference to the first destination variable.
+ * @param u... Others destination variables.
  */
 template <typename T, typename ... U>
     void deserialize_many(input_t & input, T& t, U&... u)
 {
     input >> t;
     deserialize_many(input, u...);
+}
+
+
+/**
+ * Serialize data into an output stream.
+ * Commodity for bakery_t class.
+ *
+ * @param output Output stream.
+ * @param t Const reference to the source variable.
+ */
+template <typename T> void serialize_many(output_t & output, const T& t)
+{
+    output << t;
+}
+
+
+/**
+ * Serialize multiple variables into an output stream.
+ *
+ * @param output Output stream.
+ * @param t Const reference to the first source variable.
+ * @param u... Const reference to the other source variables.
+ */
+template <typename T, typename ... U>
+    void serialize_many(output_t & output, const T & t, const U&... u)
+{
+    output << t;
+    serialize_many(output, u...);
 }
 
 
@@ -88,7 +119,7 @@ class bakery_t
         /**
          * Load a bakery data file and deserialize it in destination variables.
          *
-         * @param path Path to the datafile.
+         * @param path Path to the data file.
          * @param dest Reference to destination variable.
          * @return false in case of error (if abort_on_error is disabled), true
          *     if data has been written into dest variables.
@@ -105,6 +136,41 @@ class bakery_t
             {
                 return false;
             }
+        }
+
+        /**
+         * Save a bakery data in binary using serialization, and then decompiles
+         * it to regenerate a text data file.
+         *
+         * @param dat_path Path to the data file.
+         * @param rec_path Path to the recipe file to be used for decompilation.
+         * @return false in case of error (if abort_on_error is disabled), true
+         *     if the binary and data files have been written.
+         */
+        template <typename ... T> log_t save(const std::string & dat_path,
+            const std::string & rec_path, const T & ... src)
+        {
+            log_t log;
+            boost::filesystem::path bin_path(dat_path);
+            bin_path.replace_extension(".bin");
+            {
+                output_t output;
+                output.set_stream(new std::ofstream(bin_path.c_str()));
+                if (output)
+                {
+                    serialize_many(output, src...);
+                }
+                else
+                {
+                    log.error("Failed to open output file '"
+                        + std::string(bin_path.c_str()) + "'.");
+                    return log;
+                }
+                /* file will be closed here */
+            }
+            compiler::decompile(bin_path.c_str(), rec_path, dat_path,
+                include_directories, log);
+            return log;
         }
 
     private:
