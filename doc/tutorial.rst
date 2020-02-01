@@ -117,7 +117,7 @@ code is an example showing how to check and report errors:
         log.print();
     }
 
-Alternatively, use can't use ``verbose`` option to print loading messages in
+Alternatively, use ``verbose`` option to print loading messages in
 ``std::cout``, and ``abort_on_error`` option to stop program execution when an
 error is encountered. Thoose option must be set using the ``bakery_t`` class:
 
