@@ -21,6 +21,7 @@
 
 #include <catch2/catch.hpp>
 #include "bakery.hpp"
+#include "str.hpp"
 
 
 TEST_CASE("bakery_t")
@@ -205,8 +206,19 @@ TEST_CASE("bakery_t")
     /* Test saving basic data and decompilation */
     SECTION("save")
     {
+        std::string dat_out_path = "tests/out.dat";
+        boost::filesystem::remove(dat_out_path);
+        REQUIRE( boost::filesystem::exists(dat_out_path) == false );
+
         bakery::bakery_t bak;
-        bakery::log_t log = bak.save("tests/out.dat", "int_string.rec", 10,
+        bakery::log_t log = bak.save(dat_out_path, "int_string.rec", 10,
             std::string("wololo"));
+        std::string dat;
+        bakery::str::load_from_file(dat_out_path, dat);
+        REQUIRE( dat ==
+            "recipe \"int_string.rec\";\n"
+            "\n"
+            "the_int = 10;\n"
+            "the_string = \"wololo\";\n");
     }
 }
