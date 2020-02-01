@@ -60,14 +60,6 @@ straightforward:
     std::string name;
     int difficulty;
 
-    bakery::input_t input = bakery::load("settings.dat");
-    input >> width >> height >> fullscreen >> name >> difficulty;
-
-The last two lines can also be rewritten in the following shorter form:
-
-.. code-block:: c++
-    :caption: demo.cpp
-
     bakery::load("settings.dat", width, height, fullscreen, name, difficulty);
 
 What's happening ?
@@ -110,19 +102,19 @@ Dealing with errors
 -------------------
 
 Loading data can fail if there is an error in the **recipe** or **data** files.
-When calling the ``load`` method, Bakery will return an ``input_t`` object which
+When calling the ``load`` method, Bakery will return a ``log_t`` object which
 stores the status of the compilation, and possible error messages. The following
 code is an example showing how to check and report errors:
 
 .. code-block:: c++
     
     ...
-    bakery::input_t input = bakery::load("settings.dat");
-    if (input) {
-        input >> width >> height >> fullscreen >> name >> difficulty;
-    } else {
+    bakery::log_t log =
+        bakery::load("settings.dat", width, height, fullscreen, name, difficulty);
+    if (!log)
+    {
         std::cout << "Error during settings loading: " << std::endl;
-        input.get_log().print();
+        log.print();
     }
 
 Alternatively, use can't use ``verbose`` option to print loading messages in
@@ -136,8 +128,7 @@ error is encountered. Thoose option must be set using the ``bakery_t`` class:
     bak.set_verbose(true);
     bak.set_abort_on_error(true);
     // load will call std::abort in case of failure
-    bakery::input_t input = bak.load("settings.dat");
-    input >> width >> height >> fullscreen >> name >> difficulty;
+    bakery::load("settings.dat", width, height, fullscreen, name, difficulty);
 
 
 Improving difficulty field
@@ -184,3 +175,24 @@ value!
 
 Bakery has many defined types, supports structures, variants, typedefs, and
 templates types... This allows creating very rich data formats!
+
+Saving data
+-----------
+
+For now we saw how to load a settings data file using Bakery. To go further, we
+would like to save changes made in the settings during program execution. This
+involes two operations: serialization and decompilation. The serialization will
+save the settings in binary file *settings.bin*. Then, Bakery will decompile the
+binary using the *settings.rec* recipe file and produce a new *settings.dat*
+file.
+
+.. code-block:: c++
+
+    bakery::log_t log =
+        bakery::save("settings.dat", width, height, fullscreen, name, difficulty);
+    if (!log)
+    {
+        std::cout << "Error while saving settings: " << std::endl;
+        log.print();
+    }
+

@@ -23,20 +23,25 @@
 #include "log.hpp"
 
 
-TEST_CASE("compilation_log_t")
+TEST_CASE("log_t")
 {
     SECTION("constructor")
     {
         bakery::log_t log;
         REQUIRE( log.get_error_count() == 0 );
+        REQUIRE( (bool)log == true );
+        REQUIRE( log.good() == true );
         REQUIRE( log.get_messages() == std::list<bakery::log_message_t>() );
         REQUIRE( log.to_string() == "" );
+        REQUIRE( log.has_rebuilt() == false );
     }
 
     SECTION("add messages")
     {
         bakery::log_t log;
         log.error("abcd");
+        REQUIRE( (bool)log == false );
+        REQUIRE( log.good() == false );
         REQUIRE( log.get_error_count() == 1 );
         log.warning("defg");
         log.error("ijkl");
@@ -50,13 +55,19 @@ TEST_CASE("compilation_log_t")
     SECTION("clear")
     {
         bakery::log_t log;
-        log.error("abcd");
         log.warning("efgh");
+        REQUIRE( (bool)log == true );
+        REQUIRE( log.good() == true );
+        log.error("abcd");
         log.error("ijkl");
         REQUIRE( log.get_error_count() == 2 );
+        REQUIRE( (bool)log == false );
+        REQUIRE( log.good() == false );
         REQUIRE( log.get_messages().size() == 3 );
         log.clear();
         REQUIRE( log.get_error_count() == 0 );
+        REQUIRE( (bool)log == true );
+        REQUIRE( log.good() == true );
         REQUIRE( log.get_messages().size() == 0 );
     }
 
@@ -71,4 +82,16 @@ TEST_CASE("compilation_log_t")
         log.error("ijkl");
         REQUIRE( log.size() == 3 );
     }
+
+    SECTION("rebuilt setter/getter")
+    {
+        bakery::log_t x;
+        x.set_rebuilt(false);
+        REQUIRE( x.has_rebuilt() == false );
+        x.set_rebuilt(true);
+        REQUIRE( x.has_rebuilt() == true );
+        x.set_rebuilt(false);
+        REQUIRE( x.has_rebuilt() == false );
+    }
+
 }

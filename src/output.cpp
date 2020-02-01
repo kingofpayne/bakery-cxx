@@ -38,8 +38,7 @@ output_t::output_t(): stream(0) {}
  * @param other Moved instance.
  */
 output_t::output_t(output_t && other):
-    stream(other.stream),
-    log(std::move(other.log))
+    stream(other.stream)
 {
     other.stream = 0;
 }
@@ -64,24 +63,21 @@ output_t & output_t::operator = (output_t&& other)
     delete stream;
     stream = other.stream;
     other.stream = 0;
-    log = std::move(other.log);
     return *this;
 }
 
 
 /**
- * @return True if Bakery successfully opened the file. False if any error
- *         occured. Errors can be retrieved in the log.
+ * @return True if Bakery successfully opened the file.
  */
 bool output_t::good() const
 {
-    return (stream != 0) && ((bool)*stream) && (log.get_error_count() == 0);
+    return (stream != 0) && ((bool)*stream);
 }
 
 
 /**
- * @return True if Bakery successfully opened the file. False if any error
- *         occured. Errors can be retrieved in the log.
+ * @return True if Bakery successfully opened the file.
  */
 output_t::operator bool() const
 {
@@ -98,24 +94,6 @@ void output_t::set_stream(std::ostream* stream)
 {
     delete this->stream;
     this->stream = stream;
-}
-
-
-/**
- * @return Compilation log.
- */
-log_t & output_t::get_log()
-{
-    return log;
-}
-
-
-/**
- * @return Compilation log.
- */
-const log_t & output_t::get_log() const
-{
-    return log;
 }
 
 

@@ -114,28 +114,22 @@ class bakery_t
         bool get_verbose() const;
         void set_abort_on_error(bool);
         bool get_abort_on_error() const;
-        input_t load(const std::string &);
+        input_t load_input(const std::string &, log_t &);
 
         /**
          * Load a bakery data file and deserialize it in destination variables.
          *
          * @param path Path to the data file.
          * @param dest Reference to destination variable.
-         * @return false in case of error (if abort_on_error is disabled), true
-         *     if data has been written into dest variables.
+         * @return Log object containing potential error messages.
          */
-        template <typename ... T> bool load(const std::string & path, T&... dest)
+        template <typename ... T> log_t load(const std::string & path, T&... dest)
         {
-            input_t input = load(path);
+            log_t log;
+            input_t input = load_input(path, log);
             if (input)
-            {
                 deserialize_many(input, dest...);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return log;
         }
 
         /**
@@ -187,8 +181,6 @@ class bakery_t
 };
 
 
-input_t load(const std::string &);
-
 /**
  * Load a bakery data file and deserialize it in destination variables.
  * Rebuilds the binary cache if necessary.
@@ -199,7 +191,7 @@ input_t load(const std::string &);
  * @return false in case of error, true if data has been written into dest
  *     variables.
  */
-template <typename ...T> bool load(const std::string & path, T&... dest)
+template <typename ...T> log_t load(const std::string & path, T&... dest)
 {
     bakery_t b;
     return b.load(path, dest...);

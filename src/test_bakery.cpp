@@ -70,22 +70,20 @@ TEST_CASE("bakery_t")
         bakery::bakery_t bk;
         bk.set_force_rebuild(true);
         {
-            bakery::input_t input = bk.load("tests/int_42.dat");
-            REQUIRE( (bool)input == true );
-            REQUIRE( input.good() == true );
-            REQUIRE( input.has_rebuilt() == true );
-            input >> a;
+            bakery::log_t log = bk.load("tests/int_42.dat", a);
+            REQUIRE( (bool)log == true );
+            REQUIRE( log.good() == true );
+            REQUIRE( log.has_rebuilt() == true );
             REQUIRE( a == 42 );
         }
         /* Load again, verify that build occured again (force_rebuild flag is
          * set). */
         {
             a = 0;
-            bakery::input_t input = bk.load("tests/int_42.dat");
-            REQUIRE( (bool)input == true );
-            REQUIRE( input.good() == true );
-            REQUIRE( input.has_rebuilt() == true );
-            input >> a;
+            bakery::log_t log = bk.load("tests/int_42.dat", a);
+            REQUIRE( (bool)log == true );
+            REQUIRE( log.good() == true );
+            REQUIRE( log.has_rebuilt() == true );
             REQUIRE( a == 42 );
         }
         /* Disable force_rebuild switch, load again and verify it did not
@@ -93,27 +91,25 @@ TEST_CASE("bakery_t")
         bk.set_force_rebuild(false);
         {
             a = 0;
-            bakery::input_t input = bk.load("tests/int_42.dat");
-            REQUIRE( (bool)input == true );
-            REQUIRE( input.good() == true );
-            REQUIRE( input.has_rebuilt() == false );
-            input >> a;
+            bakery::log_t log = bk.load("tests/int_42.dat", a);
+            REQUIRE( (bool)log == true );
+            REQUIRE( log.good() == true );
+            REQUIRE( log.has_rebuilt() == false );
             REQUIRE( a == 42 );
         }
     }
 
     /* Test loading without bakery_t instanciation */
-    SECTION("load with input")
+    SECTION("load 1")
     {
-        bakery::input_t input = bakery::load("tests/int_42.dat");
-        REQUIRE( input.good() == true );
         int a;
-        input >> a;
+        bakery::log_t log = bakery::load("tests/int_42.dat", a);
+        REQUIRE( log.good() == true );
         REQUIRE( a == 42 );
     }
 
-    /* Load methods with variadic template arguments. */
-    SECTION("load with args")
+    /* Load methods with multiple variadic template arguments. */
+    SECTION("load 2")
     {
         int a = 0;
         std::string b;
@@ -128,41 +124,31 @@ TEST_CASE("bakery_t")
     {
         bakery::bakery_t bak;
         bak.set_force_rebuild(true);
-        bakery::input_t input = bak.load("tests/types.dat");
-        REQUIRE( input.good() == true );
-
         int a;
-        input >> a;
-        REQUIRE( a == -42 );
         short b;
-        input >> b;
-        REQUIRE( b == 101 );
         char c;
-        input >> c;
-        REQUIRE( c == 127 );
         float d;
-        input >> d;
-        REQUIRE( d == Approx(3.14159265f) );
         double e;
-        input >> e;
-        REQUIRE( e == Approx(-3.14159265) );
         std::string f;
-        input >> f;
-        REQUIRE( f == "Hello world!" );
         std::pair<int, float> g;
-        input >> g;
+        std::tuple<int, float, std::string> h;
+        std::list<int> i;
+        std::map<std::string, float> j;
+        bakery::log_t log = bak.load("tests/types.dat", a, b, c, d, e, f, g, h,
+            i, j);
+        REQUIRE( log.good() == true );
+        REQUIRE( a == -42 );
+        REQUIRE( b == 101 );
+        REQUIRE( c == 127 );
+        REQUIRE( d == Approx(3.14159265f) );
+        REQUIRE( e == Approx(-3.14159265) );
+        REQUIRE( f == "Hello world!" );
         REQUIRE( g.first == 99 );
         REQUIRE( g.second == 2.0 );
-        std::tuple<int, float, std::string> h;
-        input >> h;
         REQUIRE( std::get<0>(h) == 123456 );
         REQUIRE( std::get<1>(h) == -8.88f );
         REQUIRE( std::get<2>(h) == "tomato" );
-        std::list<int> i;
-        input >> i;
         REQUIRE( i == std::list<int>({5, 4, 3, 2, 1, 0}) );
-        std::map<std::string, float> j;
-        input >> j;
         REQUIRE( j.size() == 2 );
         REQUIRE( j["a"] == 6 );
         REQUIRE( j["b"] == 7 );
@@ -174,10 +160,9 @@ TEST_CASE("bakery_t")
         bakery::bakery_t bak;
         bak.set_force_rebuild(true);
         bak.include("./tests/dir");
-        bakery::input_t input = bak.load("tests/aaa.dat");
-        REQUIRE( input.good() );
         std::string value;
-        input >> value;
+        bakery::log_t log = bak.load("tests/aaa.dat", value);
+        REQUIRE( log.good() );
         REQUIRE( value == "aaa" );
     }
 

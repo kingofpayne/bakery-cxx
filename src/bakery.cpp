@@ -139,9 +139,10 @@ const std::list<std::string> & bakery_t::get_include_directories() const
  * If options for loading data has to be set, use the bakery_t class instead.
  *
  * @param path Path to the datafile.
+ * @param log Where error messages are written in case of problem.
  * @return input_t for deserialization.
  */
-input_t bakery_t::load(const std::string & path)
+input_t bakery_t::load_input(const std::string & path, log_t & log)
 {
     bool has_rebuilt_flag = false;
     if (verbose)
@@ -155,9 +156,6 @@ input_t bakery_t::load(const std::string & path)
     bin_path.replace_extension(".bin");
 
     input_t result;
-
-    /* Will get all compilation errors */
-    log_t log;
 
     /* Check dates */
     bool recompile = (!boost::filesystem::exists(bin_path)) || force_rebuild;
@@ -220,29 +218,15 @@ input_t bakery_t::load(const std::string & path)
         delete stream;
         if (abort_on_error)
             bakery_abort_message("Failed to open binary stream " + path + ".");
-        result.set_rebuilt(false);
+        log.set_rebuilt(false);
     }
     else
     {
-        result.set_rebuilt(has_rebuilt_flag);
+        log.set_rebuilt(has_rebuilt_flag);
         result.set_stream(stream);
     }
 
     return result;
-}
-
-
-/**
- * Load a bakery data file. Rebuilds the binary cache if necessary, or if the
- * force_build option is enabled.
- *
- * @param path Path to the datafile.
- * @return input_t for deserialization.
- */
-input_t load(const std::string & path)
-{
-    bakery_t b;
-    return b.load(path);
 }
 
 

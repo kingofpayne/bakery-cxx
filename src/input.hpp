@@ -25,7 +25,6 @@
 
 #include <istream>
 #include "serializers.hpp"
-#include "log.hpp"
 
 
 namespace bakery {
@@ -46,11 +45,7 @@ class input_t
         input_t & operator = (input_t &&);
         operator bool() const;
         bool good() const;
-        void set_rebuilt(bool);
-        bool has_rebuilt() const;
         void set_stream(std::istream*);
-        log_t & get_log();
-        const log_t & get_log() const;
 
         /**
          * Reads input into t using bakery deserialization.
@@ -103,10 +98,6 @@ class input_t
     private:
         /** Input stream for deserialization. Owned. */
         std::istream* stream;
-        /** When true, indicates the binary has been rebuilt. */
-        bool rebuilt_flag;
-        /** Compilation log, to store error messages. */
-        log_t log;
 };
 
 

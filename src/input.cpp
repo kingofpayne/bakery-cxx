@@ -26,10 +26,10 @@ namespace bakery {
 
 
 /**
- * Default constructor. Set stream to null and rebuilt flag to false. The input
- * cannot be deserialized after default construction.
+ * Default constructor. Set stream to null. The input cannot be deserialized
+ * after default construction.
  */
-input_t::input_t(): stream(0), rebuilt_flag(false) {}
+input_t::input_t(): stream(0) {}
 
 
 /**
@@ -38,12 +38,9 @@ input_t::input_t(): stream(0), rebuilt_flag(false) {}
  * @param other Moved instance.
  */
 input_t::input_t(input_t && other):
-    stream(other.stream),
-    rebuilt_flag(other.rebuilt_flag),
-    log(std::move(other.log))
+    stream(other.stream)
 {
     other.stream = 0;
-    other.rebuilt_flag = false;
 }
 
 
@@ -66,49 +63,25 @@ input_t & input_t::operator = (input_t&& other)
     delete stream;
     this->stream = other.stream;
     other.stream = 0;
-    rebuilt_flag = other.rebuilt_flag;
-    other.rebuilt_flag = false;
-    log = std::move(other.log);
     return *this;
 }
 
 
 /**
- * @return True if Bakery successfully opened the file. False if any error
- *         occured. Errors can be retrieved in the log.
+ * @return True if Bakery successfully opened the file.
  */
 bool input_t::good() const
 {
-    return (stream != 0) && ((bool)*stream) && (log.get_error_count() == 0);
+    return (stream != 0) && ((bool)*stream);
 }
 
 
 /**
- * @return True if Bakery successfully opened the file. False if any error
- *         occured. Errors can be retrieved in the log.
+ * @return True if Bakery successfully opened the file.
  */
 input_t::operator bool() const
 {
     return good();
-}
-
-
-/**
- * Set the rebuilt flag value. Called by bakery when loading a data file.
- */
-void input_t::set_rebuilt(bool value)
-{
-    rebuilt_flag = value;
-}
-
-
-/**
- * @return True if the binary has been rebuilt. False if it has been loaded from
- *         cache.
- */
-bool input_t::has_rebuilt() const
-{
-    return rebuilt_flag;
 }
 
 
@@ -121,24 +94,6 @@ void input_t::set_stream(std::istream* stream)
 {
     delete this->stream;
     this->stream = stream;
-}
-
-
-/**
- * @return Compilation log.
- */
-log_t & input_t::get_log()
-{
-    return log;
-}
-
-
-/**
- * @return Compilation log.
- */
-const log_t & input_t::get_log() const
-{
-    return log;
 }
 
 

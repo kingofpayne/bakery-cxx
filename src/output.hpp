@@ -25,7 +25,6 @@
 
 #include <istream>
 #include "serializers.hpp"
-#include "log.hpp"
 
 
 namespace bakery {
@@ -47,8 +46,6 @@ class output_t
         operator bool() const;
         bool good() const;
         void set_stream(std::ostream*);
-        log_t & get_log();
-        const log_t & get_log() const;
 
         /**
          * Writes t into the output stream using bakery serialization.
@@ -96,8 +93,6 @@ class output_t
     private:
         /** Output stream for serialization. Owned. */
         std::ostream* stream;
-        /** Decompilation log, to store error messages. */
-        log_t log;
 };
 
 

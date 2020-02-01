@@ -48,6 +48,10 @@ class log_t
         const std::list<log_message_t> & get_messages() const;
         void clear();
         size_t size() const;
+        void set_rebuilt(bool);
+        bool has_rebuilt() const;
+        operator bool() const;
+        bool good() const;
 
     private:
         /** List of the messages. */
@@ -55,6 +59,8 @@ class log_t
         /** Boolean indicating the error count. This member is calculated when
          * adding the messages to the status. */
         size_t error_count;
+        /** When true, indicates the binary has been rebuilt. */
+        bool rebuilt_flag;
 };
 
 

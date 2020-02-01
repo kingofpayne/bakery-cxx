@@ -30,7 +30,8 @@ namespace bakery {
  * Constructor
  */
 log_t::log_t():
-    error_count(0)
+    error_count(0),
+    rebuilt_flag(false)
 {}
 
 
@@ -150,6 +151,43 @@ void log_t::clear()
 size_t log_t::size() const
 {
     return messages.size();
+} 
+
+
+/**
+ * Set the rebuilt flag value. Called by bakery when loading a data file.
+ */
+void log_t::set_rebuilt(bool value)
+{
+    rebuilt_flag = value;
+}
+
+
+/**
+ * @return True if the binary has been rebuilt. False if it has been loaded from
+ *     cache.
+ */
+bool log_t::has_rebuilt() const
+{
+    return rebuilt_flag;
+}
+
+
+/**
+ * @return True if log has no error messages.
+ */
+bool log_t::good() const
+{
+    return get_error_count() == 0;
+}
+
+
+/**
+ * @return True if log has no error messages.
+ */
+log_t::operator bool() const
+{
+    return good();
 }
 
 
