@@ -43,10 +43,10 @@ namespace dat {
  * For example, the string '1.45e-4' will be stored as {'1', '45', '-4'}. The
  * string '1' will be stored as {'1', '', ''}.
  */
-class floating
+class floating_t
 {
     public:
-        floating();
+        floating_t();
 
         bool get_negative() const;
         const std::string & get_integer_string() const;

@@ -33,7 +33,7 @@ namespace dat {
 /**
  * Constructor. All parts strings are initialized to empty strings.
  */
-floating::floating():
+floating_t::floating_t():
     negative(false),
     integer_string(),
     decimal_string(),
@@ -44,7 +44,7 @@ floating::floating():
 /**
  * @return True if the floating is negative, false otherwise.
  */
-bool floating::get_negative() const
+bool floating_t::get_negative() const
 {
     return negative;
 }
@@ -54,7 +54,7 @@ bool floating::get_negative() const
  * @return The string representing the integer part of the floating number, or
  *         an empty string (meaning 0).
  */
-const std::string & floating::get_integer_string() const
+const std::string & floating_t::get_integer_string() const
 {
     return integer_string;
 }
@@ -64,7 +64,7 @@ const std::string & floating::get_integer_string() const
  * @return The string representing the decimal part of the floating number, or
  *         an empty string (meaning 0).
  */
-const std::string & floating::get_decimal_string() const
+const std::string & floating_t::get_decimal_string() const
 {
     return decimal_string;
 }
@@ -74,7 +74,7 @@ const std::string & floating::get_decimal_string() const
  * @return The string representing the exponent part of the floating number, or
  *         an empty string (meaning 0).
  */
-const std::string & floating::get_exponent_string() const
+const std::string & floating_t::get_exponent_string() const
 {
     return exponent_string;
 }
@@ -83,7 +83,7 @@ const std::string & floating::get_exponent_string() const
 /**
  * @return True if the integer part string is not empty.
  */
-bool floating::has_integer_part() const
+bool floating_t::has_integer_part() const
 {
     return !integer_string.empty();
 }
@@ -92,7 +92,7 @@ bool floating::has_integer_part() const
 /**
  * @return True if the decimal part string is not empty.
  */
-bool floating::has_decimal_part() const
+bool floating_t::has_decimal_part() const
 {
     return !decimal_string.empty();
 }
@@ -101,7 +101,7 @@ bool floating::has_decimal_part() const
 /**
  * @return True if the exponent part string is not empty.
  */
-bool floating::has_exponent_part() const
+bool floating_t::has_exponent_part() const
 {
     return !exponent_string.empty();
 }
@@ -112,7 +112,7 @@ bool floating::has_exponent_part() const
  *
  * @param value True for making the floating negative.
  */
-void floating::set_negative(bool value)
+void floating_t::set_negative(bool value)
 {
     negative = value;
 }
@@ -123,7 +123,7 @@ void floating::set_negative(bool value)
  *
  * @param value A string matching the regex '-?[0-9]*'.
  */
-void floating::set_integer_string(const std::string & value)
+void floating_t::set_integer_string(const std::string & value)
 {
     bakery_assert(valid_format(value, false));
     integer_string = value;
@@ -137,7 +137,7 @@ void floating::set_integer_string(const std::string & value)
  *
  * @throw core::exceptions::invalid_parameter* if value has a wrong format.
  */
-void floating::set_decimal_string(const std::string & value)
+void floating_t::set_decimal_string(const std::string & value)
 {
     bakery_assert(valid_format(value, false));
     decimal_string = value;
@@ -151,7 +151,7 @@ void floating::set_decimal_string(const std::string & value)
  *
  * @throw core::exceptions::invalid_parameter* if value has a wrong format.
  */
-void floating::set_exponent_string(const std::string & value)
+void floating_t::set_exponent_string(const std::string & value)
 {
     bakery_assert(valid_format(value, true));
     exponent_string = value;
@@ -166,7 +166,7 @@ void floating::set_exponent_string(const std::string & value)
  *
  * @return True if s has the right format.
  */
-bool floating::valid_format(const std::string & s, bool n)
+bool floating_t::valid_format(const std::string & s, bool n)
 {
     if(s.length() == 0)
         return true;

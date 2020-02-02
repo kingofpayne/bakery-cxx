@@ -86,7 +86,7 @@ class node
         const std::string & get_name() const;
         const std::string & get_string() const;
         const std::string & get_identifier() const;
-        const floating & get_floating() const;
+        const floating_t & get_floating() const;
         bool get_bool() const;
         template <template <typename T, typename U> class Container>
             Container<sptr, std::allocator<sptr> >
@@ -95,7 +95,7 @@ class node
         void set_name(const std::string &);
         void add_child(const sptr &);
         void set_string(const std::string &);
-        void set_floating(const floating &);
+        void set_floating(const floating_t &);
         void set_identifier(const std::string &);
         void set_bool(bool);
 
@@ -107,11 +107,7 @@ class node
         /** Sub nodes */
         node_sptr_list children;
         /** data, depending on the node kind. */
-        boost::variant<
-            std::string,
-            floating,
-            bool
-        > data;
+        boost::variant<std::string, floating_t, bool> data;
 };
 
 

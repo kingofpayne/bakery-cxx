@@ -73,7 +73,7 @@ template <typename I>
         unsigned_integer,
         quoted_string;
 
-    boost::spirit::qi::rule<I, dat::floating(), skipper> floating_number;
+    boost::spirit::qi::rule<I, dat::floating_t(), skipper> floating_number;
 
     boost::spirit::qi::rule<I, rec::path(), skipper> path;
 

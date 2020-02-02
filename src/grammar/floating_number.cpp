@@ -75,7 +75,7 @@ template <typename I>
         -(
             qi::char_('-')
             [
-                boost::phoenix::bind(&dat::floating::set_negative, _val,
+                boost::phoenix::bind(&dat::floating_t::set_negative, _val,
                     true)
             ]
         )
@@ -83,7 +83,7 @@ template <typename I>
         (
             rules.unsigned_integer
             [
-                boost::phoenix::bind(&dat::floating::set_integer_string,
+                boost::phoenix::bind(&dat::floating_t::set_integer_string,
                     _val, _1)
             ]
             ||
@@ -92,7 +92,7 @@ template <typename I>
                 >>
                 rules.unsigned_integer
                 [
-                    boost::phoenix::bind(&dat::floating::set_decimal_string,
+                    boost::phoenix::bind(&dat::floating_t::set_decimal_string,
                         _val, _1)
                 ]
             )
@@ -103,7 +103,7 @@ template <typename I>
             >>
             rules.integer
             [
-                boost::phoenix::bind(&dat::floating::set_exponent_string,
+                boost::phoenix::bind(&dat::floating_t::set_exponent_string,
                     _val, _1)
             ]
         );

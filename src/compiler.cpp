@@ -1278,7 +1278,7 @@ bool write_native_integer(compilation_state_t & state,
     }
 
     /* floating value must only have an integer part. */
-    const dat::floating & floating = data_node.get_floating();
+    const dat::floating_t & floating = data_node.get_floating();
 
     if (floating.has_decimal_part())
     {
@@ -2538,9 +2538,7 @@ void populate_node(rec::node::sptr node)
  *
  * @return True if no error occurs.
  */
-bool floating_to_mpf(
-    mpf_class & out,
-    const dat::floating & floating,
+bool floating_to_mpf(mpf_class & out, const dat::floating_t & floating,
     log_t & log)
 {
     /* Get the integer value */

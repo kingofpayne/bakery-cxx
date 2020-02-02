@@ -90,7 +90,7 @@ node::node(kind::value _kind):
             break;
 
         case kind::floating:
-            data = floating();
+            data = floating_t();
             break;
 
         case kind::identifier:
@@ -151,10 +151,10 @@ const std::string & node::get_string() const
  *
  * @throw core::exceptions::unexpected_call if node's kind is not kind::floating.
  */
-const floating & node::get_floating() const
+const floating_t & node::get_floating() const
 {
     bakery_assert(kind == kind::floating);
-    return boost::get<const floating>(data);
+    return boost::get<const floating_t>(data);
 }
 
 
@@ -286,7 +286,7 @@ void node::set_string(const std::string & value)
  *
  * @throw core::exceptions::unexpected_call if node's kind is not kind::floating.
  */
-void node::set_floating(const floating & value)
+void node::set_floating(const floating_t & value)
 {
     bakery_assert(kind == kind::floating);
     data = value;

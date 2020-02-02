@@ -209,7 +209,7 @@ bool read_native_list(decompilation_state_t &,
 bool read_native_map(decompilation_state_t &,
     const rec::type_instanciation_t &);
 
-bool floating_to_mpf(mpf_class &, const dat::floating &, log_t &);
+bool floating_to_mpf(mpf_class &, const dat::floating_t &, log_t &);
 
 bool check_template_parameter_count(const rec::type_instanciation_t &,
     log_t &);
