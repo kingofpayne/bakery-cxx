@@ -186,8 +186,7 @@ input_t bakery_t::load_input(const std::string & path, log_t & log)
             if (verbose)
             {
                 std::cout << " failed." << std::endl;
-
-                std::cerr << "An error occured during compilation of ressource "
+                std::cerr << "An error occured during compilation of resource "
                     << path
                     << ", below are listed the error messages reported during "
                     << "compilation."
@@ -203,7 +202,7 @@ input_t bakery_t::load_input(const std::string & path, log_t & log)
             if (abort_on_error)
             {
                 /* Stop program execution, this is unrecoverable ! */
-                bakery_abort_message("Cannot load ressource " + path + ".");
+                bakery_abort_message("Cannot load resource " + path + ".");
             }
         }
     }

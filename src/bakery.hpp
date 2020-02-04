@@ -156,14 +156,33 @@ class bakery_t
                 }
                 else
                 {
-                    log.error("Failed to open output file '"
-                        + std::string(bin_path.c_str()) + "'.");
+                    std::string msg = "Failed to open output file "
+                        + std::string(bin_path.c_str()) + ".";
+                    if (abort_on_error)
+                        bakery_abort_message(msg);
+                    else if (verbose)
+                        std::cout << msg << std::endl;
+                    log.error(msg);
                     return log;
                 }
                 /* file will be closed here */
             }
             compiler::decompile(bin_path.c_str(), rec_path, dat_path,
                 include_directories, log);
+            if (!log)
+            {
+                if (verbose)
+                {
+                    std::cout << "An error occured during decompilation of "
+                        "resource " << dat_path << ", below are listed the "
+                        "error messages reported during decompilation."
+                        << std::endl;
+                    log.print();
+                }
+
+                if (abort_on_error)
+                    bakery_abort_message("Cannot decompile resource " + dat_path + ".");
+            }
             return log;
         }
 
