@@ -18,5 +18,4 @@ target_link_libraries(run-tests bakery boost_filesystem boost_regex boost_system
 add_test(NAME tests COMMAND run-tests WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
 install(TARGETS bakery DESTINATION lib)
-file(GLOB_RECURSE lib_headers "${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp")
-install(FILES ${lib_headers} DESTINATION include/bakery)
+install(DIRECTORY src/ DESTINATION include/bakery FILES_MATCHING REGEX .*\.hpp)
