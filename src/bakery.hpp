@@ -114,7 +114,7 @@ class bakery_t
         bool get_verbose() const;
         void set_abort_on_error(bool);
         bool get_abort_on_error() const;
-        input_t load_input(const std::string &, log_t &);
+        input_t load_input(const std::string &, log_t &) const;
 
         /**
          * Load a bakery data file and deserialize it in destination variables.
@@ -123,7 +123,8 @@ class bakery_t
          * @param dest Reference to destination variable.
          * @return Log object containing potential error messages.
          */
-        template <typename ... T> log_t load(const std::string & path, T&... dest)
+        template <typename ... T>
+            log_t load(const std::string & path, T&... dest) const
         {
             log_t log;
             input_t input = load_input(path, log);
@@ -142,7 +143,7 @@ class bakery_t
          *     if the binary and data files have been written.
          */
         template <typename ... T> log_t save(const std::string & dat_path,
-            const std::string & rec_path, const T & ... src)
+            const std::string & rec_path, const T & ... src) const
         {
             log_t log;
             boost::filesystem::path bin_path(dat_path);

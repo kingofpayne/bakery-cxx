@@ -119,6 +119,18 @@ TEST_CASE("bakery_t")
         REQUIRE( b == "Hello world!" );
     }
 
+    /* Load with a const reference to a bakery */
+    SECTION("load with const ref")
+    {
+        bakery::bakery_t bak;
+        bak.set_force_rebuild(true);
+        const bakery::bakery_t & bak2 = bak;
+        int a;
+        bakery::log_t log = bak2.load("tests/int_42.dat", a);
+        REQUIRE( log.good() == true );
+        REQUIRE( a == 42 );
+    }
+
     /* Test all native types. */
     SECTION("load native types")
     {
@@ -205,5 +217,18 @@ TEST_CASE("bakery_t")
             "\n"
             "the_int = 10;\n"
             "the_string = \"wololo\";\n");
+    }
+
+    /* Save with a const reference to a bakery */
+    SECTION("save with const ref")
+    {
+        bakery::bakery_t bak;
+        const bakery::bakery_t & bak2 = bak;
+
+        std::string dat_out_path = "tests/out.dat";
+        boost::filesystem::remove(dat_out_path);
+        REQUIRE( boost::filesystem::exists(dat_out_path) == false );
+        bakery::log_t log = bak2.save(dat_out_path, "int_string.rec", 10,
+            std::string("wololo"));
     }
 }

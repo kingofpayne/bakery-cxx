@@ -142,7 +142,7 @@ const std::list<std::string> & bakery_t::get_include_directories() const
  * @param log Where error messages are written in case of problem.
  * @return input_t for deserialization.
  */
-input_t bakery_t::load_input(const std::string & path, log_t & log)
+input_t bakery_t::load_input(const std::string & path, log_t & log) const
 {
     bool has_rebuilt_flag = false;
     if (verbose)
