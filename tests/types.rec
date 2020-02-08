@@ -8,3 +8,10 @@ pair<int, float> g;
 tuple<int, float, string> h;
 list<int> i;
 map<string, float> j;
+
+enum k_t {
+  first,
+  second
+};
+
+k_t k;

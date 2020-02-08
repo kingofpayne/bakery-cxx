@@ -154,8 +154,10 @@ TEST_CASE("bakery_t")
         std::tuple<int, float, std::string> h;
         std::list<int> i;
         std::map<std::string, float> j;
+        enum k_t { first, second };
+        k_t k;
         bakery::log_t log = bak.load("tests/types.dat", a, b, c, d, e, f, g, h,
-            i, j);
+            i, j, k);
         REQUIRE( log.good() == true );
         REQUIRE( a == -42 );
         REQUIRE( b == 101 );
@@ -172,6 +174,7 @@ TEST_CASE("bakery_t")
         REQUIRE( j.size() == 2 );
         REQUIRE( j["a"] == 6 );
         REQUIRE( j["b"] == 7 );
+        REQUIRE( k == 1 );
     };
 
     /* Test include directory effectiveness */

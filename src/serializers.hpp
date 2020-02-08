@@ -103,7 +103,7 @@ template <typename E> struct serializer< enum_wrapping_t<E> >
     template <typename U, typename IO> void operator()(E & u, IO & io)
     {
         int x;
-        io.stream_serialize(x);
+        io.trivial(x);
         u = (E)x;
     }
 };
