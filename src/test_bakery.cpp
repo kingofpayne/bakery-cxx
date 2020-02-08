@@ -40,8 +40,11 @@ TEST_CASE("bakery_t")
     /* Test include directory list management */
     SECTION("include")
     {
-        bakery::bakery_t bk;
-        bk.include({"aaa", "zzz", "bbb"});
+        bakery::bakery_t bk({"aaa"});
+        REQUIRE( bk.get_include_directories()
+            == std::list<std::string>({"aaa"}) );
+        REQUIRE( bk.get_include_directories().size() == 1 );
+        bk.include({"zzz", "bbb"});
         REQUIRE( bk.get_include_directories().size() == 3 );
         REQUIRE( bk.get_include_directories()
             == std::list<std::string>({"aaa", "zzz", "bbb"}) );
@@ -49,6 +52,11 @@ TEST_CASE("bakery_t")
         REQUIRE( bk.get_include_directories().size() == 4 );
         REQUIRE( bk.get_include_directories()
             == std::list<std::string>({"aaa", "zzz", "bbb", "ccc"}) );
+        bk.include(std::list<std::string>({"uuu", "jjj"}));
+        REQUIRE( bk.get_include_directories().size() == 6 );
+        REQUIRE( bk.get_include_directories()
+            == std::list<std::string>(
+            {"aaa", "zzz", "bbb", "ccc", "uuu", "jjj"}) );
     }
 
     /* Test force_rebuild switch getter/setter */

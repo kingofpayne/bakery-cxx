@@ -105,8 +105,10 @@ class bakery_t
 {
     public:
         bakery_t();
+        bakery_t(std::initializer_list<std::string>);
         void include(const std::string &);
         void include(const std::list<std::string> &);
+        void include(const std::initializer_list<std::string> &);
         const std::list<std::string> & get_include_directories() const;
         void set_force_rebuild(bool);
         bool get_force_rebuild() const;

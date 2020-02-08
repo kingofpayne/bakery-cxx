@@ -37,6 +37,19 @@ bakery_t::bakery_t():
 
 
 /**
+ * Constructor with a list of include directories.
+ *
+ * @param includes List of include directories for the recipe files.
+ */
+bakery_t::bakery_t(std::initializer_list<std::string> includes):
+    include_directories(includes),
+    force_rebuild(false),
+    verbose(false),
+    abort_on_error(false)
+{}
+
+
+/**
  * Set or unset force_rebuild switch.
  *
  * @param value New value.
@@ -107,6 +120,18 @@ bool bakery_t::get_abort_on_error() const
  * @param dirs List of include directories.
  */
 void bakery_t::include(const std::list<std::string> & dirs)
+{
+    std::copy(dirs.begin(), dirs.end(),
+        std::back_inserter(include_directories));
+}
+
+
+/**
+ * Add a list of include directories.
+ *
+ * @param dirs List of include directories.
+ */
+void bakery_t::include(const std::initializer_list<std::string> & dirs)
 {
     std::copy(dirs.begin(), dirs.end(),
         std::back_inserter(include_directories));
