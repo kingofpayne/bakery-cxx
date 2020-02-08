@@ -7,6 +7,7 @@ string f;
 pair<int, float> g;
 tuple<int, float, string> h;
 list<int> i;
+list<int> i2;
 map<string, float> j;
 
 enum k_t {

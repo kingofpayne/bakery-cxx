@@ -153,11 +153,12 @@ TEST_CASE("bakery_t")
         std::pair<int, float> g;
         std::tuple<int, float, std::string> h;
         std::list<int> i;
+        std::vector<int> i2;
         std::map<std::string, float> j;
         enum k_t { first, second };
         k_t k;
         bakery::log_t log = bak.load("tests/types.dat", a, b, c, d, e, f, g, h,
-            i, j, k);
+            i, i2, j, k);
         REQUIRE( log.good() == true );
         REQUIRE( a == -42 );
         REQUIRE( b == 101 );
@@ -171,6 +172,7 @@ TEST_CASE("bakery_t")
         REQUIRE( std::get<1>(h) == -8.88f );
         REQUIRE( std::get<2>(h) == "tomato" );
         REQUIRE( i == std::list<int>({5, 4, 3, 2, 1, 0}) );
+        REQUIRE( i2 == std::vector<int>({11, 10, 9, 8, 7, 6}) );
         REQUIRE( j.size() == 2 );
         REQUIRE( j["a"] == 6 );
         REQUIRE( j["b"] == 7 );

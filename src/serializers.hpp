@@ -170,7 +170,8 @@ template <typename T>
         io(size);
         u.clear();
         u.resize(size);
-        std::for_each(u.begin(), u.end(), io);
+        for (auto & item: u)
+            io(item);
     }
 
 
