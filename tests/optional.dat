@@ -1,0 +1,4 @@
+recipe "optional.rec";
+
+a = 99;
+b = "hello";

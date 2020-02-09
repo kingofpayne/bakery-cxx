@@ -1,0 +1,4 @@
+optional int a;
+optional string b;
+optional int c;
+optional string d;
