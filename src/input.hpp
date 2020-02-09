@@ -95,6 +95,22 @@ class input_t
             stream->read((char*)(&dest), (std::streamsize)sizeof(T));
          }
 
+        /**
+         * Load an optional value. Reads a boolean indicating if the value of
+         * dest is present in the stream or not, and deserialize the value if
+         * present.
+         *
+         * @param dest Destination variable.
+         */
+        template <typename T> input_t & optional(T & dest)
+        {
+            bool present;
+            trivial(present);
+            if (present)
+                (*this)(dest);
+            return *this;
+        }
+
     private:
         /** Input stream for deserialization. Owned. */
         std::istream* stream;

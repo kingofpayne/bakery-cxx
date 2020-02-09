@@ -179,6 +179,25 @@ TEST_CASE("bakery_t")
         REQUIRE( k == 1 );
     };
 
+    /* Test optional qualifier */
+    SECTION("load optional")
+    {
+        bakery::bakery_t bak;
+        bak.set_force_rebuild(true);
+        int a = -1;
+        std::string b = "default";
+        int c = -1;
+        std::string d = "default";
+        bakery::log_t log;
+        bakery::input_t input = bak.load_input("tests/optional.dat", log);
+        REQUIRE( log.good() == true );
+        input.optional(a).optional(b).optional(c).optional(d);
+        REQUIRE( a == 99 );
+        REQUIRE( b == "hello" );
+        REQUIRE( c == -1 );
+        REQUIRE( d == "default" );
+    }
+
     /* Test include directory effectiveness */
     SECTION("include")
     {
