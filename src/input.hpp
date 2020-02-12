@@ -111,6 +111,38 @@ class input_t
             return *this;
         }
 
+        /**
+         * Deserializes using a setter.
+         *
+         * @param u Reference to the object owning the serialized member.
+         *
+         * @tparam U Reference or const reference of the class having the setter
+         *     method.
+         * @tparam T Parameter type of the setter method.
+         * @tparam S Setter method pointer type.
+         */
+        template <typename U, typename T, void (std::remove_const<typename
+            std::remove_reference<U>::type>::type::*S)(T)>
+        input_t & setter(typename std::add_lvalue_reference<U>::type u)
+        {
+            typename std::remove_const<typename std::remove_reference<T>::type>
+                ::type x;
+            (*this)(x);
+            (u.*S)(x);
+            return *this;
+        }
+
+        /**
+         * Does nothing for input_t. Required to implement the same interface as
+         * output_t.
+         */
+        template <typename U, typename T, T (std::remove_const<
+            typename std::remove_reference<U>::type>::type::*G)() const>
+        input_t & getter(const U &)
+        {
+            return *this;
+        }
+
     private:
         /** Input stream for deserialization. Owned. */
         std::istream* stream;

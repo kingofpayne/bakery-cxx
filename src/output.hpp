@@ -75,7 +75,14 @@ class output_t
                     serializer<T>
                 >::type
             >::type selected_serializer_t;
-            selected_serializer_t().template operator()<T, output_t>(t, *this);
+            selected_serializer_t().template operator()<
+                /* Type tranformation:
+                 * from (int) to (int &)
+                 * from (float) to (float &)
+                 * etc. */
+                typename boost::call_traits<T>::const_reference,
+                output_t
+            >(t, *this);
             return *this;
         }
 
@@ -88,6 +95,36 @@ class output_t
         template <typename T> void trivial(const T & data)
         {
             stream->write((const char*)(&data), (std::streamsize)sizeof(T));
+        }
+
+        /**
+         * Does nothing for output_t. Required to implement the same interface
+         * as input_t.
+         */
+        template <typename U, typename T,
+            void (std::remove_const<typename std::remove_reference<U>::type>
+            ::type::*S)(T)>
+        output_t & setter(const U & u)
+        {
+            return *this;
+        }
+
+        /**
+         * Serializes using a getter.
+         *
+         * @param u reference to the object owning the serialized member.
+         *
+         * @tparam U Reference or const reference of the class having the setter
+         *     method.
+         * @tparam T Parameter type of the setter method.
+         * @tparam G Getter method pointer type.
+         */
+        template <typename U, typename T,
+            T (std::remove_reference<U>::type::*G)() const>
+        output_t & getter(const U & u)
+        {
+            (*this)((u.*G)());
+            return *this;
         }
 
     private:

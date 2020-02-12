@@ -24,6 +24,53 @@
 #include "str.hpp"
 
 
+class test_class_t
+{
+    public:
+        test_class_t(): a(0), b(){}
+
+        /* Prevent copies: we want bakery to serialize using references. */
+        test_class_t(const test_class_t &) = delete;
+        test_class_t & operator = (const test_class_t &) = delete;
+
+        int get_a() const
+        {
+            return a;
+        }
+
+        void set_a(int value)
+        {
+            a = value;
+        }
+
+        const std::string & get_b() const
+        {
+            return b;
+        }
+
+        void set_b(const std::string & value)
+        {
+            b = value;
+        }
+
+    private:
+        int a;
+        std::string b;
+};
+
+
+namespace bakery {
+BAKERY_BASIC_SERIALIZER_BEGIN(test_class_t)
+    io.template getter<test_class_t, int, &test_class_t::get_a>(x)
+        .template setter<test_class_t, int, &test_class_t::set_a>(x)
+        .template getter<test_class_t, const std::string &,
+            &test_class_t::get_b>(x)
+        .template setter<test_class_t, const std::string &,
+            &test_class_t::set_b>(x);
+BAKERY_BASIC_SERIALIZER_END
+}
+
+
 TEST_CASE("bakery_t")
 {
     /* Test state after default constructor. */
@@ -198,6 +245,16 @@ TEST_CASE("bakery_t")
         REQUIRE( d == "default" );
     }
 
+    /* Load using setters */
+    SECTION("load setter")
+    {
+        test_class_t x;
+        bool result = bakery::load("tests/int_21_string_hello.dat", x);
+        REQUIRE( result == true );
+        REQUIRE( x.get_a() == 21 );
+        REQUIRE( x.get_b() == "Hello world!" );
+    }
+
     /* Test include directory effectiveness */
     SECTION("include")
     {
@@ -262,5 +319,27 @@ TEST_CASE("bakery_t")
         REQUIRE( boost::filesystem::exists(dat_out_path) == false );
         bakery::log_t log = bak2.save(dat_out_path, "int_string.rec", 10,
             std::string("wololo"));
+    }
+
+    /* Test getters when saving */
+    SECTION("save getters")
+    {
+        test_class_t x;
+        x.set_a(451);
+        x.set_b("Fahrenheit");
+
+        std::string dat_out_path = "tests/out.dat";
+        boost::filesystem::remove(dat_out_path);
+        REQUIRE( boost::filesystem::exists(dat_out_path) == false );
+        bakery::bakery_t bak;
+        bakery::log_t log = bak.save(dat_out_path, "int_string.rec", x);
+        REQUIRE( log.good() == true );
+        std::string dat;
+        bakery::str::load_from_file(dat_out_path, dat);
+        REQUIRE( dat ==
+            "recipe \"int_string.rec\";\n"
+            "\n"
+            "the_int = 451;\n"
+            "the_string = \"Fahrenheit\";\n");
     }
 }
