@@ -1,18 +1,18 @@
-int a;
-short b;
-char c;
-float d;
-double e;
-string f;
-pair<int, float> g;
-tuple<int, float, string> h;
-list<int> i;
-list<int> i2;
-map<string, float> j;
+int v0;
+short v1;
+char v2;
+float v3;
+double v4;
+string v5;
+pair<int, float> v6;
+tuple<int, float, string> v7;
+list<int> v8;
+list<int> v9;
+map<string, float> v10;
 
 enum k_t {
   first,
   second
 };
 
-k_t k;
+k_t v11;
