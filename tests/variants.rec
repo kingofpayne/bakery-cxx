@@ -1,0 +1,9 @@
+variant some_variant_t {
+  int a;
+  float b;
+  string c;
+};
+
+some_variant_t v0;
+some_variant_t v1;
+some_variant_t v2;

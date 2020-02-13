@@ -226,6 +226,22 @@ TEST_CASE("bakery_t")
         REQUIRE( v11 == 1 );
     };
 
+    /* Test variants */
+    SECTION("load variant")
+    {
+        boost::variant<int, float, std::string> v0, v1, v2;
+        bakery::bakery_t bak;
+        bak.set_force_rebuild(true);
+        bakery::log_t log = bak.load("tests/variants.dat", v0, v1, v2);
+        REQUIRE( log.good() == true );
+        REQUIRE( v0.which() == 0 );
+        REQUIRE( boost::get<int>(v0) == 2020 );
+        REQUIRE( v1.which() == 1 );
+        REQUIRE( boost::get<float>(v1) == 9.9f );
+        REQUIRE( v2.which() == 2 );
+        REQUIRE( boost::get<std::string>(v2) == "good" );
+    }
+
     /* Test optional qualifier */
     SECTION("load optional")
     {

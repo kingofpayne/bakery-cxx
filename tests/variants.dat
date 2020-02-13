@@ -1,0 +1,5 @@
+recipe "variants.rec";
+
+v0 = a: 2020;
+v1 = b: 9.9;
+v2 = c: "good";
