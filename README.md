@@ -24,8 +24,16 @@ Documentation is available at https://libbakery.readthedocs.io/.
 This library depends on boost (mainly boost::spirit), gmpxx and catch2 (for
 testing only). A recent gcc compiler supporting C++17 features is required.
 
-## Building
+## Build and install
 
-Building can be achieved using SCons. There is a very simple and poor sconstruct
-script which may be improved in the future. It has only been tested on Linux
-(Ubuntu Bionic)
+Build and installation can be achieved using CMake:
+
+```
+mkdir build && cd build
+cmake ..
+make
+make install
+```
+
+Both gcc and clang compilers are supported.
+Build is regularly tested on Linux Ubuntu Bionic with Continuous Integration.
