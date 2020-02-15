@@ -3,12 +3,17 @@ before_install:
   - sudo mkdir /usr/local/include/catch2
   - sudo mv catch.hpp /usr/local/include/catch2
 language: cpp
-script: scons
+before_script:
+  - mkdir build
+  - cd build
+  - cmake ..
+script:
+  - make
+  - make test
 dist: bionic
 addons:
   apt:
     packages:
-      - scons
       - libboost-dev
       - libboost-filesystem-dev
       - libboost-regex-dev
