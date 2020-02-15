@@ -33,7 +33,7 @@ namespace grammar {
  * @param rules Reference over the rules container.
  */
 template <typename I>
-    void generic_init_def_composite_content(rule_container<I> & rules)
+    void generic_init_def_composite_content(rule_container_t<I> & rules)
 {
     namespace qi = boost::spirit::qi;
     using qi::_val;
@@ -83,7 +83,7 @@ template <typename I>
 
 
 template <>
-    void init_def_composite_content<iterator>(rule_container<iterator> & rules)
+    void init_def_composite_content<iterator>(rule_container_t<iterator> & rules)
 {
     generic_init_def_composite_content<iterator>(rules);
 }

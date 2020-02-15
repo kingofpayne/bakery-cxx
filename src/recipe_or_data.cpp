@@ -28,28 +28,28 @@ namespace bakery {
 /**
  * Default constructor.
  */
-recipe_or_data::recipe_or_data():
+recipe_or_data_t::recipe_or_data_t():
     value(0)
 {}
 
 
 /**
- * Defines the recipe_or_data as a Definition.
+ * Defines the recipe_or_data_t as a Definition.
  *
  * @param value The recipe.
  */
-void recipe_or_data::set_recipe(const rec::recipe & value)
+void recipe_or_data_t::set_recipe(const rec::recipe & value)
 {
     this->value = value;
 }
 
 
 /**
- * Defines the recipe_or_data as a Data.
+ * Defines the recipe_or_data_t as a Data.
  *
  * @param value The data.
  */
-void recipe_or_data::set_data(const dat::data & value)
+void recipe_or_data_t::set_data(const dat::data & value)
 {
     this->value = value;
 }
@@ -58,7 +58,7 @@ void recipe_or_data::set_data(const dat::data & value)
 /**
  * @return True if the instance holds a recipe.
  */
-bool recipe_or_data::is_recipe() const
+bool recipe_or_data_t::is_recipe() const
 {
     return value.which() == 1;
 }
@@ -67,7 +67,7 @@ bool recipe_or_data::is_recipe() const
 /**
  * @return True if the instance holds a data.
  */
-bool recipe_or_data::is_data() const
+bool recipe_or_data_t::is_data() const
 {
     return value.which() == 2;
 }
@@ -78,7 +78,7 @@ bool recipe_or_data::is_data() const
  *
  * This function must be called only if is_recipe() == true.
  */
-rec::recipe & recipe_or_data::get_recipe()
+rec::recipe & recipe_or_data_t::get_recipe()
 {
     bakery_assert_debug(is_recipe());
     return boost::get<rec::recipe>(value);
@@ -90,7 +90,7 @@ rec::recipe & recipe_or_data::get_recipe()
  *
  * This function must be called only if is_data() == true.
  */
-dat::data & recipe_or_data::get_data()
+dat::data & recipe_or_data_t::get_data()
 {
     bakery_assert_debug(is_data());
     return boost::get<dat::data>(value);

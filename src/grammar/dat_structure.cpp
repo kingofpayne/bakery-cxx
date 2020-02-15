@@ -31,7 +31,7 @@ namespace grammar {
  *
  * @param rules Reference over the rules container.
  */
-template <typename I> void generic_init_dat_structure(rule_container<I> & rules)
+template <typename I> void generic_init_dat_structure(rule_container_t<I> & rules)
 {
     namespace qi = boost::spirit::qi;
 
@@ -44,7 +44,7 @@ template <typename I> void generic_init_dat_structure(rule_container<I> & rules)
 }
 
 
-template <> void init_dat_structure<iterator>(rule_container<iterator> & rules)
+template <> void init_dat_structure<iterator>(rule_container_t<iterator> & rules)
 {
     generic_init_dat_structure<iterator>(rules);
 }

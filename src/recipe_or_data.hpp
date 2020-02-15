@@ -33,10 +33,10 @@ namespace bakery {
 /**
  * Class which holds either a recipe or a data, or nothing.
  */
-class recipe_or_data
+class recipe_or_data_t
 {
     public:
-        recipe_or_data();
+        recipe_or_data_t();
 
         void set_recipe(const rec::recipe &);
         void set_data(const dat::data &);

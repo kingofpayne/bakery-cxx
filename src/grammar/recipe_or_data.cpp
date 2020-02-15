@@ -32,20 +32,20 @@ namespace grammar {
  * @param rules Reference over the rules container.
  */
 template <typename I>
-    void generic_init_recipe_or_data(rule_container<I> & rules)
+    void generic_init_recipe_or_data(rule_container_t<I> & rules)
 {
     namespace qi = boost::spirit::qi;
     using qi::_val;
     using qi::_1;
 
     /* Node which returns either a data or a recipe. */
-    rules.recipe_or_data_ =
+    rules.recipe_or_data =
         /* Start by testing data since all data files must start by the
          * 'recipe' directive. */
         rules.data
         [
             boost::phoenix::bind(
-                &recipe_or_data::set_data,
+                &recipe_or_data_t::set_data,
                 _val,
                 _1
             )
@@ -54,7 +54,7 @@ template <typename I>
         rules.recipe_
         [
             boost::phoenix::bind(
-                &recipe_or_data::set_recipe,
+                &recipe_or_data_t::set_recipe,
                 _val,
                 _1
             )
@@ -63,7 +63,7 @@ template <typename I>
 
 
 template <>
-    void init_recipe_or_data<iterator>(rule_container<iterator> & rules)
+    void init_recipe_or_data<iterator>(rule_container_t<iterator> & rules)
 {
     generic_init_recipe_or_data<iterator>(rules);
 }

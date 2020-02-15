@@ -49,7 +49,7 @@ typedef std::string::const_iterator iterator;
  *
  * boost::spirit::ascii::space was used initially. In order to allow C-style
  * comments, a custom skipper has been written in custom_skipper.hpp. */
-typedef custom_skipper<iterator> skipper;
+typedef custom_skipper<iterator> skipper_t;
 
 
 /**
@@ -62,58 +62,57 @@ typedef custom_skipper<iterator> skipper;
  *
  * @param <I> Grammar iterator type.
  */
-template <typename I>
-    struct rule_container
+template <typename I> struct rule_container_t
 {
     boost::spirit::qi::symbols<char, char> quoted_string_symbols;
 
-    boost::spirit::qi::rule<I, std::string(), skipper>
+    boost::spirit::qi::rule<I, std::string(), skipper_t>
         identifier,
         integer,
         unsigned_integer,
         quoted_string;
 
-    boost::spirit::qi::rule<I, dat::floating_t(), skipper> floating_number;
+    boost::spirit::qi::rule<I, dat::floating_t(), skipper_t> floating_number;
 
-    boost::spirit::qi::rule<I, rec::path(), skipper> path;
+    boost::spirit::qi::rule<I, rec::path(), skipper_t> path;
 
     /** recipe or data. */
-    boost::spirit::qi::rule<I, recipe_or_data(), skipper>
-        recipe_or_data_;
+    boost::spirit::qi::rule<I, recipe_or_data_t(), skipper_t>
+        recipe_or_data;
 
     /** recipe. */
-    boost::spirit::qi::rule<I, rec::recipe(), skipper>
+    boost::spirit::qi::rule<I, rec::recipe(), skipper_t>
         recipe_;
 
     /** Array type definition. */
     boost::spirit::qi::rule<I, boost::spirit::qi::locals<rec::array_data_t>,
-        rec::node::sptr(), skipper> def_array;
+        rec::node::sptr(), skipper_t> def_array;
 
-    boost::spirit::qi::rule<I, rec::node::sptr(), skipper>
+    boost::spirit::qi::rule<I, rec::node::sptr(), skipper_t>
         def_enum;
 
     /** Template argument list. */
     boost::spirit::qi::rule<I, boost::spirit::qi::locals<rec::node::sptr>,
-        std::list<rec::node::sptr>(), skipper>
+        std::list<rec::node::sptr>(), skipper_t>
         def_template_argument_declaration;
 
     boost::spirit::qi::rule<I, boost::spirit::qi::locals<rec::member_data_t>,
-        rec::node::sptr(), skipper> def_member;
+        rec::node::sptr(), skipper_t> def_member;
 
-    boost::spirit::qi::rule<I, rec::type_instanciation_t(), skipper>
+    boost::spirit::qi::rule<I, rec::type_instanciation_t(), skipper_t>
         /* type instanciation for recipes. Includes array definition. */
         def_type_instanciation,
         /** type instanciation for recipes. Does not include array
          * definitions. */
         def_type_instanciation_no_array;
 
-    boost::spirit::qi::rule<I, rec::node::sptr(), skipper>
+    boost::spirit::qi::rule<I, rec::node::sptr(), skipper_t>
         def_typedef,
         def_composite_content;
 
     /* Namespace definition. */
     boost::spirit::qi::rule<I, boost::spirit::qi::locals<std::string>,
-        rec::node::sptr(), skipper> def_namespace;
+        rec::node::sptr(), skipper_t> def_namespace;
 
     /* Structure definition. */
     boost::spirit::qi::rule
@@ -126,18 +125,18 @@ template <typename I>
             rec::structure_data_t
         >,
         rec::node::sptr(),
-        skipper
+        skipper_t
     > def_structure;
 
     /* Variant definition. */
     boost::spirit::qi::rule<I, boost::spirit::qi::locals<std::string,
-        std::list<rec::node::sptr> >, rec::node::sptr(), skipper>
+        std::list<rec::node::sptr> >, rec::node::sptr(), skipper_t>
         def_variant;
 
     /* data rule. */
-    boost::spirit::qi::rule<I, dat::data(), skipper> data;
+    boost::spirit::qi::rule<I, dat::data(), skipper_t> data;
 
-    boost::spirit::qi::rule<I, dat::node::sptr(), skipper>
+    boost::spirit::qi::rule<I, dat::node::sptr(), skipper_t>
         dat_bool_value,
         dat_floating_value,
         dat_identifier_value,
@@ -152,14 +151,14 @@ template <typename I>
         dat_structure;
 
     boost::spirit::qi::rule<I, boost::spirit::qi::locals<enum_value_data_t>,
-        rec::node::sptr(), skipper> def_enum_value;
+        rec::node::sptr(), skipper_t> def_enum_value;
 
     /** recipe indication. */
     boost::spirit::qi::rule<I, boost::spirit::qi::locals<std::string>,
-        file_indication_t(), skipper>
+        file_indication_t(), skipper_t>
         recipe_indication;
 
-    boost::spirit::qi::rule<I, recipe_indication_t(), skipper>
+    boost::spirit::qi::rule<I, recipe_indication_t(), skipper_t>
         recipe_indication_new;
 };
 
@@ -175,43 +174,43 @@ template <typename I>
  * absolutely necessary. */
 
 
-template <typename I> void init_path(rule_container<I> &);
-template <typename I> void init_integer(rule_container<I> &);
-template <typename I> void init_unsigned_integer(rule_container<I> &);
-template <typename I> void init_quoted_string(rule_container<I> &);
-template <typename I> void init_floating_number(rule_container<I> &);
-template <typename I> void init_identifier(rule_container<I> &);
-template <typename I> void init_recipe_or_data(rule_container<I> &);
-template <typename I> void init_recipe(rule_container<I> &);
-template <typename I> void init_recipe_indication(rule_container<I> &);
-template <typename I> void init_recipe_indication_new(rule_container<I> &);
-template <typename I> void init_def_type_instanciation(rule_container<I> &);
-template <typename I> void init_def_array(rule_container<I> &);
-template <typename I> void init_def_member(rule_container<I> &);
-template <typename I> void init_def_typedef(rule_container<I> &);
-template <typename I> void init_def_variant(rule_container<I> &);
-template <typename I> void init_def_namespace(rule_container<I> &);
-template <typename I> void init_def_structure(rule_container<I> &);
-template <typename I> void init_def_composite_content(rule_container<I> &);
+template <typename I> void init_path(rule_container_t<I> &);
+template <typename I> void init_integer(rule_container_t<I> &);
+template <typename I> void init_unsigned_integer(rule_container_t<I> &);
+template <typename I> void init_quoted_string(rule_container_t<I> &);
+template <typename I> void init_floating_number(rule_container_t<I> &);
+template <typename I> void init_identifier(rule_container_t<I> &);
+template <typename I> void init_recipe_or_data(rule_container_t<I> &);
+template <typename I> void init_recipe(rule_container_t<I> &);
+template <typename I> void init_recipe_indication(rule_container_t<I> &);
+template <typename I> void init_recipe_indication_new(rule_container_t<I> &);
+template <typename I> void init_def_type_instanciation(rule_container_t<I> &);
+template <typename I> void init_def_array(rule_container_t<I> &);
+template <typename I> void init_def_member(rule_container_t<I> &);
+template <typename I> void init_def_typedef(rule_container_t<I> &);
+template <typename I> void init_def_variant(rule_container_t<I> &);
+template <typename I> void init_def_namespace(rule_container_t<I> &);
+template <typename I> void init_def_structure(rule_container_t<I> &);
+template <typename I> void init_def_composite_content(rule_container_t<I> &);
 template <typename I>
-    void init_def_type_instanciation_no_array(rule_container<I> &);
+    void init_def_type_instanciation_no_array(rule_container_t<I> &);
 template <typename I>
-    void init_def_template_argument_declaration(rule_container<I> &);
-template <typename I> void init_data(rule_container<I> &);
-template <typename I> void init_dat_bool_value(rule_container<I> &);
-template <typename I> void init_dat_floating_value(rule_container<I> &);
-template <typename I> void init_dat_identifier_value(rule_container<I> &);
-template <typename I> void init_dat_string_value(rule_container<I> &);
-template <typename I> void init_dat_assignment(rule_container<I> &);
-template <typename I> void init_dat_list(rule_container<I> &);
-template <typename I> void init_dat_map(rule_container<I> &);
-template <typename I> void init_dat_map_assignment(rule_container<I> &);
-template <typename I> void init_dat_structure(rule_container<I> &);
-template <typename I> void init_dat_variant_value(rule_container<I> &);
-template <typename I> void init_dat_structure_content(rule_container<I> &);
-template <typename I> void init_dat_value(rule_container<I> &);
-template <typename I> void init_def_enum_value(rule_container<I> &);
-template <typename I> void init_def_enum(rule_container<I> &);
+    void init_def_template_argument_declaration(rule_container_t<I> &);
+template <typename I> void init_data(rule_container_t<I> &);
+template <typename I> void init_dat_bool_value(rule_container_t<I> &);
+template <typename I> void init_dat_floating_value(rule_container_t<I> &);
+template <typename I> void init_dat_identifier_value(rule_container_t<I> &);
+template <typename I> void init_dat_string_value(rule_container_t<I> &);
+template <typename I> void init_dat_assignment(rule_container_t<I> &);
+template <typename I> void init_dat_list(rule_container_t<I> &);
+template <typename I> void init_dat_map(rule_container_t<I> &);
+template <typename I> void init_dat_map_assignment(rule_container_t<I> &);
+template <typename I> void init_dat_structure(rule_container_t<I> &);
+template <typename I> void init_dat_variant_value(rule_container_t<I> &);
+template <typename I> void init_dat_structure_content(rule_container_t<I> &);
+template <typename I> void init_dat_value(rule_container_t<I> &);
+template <typename I> void init_def_enum_value(rule_container_t<I> &);
+template <typename I> void init_def_enum(rule_container_t<I> &);
 
 
 } /* namespace grammar */

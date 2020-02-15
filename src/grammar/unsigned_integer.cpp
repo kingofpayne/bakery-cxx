@@ -36,7 +36,7 @@ namespace grammar {
  * @param dest Reference over the rule to be initialized.
  */
 template <typename I>
-    void generic_init_unsigned_integer(rule_container<I> & rules)
+    void generic_init_unsigned_integer(rule_container_t<I> & rules)
 {
     namespace qi = boost::spirit::qi;
 
@@ -48,7 +48,7 @@ template <typename I>
 
 
 template <> void
-    init_unsigned_integer<iterator>(rule_container<iterator> & rules)
+    init_unsigned_integer<iterator>(rule_container_t<iterator> & rules)
 {
     generic_init_unsigned_integer<iterator>(rules);
 }

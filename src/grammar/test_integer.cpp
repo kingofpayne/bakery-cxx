@@ -25,7 +25,7 @@
 
 TEST_CASE("grammar integer rule")
 {
-    bakery::grammar::rule_container<bakery::grammar::iterator> rules;
+    bakery::grammar::rule_container_t<bakery::grammar::iterator> rules;
     bakery::grammar::init_integer(rules);
 
     struct test_vector_t
@@ -95,7 +95,7 @@ TEST_CASE("grammar integer rule")
         std::string result = "";
         REQUIRE( result == "" );
         boost::spirit::qi::phrase_parse(it, it_end, rules.integer,
-            bakery::grammar::skipper(), result);
+            bakery::grammar::skipper_t(), result);
         if (vector.good)
         {
             REQUIRE( result == vector.code );

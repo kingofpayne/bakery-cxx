@@ -34,7 +34,7 @@ namespace grammar {
  */
 template <typename I>
     void generic_init_def_template_argument_declaration
-    (rule_container<I> & rules)
+    (rule_container_t<I> & rules)
 {
     namespace qi = boost::spirit::qi;
     using qi::_val;
@@ -64,7 +64,7 @@ template <typename I>
 
 template <>
     void init_def_template_argument_declaration<iterator>
-    (rule_container<iterator> & rules)
+    (rule_container_t<iterator> & rules)
 {
     generic_init_def_template_argument_declaration<iterator>(rules);
 }

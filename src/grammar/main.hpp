@@ -41,12 +41,12 @@ template <typename I>
     struct main:
     qi::grammar<
         I,
-        recipe_or_data(),
-        skipper
+        recipe_or_data_t(),
+        skipper_t
     >
 {
     main():
-        main::base_type(rules.recipe_or_data_)
+        main::base_type(rules.recipe_or_data)
     {
         /* Quoted string symbols */
         rules.quoted_string_symbols.add
@@ -104,7 +104,7 @@ template <typename I>
         );*/
     }
 
-    rule_container<I> rules;
+    rule_container_t<I> rules;
 };
 
 

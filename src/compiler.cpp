@@ -45,12 +45,12 @@ namespace compiler {
  * parse status.
  *
  * @param path path to the file containing the recipe.
- * @param recipe_or_data Reference to a recipe_or_data object in which
+ * @param recipe_or_data Reference to a recipe_or_data_t object in which
  *        the result will be stored.
  * @param log Where the error messages will be stored.
  */
 void load_from_file(const std::string & path,
-    recipe_or_data & recipe_or_data, log_t & log)
+    recipe_or_data_t & recipe_or_data, log_t & log)
 {
     /* Load the file */
     std::string content;
@@ -68,7 +68,7 @@ void load_from_file(const std::string & path,
     grammar::main<std::string::const_iterator> grammar;
 
     boost::spirit::qi::phrase_parse(it, it_end, grammar,
-        grammar::skipper(), recipe_or_data);
+        grammar::skipper_t(), recipe_or_data);
 
     /* Check parse result. */
     if (it != it_end)
@@ -117,7 +117,7 @@ void compile(
         return;
     }
 
-    recipe_or_data recipe_or_data;
+    recipe_or_data_t recipe_or_data;
     load_from_file(abs_dat_path.string(), recipe_or_data, log);
 
     if (log.get_error_count() != 0)
@@ -240,7 +240,7 @@ bool write_data(
     }
 
     /* Loads the recipe */
-    recipe_or_data recipe_or_data;
+    recipe_or_data_t recipe_or_data;
     load_from_file(def_path, recipe_or_data, state.log);
 
     if (state.log.get_error_count() != 0)
@@ -1568,7 +1568,7 @@ bool read_data(decompilation_state_t & state,
     const std::list<std::string> & include_directories)
 {
     /* Open the recipe file and parse it. */
-    recipe_or_data recipe_or_data;
+    recipe_or_data_t recipe_or_data;
     std::string def_path;
 
     if (!resolve_file_indication(def_fi, current_directory, include_directories,
@@ -2683,7 +2683,7 @@ bool merge_included_recipe_files(
             loaded_defs.push_back(p);
 
             /* Loads the recipe. */
-            recipe_or_data recipe_or_data;
+            recipe_or_data_t recipe_or_data;
             load_from_file(p, recipe_or_data, log);
 
             if (log.get_error_count() != 0)

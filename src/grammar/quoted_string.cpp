@@ -32,7 +32,7 @@ namespace grammar {
  *
  * @param rules Reference over the rules container.
  */
-template <typename I> void generic_init_quoted_string(rule_container<I> & rules)
+template <typename I> void generic_init_quoted_string(rule_container_t<I> & rules)
 {
     namespace qi = boost::spirit::qi;
     using qi::_val;
@@ -54,7 +54,7 @@ template <typename I> void generic_init_quoted_string(rule_container<I> & rules)
 }
 
 
-template <> void init_quoted_string<iterator>(rule_container<iterator> & rules)
+template <> void init_quoted_string<iterator>(rule_container_t<iterator> & rules)
 {
     generic_init_quoted_string<iterator>(rules);
 }
