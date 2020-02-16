@@ -1,0 +1,11 @@
+struct a_t {
+  int a;
+  string b;
+};
+
+struct b_t: a_t {
+  float c;
+  bool d;
+};
+
+b_t x;

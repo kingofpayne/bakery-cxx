@@ -1680,7 +1680,14 @@ bool read_structure(decompilation_state_t & state,
     for (const rec::type_instanciation_t & inherited_type_inst :
         type_ptr->get_structure_data().heritance_list)
     {
-        if (!read_type(state, inherited_type_inst))
+        if (inherited_type_inst.get_type_ptr()->get_kind() !=
+            rec::node::kind::structure)
+        {
+            state.log.error("inherited type '" + inherited_type_inst.print() +
+                "' is not a structure.");
+            return false;
+        }
+        if (!read_structure(state, inherited_type_inst))
         {
             state.log.error("failed to read inherited data of type '"
                 + inherited_type_inst.print() + "'.");

@@ -143,6 +143,20 @@ class input_t
             return *this;
         }
 
+        /**
+         * Deserialize to base class T. T shall inherits U.
+         *
+         * @param x Destination variable.
+         * @tparam U Type of the base class.
+         * @tparam T Type of the destination variable.
+         * @return this
+         */
+        template <typename U, typename T> input_t & inherits(T & x)
+        {
+            (*this)((U&)x);
+            return *this;
+        }
+
     private:
         /** Input stream for deserialization. Owned. */
         std::istream* stream;

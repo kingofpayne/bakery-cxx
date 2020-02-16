@@ -71,6 +71,29 @@ BAKERY_BASIC_SERIALIZER_END
 }
 
 
+struct test_inheritance_a_t
+{
+    int a;
+    std::string b;
+};
+
+struct test_inheritance_b_t: public test_inheritance_a_t
+{
+    float c;
+    bool d;
+};
+
+
+namespace bakery {
+BAKERY_BASIC_SERIALIZER_BEGIN(test_inheritance_a_t)
+    io(x.a)(x.b);
+BAKERY_BASIC_SERIALIZER_END
+BAKERY_BASIC_SERIALIZER_BEGIN(test_inheritance_b_t)
+    io.template inherits<test_inheritance_a_t>(x)(x.c)(x.d);
+BAKERY_BASIC_SERIALIZER_END
+}
+
+
 TEST_CASE("bakery_t")
 {
     /* Test state after default constructor. */
@@ -242,6 +265,20 @@ TEST_CASE("bakery_t")
         REQUIRE( boost::get<std::string>(v2) == "good" );
     }
 
+    /* Test inheritance */
+    SECTION("load inheritance")
+    {
+        test_inheritance_b_t x;
+        bakery::bakery_t bak;
+        bak.set_force_rebuild(true);
+        bakery::log_t log = bak.load("tests/inheritance.dat", x);
+        REQUIRE( log.good() == true );
+        REQUIRE( x.a == 12 );
+        REQUIRE( x.b == "cool" );
+        REQUIRE( x.c == 2.0f );
+        REQUIRE( x.d == true );
+    }
+
     /* Test optional qualifier */
     SECTION("load optional")
     {
@@ -358,6 +395,34 @@ TEST_CASE("bakery_t")
             "v0 = a: 7564;\n"
             "v1 = b: 12.5;\n"
             "v2 = c: \"yeah\";\n");
+    }
+
+    /* Saving inherintance */
+    SECTION("save variant")
+    {
+        std::string dat_out_path = "tests/out.dat";
+        boost::filesystem::remove(dat_out_path);
+        REQUIRE( boost::filesystem::exists(dat_out_path) == false );
+        bakery::bakery_t bak;
+        test_inheritance_b_t x;
+        x.a = 77;
+        x.b = "seven";
+        x.c = 7.77f;
+        x.d = true;
+        bakery::log_t log = bak.save(dat_out_path, "inheritance.rec", x);
+        REQUIRE( log.good() == true );
+        std::string dat;
+        bakery::str::load_from_file(dat_out_path, dat);
+        REQUIRE( dat ==
+            "recipe \"inheritance.rec\";\n"
+            "\n"
+            "x = \n"
+            "{\n"
+            "  a = 77;\n"
+            "  b = \"seven\";\n"
+            "  c = 7.77;\n"
+            "  d = true;\n"
+            "};\n");
     }
 
     /* Test getters when saving */

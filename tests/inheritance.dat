@@ -1,0 +1,8 @@
+recipe "inheritance.rec";
+
+x = {
+  c = 2.0;
+  d = true;
+  a = 12;
+  b = "cool";
+};

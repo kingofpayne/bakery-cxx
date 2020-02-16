@@ -127,6 +127,21 @@ class output_t
             return *this;
         }
 
+        /**
+         * Serialize base class T. T shall inherits U.
+         *
+         * @param x Source variable.
+         * @tparam U Type of the base class.
+         * @tparam T Type of the destination variable.
+         * @return this
+         */
+        template <typename U, typename T> output_t & inherits(T & x)
+        {
+            (*this)((U&)x);
+            return *this;
+        }
+
+
     private:
         /** Output stream for serialization. Owned. */
         std::ostream* stream;
