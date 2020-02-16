@@ -337,6 +337,29 @@ TEST_CASE("bakery_t")
             std::string("wololo"));
     }
 
+    /* Saving variants */
+    SECTION("save variant")
+    {
+        std::string dat_out_path = "tests/out.dat";
+        boost::filesystem::remove(dat_out_path);
+        REQUIRE( boost::filesystem::exists(dat_out_path) == false );
+        bakery::bakery_t bak;
+        boost::variant<int, float, std::string> v0, v1, v2;
+        v0 = 7564;
+        v1 = 12.5f;
+        v2 = "yeah";
+        bakery::log_t log = bak.save(dat_out_path, "variants.rec", v0, v1, v2);
+        REQUIRE( log.good() == true );
+        std::string dat;
+        bakery::str::load_from_file(dat_out_path, dat);
+        REQUIRE( dat ==
+            "recipe \"variants.rec\";\n"
+            "\n"
+            "v0 = a: 7564;\n"
+            "v1 = b: 12.5;\n"
+            "v2 = c: \"yeah\";\n");
+    }
+
     /* Test getters when saving */
     SECTION("save getters")
     {

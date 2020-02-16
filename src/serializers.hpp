@@ -418,7 +418,7 @@ template <typename U, typename O> struct variant_visitor_out_t
     O & o;
 
     template <typename T> void operator()(const T &) const
-        { o(u.template get<T>()); }
+        { o(boost::get<T>(u)); }
 };
 
 
