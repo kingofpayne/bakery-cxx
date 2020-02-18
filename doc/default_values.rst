@@ -5,7 +5,7 @@ Recipes allows defining default values for any variable. When a default value
 exists, variable assignment in the data file can be omitted and the default
 value will be written in the compiled binary file.
 
-Note: Although they can serve the same purpose, optional values are different
+Note: Although they can serve the same purpose, default values are different
 from optional values described in next page.
 
 Example with basic types
