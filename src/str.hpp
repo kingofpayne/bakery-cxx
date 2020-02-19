@@ -192,7 +192,7 @@ template <typename T> T assert_to(std::string s)
     stm >> result;
 
     bakery_assert_message(
-        (stm.tellg() == s.size()),
+        ((size_t)stm.tellg() == s.size()),
         "String conversion failed.");
 
     return result;
@@ -214,7 +214,7 @@ template <typename T> error_code_t to(std::string s, T & out)
     std::istringstream stm(s);
     T result;
     stm >> out;
-    return (stm.tellg() == s.size())?0:1;
+    return ((size_t)stm.tellg() == s.size())?0:1;
 }
 
 
