@@ -51,14 +51,13 @@ template <typename S, int A>
     /**
      * Process visitation.
      *
-     * @param i Type index. For the current specialization, this parameter
+     * @param Type index. For the current specialization, this parameter
      *        should be equal to A, so this may not be used...
      * @param v Visitation object.
      *
      * @param <V> Type of the visitation object.
      */
-    template <typename V>
-        static void visit(int i, V & v)
+    template <typename V> static void visit(int, V & v)
     {
         v.template visit<
             typename boost::mpl::at<S, boost::mpl::int_<A>>::type

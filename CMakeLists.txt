@@ -4,6 +4,7 @@ project(Bakery)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Werror")
 file(GLOB_RECURSE lib_sources "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 list(FILTER lib_sources EXCLUDE REGEX "test_")
 add_library(bakery SHARED ${lib_sources})

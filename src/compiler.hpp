@@ -127,14 +127,12 @@ bool write_native_list(compilation_state_t &, const rec::type_instanciation_t &,
 bool write_native_map(compilation_state_t &, const rec::type_instanciation_t &,
     const dat::node &);
 
-bool write_native_bool(compilation_state_t &, const rec::type_instanciation_t &,
-    const dat::node &);
+bool write_native_bool(compilation_state_t &, const dat::node &);
 
 bool write_native_integer(compilation_state_t &,
     const rec::type_instanciation_t &, const dat::node &);
 
-bool write_native_string(compilation_state_t &,
-    const rec::type_instanciation_t &, const dat::node &);
+bool write_native_string(compilation_state_t &, const dat::node &);
 
 bool write_native_floating(compilation_state_t &,
     const rec::type_instanciation_t &, const dat::node &);
@@ -188,8 +186,7 @@ bool read_template_type(decompilation_state_t &,
 
 bool read_native(decompilation_state_t &, const rec::type_instanciation_t &);
 
-bool read_native_bool(decompilation_state_t &,
-    const rec::type_instanciation_t &);
+bool read_native_bool(decompilation_state_t &);
 
 bool read_native_integer(decompilation_state_t &,
     const rec::type_instanciation_t &);
@@ -197,8 +194,7 @@ bool read_native_integer(decompilation_state_t &,
 bool read_native_floating(decompilation_state_t &,
     const rec::type_instanciation_t &);
 
-bool read_native_string(decompilation_state_t &,
-    const rec::type_instanciation_t &);
+bool read_native_string(decompilation_state_t &);
 
 bool read_native_tuple(decompilation_state_t &,
     const rec::type_instanciation_t &);

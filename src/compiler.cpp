@@ -927,7 +927,7 @@ bool write_native(compilation_state_t & state,
     switch (cls)
     {
         case rec::native_data_t::class_t::bool_:
-            return write_native_bool(state, type_inst, data_node);
+            return write_native_bool(state, data_node);
 
         case rec::native_data_t::class_t::int_:
         case rec::native_data_t::class_t::char_:
@@ -935,7 +935,7 @@ bool write_native(compilation_state_t & state,
             return write_native_integer(state, type_inst, data_node);
 
         case rec::native_data_t::class_t::string:
-            return write_native_string(state, type_inst, data_node);
+            return write_native_string(state, data_node);
 
         case rec::native_data_t::class_t::float_:
         case rec::native_data_t::class_t::double_:
@@ -1242,8 +1242,7 @@ bool write_native_map(compilation_state_t & state,
  *
  * @return True if no error occurs.
  */
-bool write_native_bool(compilation_state_t & state,
-    const rec::type_instanciation_t & type_inst, const dat::node & data_node)
+bool write_native_bool(compilation_state_t & state, const dat::node & data_node)
 {
     if (data_node.get_kind() != dat::node::kind::bool_)
     {
@@ -1532,13 +1531,12 @@ bool write_native_floating(compilation_state_t & state,
  * Writes a data node as a native string.
  *
  * @param state Compilation state.
- * @param type_inst The type instanciation.
  * @param data_node The data node.
  *
  * @return True if no error occurs.
  */
 bool write_native_string(compilation_state_t & state,
-    const rec::type_instanciation_t & type_inst, const dat::node & data_node)
+    const dat::node & data_node)
 {
     if (data_node.get_kind() != dat::node::kind::string)
     {
@@ -2106,7 +2104,7 @@ bool read_native(decompilation_state_t & state,
     switch (type_inst.get_type_ptr()->get_native_data().get_class())
     {
         case rec::native_data_t::class_t::bool_:
-            return read_native_bool(state, type_inst);
+            return read_native_bool(state);
 
         case rec::native_data_t::class_t::int_:
         case rec::native_data_t::class_t::char_:
@@ -2114,7 +2112,7 @@ bool read_native(decompilation_state_t & state,
             return read_native_integer(state, type_inst);
 
         case rec::native_data_t::class_t::string:
-            return read_native_string(state, type_inst);
+            return read_native_string(state);
 
         case rec::native_data_t::class_t::float_:
         case rec::native_data_t::class_t::double_:
@@ -2143,8 +2141,7 @@ bool read_native(decompilation_state_t & state,
  *
  * @return True if the data could be decompiled, false otherwise.
  */
-bool read_native_bool(decompilation_state_t & state,
-    const rec::type_instanciation_t & type_inst)
+bool read_native_bool(decompilation_state_t & state)
 {
     bool dest;
 
@@ -2258,8 +2255,7 @@ bool read_native_floating(decompilation_state_t & state,
  *
  * @return True if the data could be decompiled, false otherwise.
  */
-bool read_native_string(decompilation_state_t & state,
-    const rec::type_instanciation_t & type_inst)
+bool read_native_string(decompilation_state_t & state)
 {
     /* Read the size of the string. */
     size_t len;

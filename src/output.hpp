@@ -104,7 +104,7 @@ class output_t
         template <typename U, typename T,
             void (std::remove_const<typename std::remove_reference<U>::type>
             ::type::*S)(T)>
-        output_t & setter(const U & u)
+        output_t & setter(const U &)
         {
             return *this;
         }
